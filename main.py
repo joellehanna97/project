@@ -326,9 +326,6 @@ def train():
 
 
 if __name__ == '__main__':
-    print('here')
-    train()
-    """
     import argparse
     parser = argparse.ArgumentParser()
 
@@ -345,4 +342,3 @@ if __name__ == '__main__':
         evaluate()
     else:
         raise Exception("Unknow --mode")
-    """
