@@ -43,6 +43,7 @@ def SRGAN_g(t_image, is_train=False, reuse=False):
                 result = tf.nn.dropout(result, dropout_prob)
             print( i, result.get_shape() )
             print('here')
+            print(i, conv_outputs.get_shape())
             stack = tf.concat([result, rev_conv_outputs[i+1]], 3)
             # print( i, stack.get_shape() )
             current_input = stack
