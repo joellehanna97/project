@@ -233,96 +233,96 @@ def train():
         if (epoch != 0) and (epoch % 10 == 0):
             tl.files.save_npz(net_g.all_params, name=checkpoint_dir + '/g_{}_init.npz'.format(tl.global_flag['mode']), sess=sess)
 
-###========================= train GAN (SRGAN) =========================###
-for epoch in range(0, n_epoch + 1):
-    ## update learning rate
-    if epoch != 0 and (epoch % decay_every == 0):
-        new_lr_decay = lr_decay**(epoch // decay_every)
-        sess.run(tf.assign(lr_v, lr_init * new_lr_decay))
-        log = " ** new learning rate: %f (for GAN)" % (lr_init * new_lr_decay)
-        print(log)
-    elif epoch == 0:
-        #sess.run(tf.assign(lr_v, lr_init))
-        log = " ** init lr: %f  decay_every_init: %d, lr_decay: %f (for GAN)" % (lr_init, decay_every, lr_decay)
-        print(log)
+    ###========================= train GAN (SRGAN) =========================###
+    for epoch in range(0, n_epoch + 1):
+        ## update learning rate
+        if epoch != 0 and (epoch % decay_every == 0):
+            new_lr_decay = lr_decay**(epoch // decay_every)
+            sess.run(tf.assign(lr_v, lr_init * new_lr_decay))
+            log = " ** new learning rate: %f (for GAN)" % (lr_init * new_lr_decay)
+            print(log)
+        elif epoch == 0:
+            #sess.run(tf.assign(lr_v, lr_init))
+            log = " ** init lr: %f  decay_every_init: %d, lr_decay: %f (for GAN)" % (lr_init, decay_every, lr_decay)
+            print(log)
 
-    epoch_time = time.time()
-    total_d_loss, total_g_loss, n_iter = 0, 0, 0
+        epoch_time = time.time()
+        total_d_loss, total_g_loss, n_iter = 0, 0, 0
 
-    ## If your machine cannot load all images into memory, you should use
-    ## this one to load batch of images while training.
-    # random.shuffle(train_hr_img_list)
-    # for idx in range(0, len(train_hr_img_list), batch_size):
-    #     step_time = time.time()
-    #     b_imgs_list = train_hr_img_list[idx : idx + batch_size]
-    #     b_imgs = tl.prepro.threading_data(b_imgs_list, fn=get_imgs_fn, path=config.TRAIN.hr_img_path)
-    #     b_imgs_384 = tl.prepro.threading_data(b_imgs, fn=crop_sub_imgs_fn, is_random=True)
-    #     b_imgs_96 = tl.prepro.threading_data(b_imgs_384, fn=downsample_fn)
+        ## If your machine cannot load all images into memory, you should use
+        ## this one to load batch of images while training.
+        # random.shuffle(train_hr_img_list)
+        # for idx in range(0, len(train_hr_img_list), batch_size):
+        #     step_time = time.time()
+        #     b_imgs_list = train_hr_img_list[idx : idx + batch_size]
+        #     b_imgs = tl.prepro.threading_data(b_imgs_list, fn=get_imgs_fn, path=config.TRAIN.hr_img_path)
+        #     b_imgs_384 = tl.prepro.threading_data(b_imgs, fn=crop_sub_imgs_fn, is_random=True)
+        #     b_imgs_96 = tl.prepro.threading_data(b_imgs_384, fn=downsample_fn)
 
-    # shuffle images
-    step_time = time.time()
-    train_all_img_list = list(zip(train_vid_list))
-    random.shuffle(train_all_img_list)
-    train_vid_list = zip(*train_all_img_list)
-    print("Shuffled time: %4.4fs" % (time.time() - step_time))
-
-    ## If your machine have enough memory, please pre-load the whole train set.
-    for idx in range(0, len(train_vid_list)):
+        # shuffle images
         step_time = time.time()
+        train_all_img_list = list(zip(train_vid_list))
+        random.shuffle(train_all_img_list)
+        train_vid_list = zip(*train_all_img_list)
+        print("Shuffled time: %4.4fs" % (time.time() - step_time))
+
+        ## If your machine have enough memory, please pre-load the whole train set.
+        for idx in range(0, len(train_vid_list)):
+            step_time = time.time()
+            """
+            b_imgs_384 = tl.prepro.threading_data(train_hr_imgs[idx:idx + batch_size], fn=crop_sub_imgs_fn, is_random=True)
+            b_imgs_96 = tl.prepro.threading_data(b_imgs_384, fn=downsample_fn)
+            """
+            train_vid_img_list = sorted(tl.files.load_file_list(path=train_vid_list[idx] + '/frames/', regx='.*.png', printable=False))
+            #train_lr_vid_img_list = sorted(tl.files.load_file_list(path=train_lr_vid_list[idx] + '/frames/', regx='.*.png', printable=False))
+
+            b_imgg_384 = tl.vis.read_images([train_vid_img_list[15]], path=train_vid_list[idx] + '/frames/', n_threads=32) #target
+            #b_imgs_96 = tl.vis.read_images(train_lr_vid_img_list[15-1:15+2]+
+            #		           train_lr_vid_img_list[45-1:45+2]+
+            #		           train_lr_vid_img_list[75-1:75+2]+
+            #		           train_lr_vid_img_list[105-1:105+2], path=train_lr_vid_list[idx] + '/frames/', n_threads=32)
+            train_vid_img_list_s = [train_vid_img_list[i] for i in indices_1]
+            b_imgs_96 = tl.vis.read_images(train_vid_img_list_s, path=train_vid_list[idx] + '/frames/', n_threads=32)
+            """
+            b_imgs_96 = tl.prepro.threading_data(b_imgs_96, fn=crop_custom, w=82, h=82, is_random=False)
+
+            b_imgs_384 = tl.prepro.threading_data(b_imgs_384, fn=crop_custom, w=328, h=328, is_random=False)
+            """
+            b_imgs_96 = tl.prepro.threading_data(b_imgs_96, fn=tl.prepro.crop, wrg=82, hrg=82, is_random=False)
+
+            b_imgs_384 = tl.prepro.threading_data(b_imgs_384, fn=tl.prepro.crop, wrg=82, hrg=82, is_random=False)#fn=tl.prepro.crop, wrg=82, hrg=82, is_random=False)
+            #b_imgs_384 = tl.prepro.threading_data(b_imgs_384, fn=tl.prepro.crop, wrg=160, hrg=160, is_random=False)
+            #b_seqs_96 = np.stack([np.concatenate([b_imgs_96[0], b_imgs_96[1], b_imgs_96[2]], 2),
+            #        np.concatenate([b_imgs_96[3], b_imgs_96[4], b_imgs_96[5]], 2),
+            #        np.concatenate([b_imgs_96[6], b_imgs_96[7], b_imgs_96[8]], 2),
+            #        np.concatenate([b_imgs_96[9], b_imgs_96[10], b_imgs_96[11]], 2)])
+            b_seqs_96 = [np.concatenate([b_imgs_96[0], b_imgs_96[1]],2)]
+            ## update D
+            #b_imgs_96_c = np.concatenate((b_imgs_96, b_imgs_96), axis=3)
+            errD, _ = sess.run([d_loss, d_optim], {t_image: b_seqs_96, t_target_image: b_imgs_384})
+            ## update G
+            errG, errM, errA, _ = sess.run([g_loss, mse_loss, g_gan_loss, g_optim], {t_image: b_seqs_96, t_target_image: b_imgs_384})
+            print("Epoch [%2d/%2d] %4d time: %4.4fs, d_loss: %.8f g_loss: %.8f (mse: %.6f adv: %.6f)" %
+                  (epoch, n_epoch, n_iter, time.time() - step_time, errD, errG, errM, errA))
+            total_d_loss += errD
+            total_g_loss += errG
+            n_iter += 1
+
+        log = "[*] Epoch: [%2d/%2d] time: %4.4fs, d_loss: %.8f g_loss: %.8f" % (epoch, n_epoch, time.time() - epoch_time, total_d_loss / n_iter,
+                                                                                total_g_loss / n_iter)
+        print(log)
         """
-        b_imgs_384 = tl.prepro.threading_data(train_hr_imgs[idx:idx + batch_size], fn=crop_sub_imgs_fn, is_random=True)
-        b_imgs_96 = tl.prepro.threading_data(b_imgs_384, fn=downsample_fn)
+        ## quick evaluation on train set
+        if (epoch != 0) and (epoch % 10 == 0):
+            out = sess.run(net_g_test.outputs, {t_image: sample_imgs_96})  #; print('gen sub-image:', out.shape, out.min(), out.max())
+            print("[*] save images")
+            tl.vis.save_images(out, [ni, ni], save_dir_gan + '/train_%d.png' % epoch)
+
+        ## save model
+        if (epoch != 0) and (epoch % 10 == 0):
+            tl.files.save_npz(net_g.all_params, name=checkpoint_dir + '/g_{}.npz'.format(tl.global_flag['mode']), sess=sess)
+            tl.files.save_npz(net_d.all_params, name=checkpoint_dir + '/d_{}.npz'.format(tl.global_flag['mode']), sess=sess)
         """
-        train_vid_img_list = sorted(tl.files.load_file_list(path=train_vid_list[idx] + '/frames/', regx='.*.png', printable=False))
-        #train_lr_vid_img_list = sorted(tl.files.load_file_list(path=train_lr_vid_list[idx] + '/frames/', regx='.*.png', printable=False))
-
-        b_imgg_384 = tl.vis.read_images([train_vid_img_list[15]], path=train_vid_list[idx] + '/frames/', n_threads=32) #target
-        #b_imgs_96 = tl.vis.read_images(train_lr_vid_img_list[15-1:15+2]+
-        #		           train_lr_vid_img_list[45-1:45+2]+
-        #		           train_lr_vid_img_list[75-1:75+2]+
-        #		           train_lr_vid_img_list[105-1:105+2], path=train_lr_vid_list[idx] + '/frames/', n_threads=32)
-        train_vid_img_list_s = [train_vid_img_list[i] for i in indices_1]
-        b_imgs_96 = tl.vis.read_images(train_vid_img_list_s, path=train_vid_list[idx] + '/frames/', n_threads=32)
-        """
-        b_imgs_96 = tl.prepro.threading_data(b_imgs_96, fn=crop_custom, w=82, h=82, is_random=False)
-
-        b_imgs_384 = tl.prepro.threading_data(b_imgs_384, fn=crop_custom, w=328, h=328, is_random=False)
-        """
-        b_imgs_96 = tl.prepro.threading_data(b_imgs_96, fn=tl.prepro.crop, wrg=82, hrg=82, is_random=False)
-
-        b_imgs_384 = tl.prepro.threading_data(b_imgs_384, fn=tl.prepro.crop, wrg=82, hrg=82, is_random=False)#fn=tl.prepro.crop, wrg=82, hrg=82, is_random=False)
-        #b_imgs_384 = tl.prepro.threading_data(b_imgs_384, fn=tl.prepro.crop, wrg=160, hrg=160, is_random=False)
-        #b_seqs_96 = np.stack([np.concatenate([b_imgs_96[0], b_imgs_96[1], b_imgs_96[2]], 2),
-        #        np.concatenate([b_imgs_96[3], b_imgs_96[4], b_imgs_96[5]], 2),
-        #        np.concatenate([b_imgs_96[6], b_imgs_96[7], b_imgs_96[8]], 2),
-        #        np.concatenate([b_imgs_96[9], b_imgs_96[10], b_imgs_96[11]], 2)])
-        b_seqs_96 = [np.concatenate([b_imgs_96[0], b_imgs_96[1]],2)]
-        ## update D
-        #b_imgs_96_c = np.concatenate((b_imgs_96, b_imgs_96), axis=3)
-        errD, _ = sess.run([d_loss, d_optim], {t_image: b_seqs_96, t_target_image: b_imgs_384})
-        ## update G
-        errG, errM, errA, _ = sess.run([g_loss, mse_loss, g_gan_loss, g_optim], {t_image: b_seqs_96, t_target_image: b_imgs_384})
-        print("Epoch [%2d/%2d] %4d time: %4.4fs, d_loss: %.8f g_loss: %.8f (mse: %.6f adv: %.6f)" %
-              (epoch, n_epoch, n_iter, time.time() - step_time, errD, errG, errM, errA))
-        total_d_loss += errD
-        total_g_loss += errG
-        n_iter += 1
-
-    log = "[*] Epoch: [%2d/%2d] time: %4.4fs, d_loss: %.8f g_loss: %.8f" % (epoch, n_epoch, time.time() - epoch_time, total_d_loss / n_iter,
-                                                                            total_g_loss / n_iter)
-    print(log)
-    """
-    ## quick evaluation on train set
-    if (epoch != 0) and (epoch % 10 == 0):
-        out = sess.run(net_g_test.outputs, {t_image: sample_imgs_96})  #; print('gen sub-image:', out.shape, out.min(), out.max())
-        print("[*] save images")
-        tl.vis.save_images(out, [ni, ni], save_dir_gan + '/train_%d.png' % epoch)
-
-    ## save model
-    if (epoch != 0) and (epoch % 10 == 0):
-        tl.files.save_npz(net_g.all_params, name=checkpoint_dir + '/g_{}.npz'.format(tl.global_flag['mode']), sess=sess)
-        tl.files.save_npz(net_d.all_params, name=checkpoint_dir + '/d_{}.npz'.format(tl.global_flag['mode']), sess=sess)
-    """
 
 
 if __name__ == '__main__':
