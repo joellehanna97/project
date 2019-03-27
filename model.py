@@ -73,7 +73,6 @@ def SRGAN_g(t_image, is_train=False, reuse=False):
         n = InputLayer(t_image, name='in')
         print(t_image.get_shape())
         print('shape input g')
-        print(n.get_shape())
         n = Conv2d(n, 64, (3, 3), (1, 1), act=tf.nn.relu, padding='SAME', W_init=w_init, name='n64s1/c')
         temp = n
 
