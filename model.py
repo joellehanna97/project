@@ -20,6 +20,7 @@ def SRGAN_g(t_image, is_train=False, reuse=False):
     gen_filter_sizes = [3, 3, 3, 3]
     with tf.variable_scope("SRGAN_g"):
         conv_outputs = []
+        print(current_input.get_shape())
 
         current_input = t_image
         current_inputdepth = t_image.shape[3]
