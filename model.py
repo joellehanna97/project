@@ -71,13 +71,11 @@ def SRGAN_g(t_image, is_train=False, reuse=False):
     with tf.variable_scope("SRGAN_g", reuse=reuse) as vs:
         # tl.layers.set_name_reuse(reuse) # remove for TL 1.8.0+
         n = InputLayer(t_image, name='in')
-        print(n.get_shape())
+        print(t_image.get_shape())
         print('shape input g')
         print(n.get_shape())
         n = Conv2d(n, 64, (3, 3), (1, 1), act=tf.nn.relu, padding='SAME', W_init=w_init, name='n64s1/c')
         temp = n
-
-
 
         # B residual blocks
         for i in range(16):
@@ -105,7 +103,6 @@ def SRGAN_g(t_image, is_train=False, reuse=False):
         #h = bilinear_resize_tanh_deconv_block(current_input, True, rev_filter_sizes[-1], outputdepth, name=('g_tanh_deconv') )
         #print(h.get_shape())
         #n =  conv2d(h, outputdepth, hh=1, ww=1, mean=0.11, stddev=0.04, name='final_conv')
-        print(n.get_shape())
         return n
 
 

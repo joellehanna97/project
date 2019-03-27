@@ -55,6 +55,7 @@ def train():
 
     #Sample generated frame from generator:
     net_g = SRGAN_g(t_image, is_train=True, reuse=False)
+    print(net_g.outputs.get_shape())
 
     # Evaluate discrimator on real triplets
     net_d, logits_real = SRGAN_d(t_target_image, is_train=True, reuse=False)
