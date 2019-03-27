@@ -242,7 +242,7 @@ for epoch in range(0, n_epoch + 1):
         log = " ** new learning rate: %f (for GAN)" % (lr_init * new_lr_decay)
         print(log)
     elif epoch == 0:
-        #sess.run(tf.assign(lr_v, lr_init))
+        sess.run(tf.assign(lr_v, lr_init))
         log = " ** init lr: %f  decay_every_init: %d, lr_decay: %f (for GAN)" % (lr_init, decay_every, lr_decay)
         print(log)
 
@@ -323,3 +323,21 @@ for epoch in range(0, n_epoch + 1):
         tl.files.save_npz(net_g.all_params, name=checkpoint_dir + '/g_{}.npz'.format(tl.global_flag['mode']), sess=sess)
         tl.files.save_npz(net_d.all_params, name=checkpoint_dir + '/d_{}.npz'.format(tl.global_flag['mode']), sess=sess)
     """
+
+
+if __name__ == '__main__':
+    import argparse
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('--mode', type=str, default='srgan', help='srgan, evaluate')
+
+    args = parser.parse_args()
+
+    tl.global_flag['mode'] = args.mode
+
+    if tl.global_flag['mode'] == 'srgan':
+        train()
+    elif tl.global_flag['mode'] == 'evaluate':
+        evaluate()
+    else:
+        raise Exception("Unknow --mode")
