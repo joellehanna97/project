@@ -36,6 +36,7 @@ def SRGAN_g(t_image, is_train=False, reuse=False):
         rev_layer_depths = list(reversed(gen_layer_depths))
         rev_filter_sizes = list(reversed(gen_filter_sizes))
         rev_conv_outputs = list(reversed(conv_outputs))
+        print(z.get_shape())
         """
         # deconv portion
         for i, outputdepth in enumerate(rev_layer_depths[1:]): # reverse process exactly until last step
