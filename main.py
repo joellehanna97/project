@@ -242,7 +242,7 @@ for epoch in range(0, n_epoch + 1):
         log = " ** new learning rate: %f (for GAN)" % (lr_init * new_lr_decay)
         print(log)
     elif epoch == 0:
-        sess.run(tf.assign(lr_v, lr_init))
+        #sess.run(tf.assign(lr_v, lr_init))
         log = " ** init lr: %f  decay_every_init: %d, lr_decay: %f (for GAN)" % (lr_init, decay_every, lr_decay)
         print(log)
 
