@@ -58,7 +58,7 @@ def train():
 
     # Evaluate discrimator on real triplets
     net_d, logits_real = SRGAN_d(t_target_image, is_train=True, reuse=False)
-    _, logits_fake = SRGAN_d(net_g.outputs, is_train=True, reuse=True)
+    _, logits_fake = SRGAN_d(net_g, is_train=True, reuse=True) #net_g.outputs
 
     #maybe add vgg (?)
     net_g_test = SRGAN_g(t_image, is_train=False, reuse=True)
@@ -69,7 +69,7 @@ def train():
     d_loss2 = tl.cost.sigmoid_cross_entropy(logits_fake, tf.zeros_like(logits_fake), name='d2')
 
     g_gan_loss = 1e-3 * tl.cost.sigmoid_cross_entropy(logits_fake, tf.ones_like(logits_fake), name='g')
-    mse_loss = tl.cost.mean_squared_error(net_g.outputs, t_target_image, is_mean=True)
+    mse_loss = tl.cost.mean_squared_error(net_g, t_target_image, is_mean=True) #net_g.outputs
     #vgg_loss = 2e-6 * tl.cost.mean_squared_error(vgg_predict_emb.outputs, vgg_target_emb.outputs, is_mean=True)
 
     # maybe add vgg_loss, ms_ssim_loss, and clipping_loss (?)
@@ -225,7 +225,7 @@ def train():
         ## quick evaluation on train set
 
         if (epoch != 0) and (epoch % 10 == 0):
-            out = sess.run(net_g_test.outputs, {t_image: train_lr_vid_seqs})  #; print('gen sub-image:', out.shape, out.min(), out.max())
+            out = sess.run(net_g_test, {t_image: train_lr_vid_seqs})  #net_g_test.outputs#; print('gen sub-image:', out.shape, out.min(), out.max())
             print("[*] save images")
             tl.vis.save_images(out, [ni, ni], save_dir_ginit + '/train_%d.png' % epoch)
 
