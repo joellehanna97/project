@@ -34,7 +34,7 @@ def SRGAN_g(t_image, is_train=False, reuse=False):
         rev_layer_depths = list(reversed(gen_layer_depths))
         rev_filter_sizes = list(reversed(gen_filter_sizes))
         rev_conv_outputs = list(reversed(conv_outputs))
-
+        """
         # deconv portion
         for i, outputdepth in enumerate(rev_layer_depths[1:]): # reverse process exactly until last step
 
@@ -47,9 +47,9 @@ def SRGAN_g(t_image, is_train=False, reuse=False):
             stack = tf.concat([result, rev_conv_outputs[i+1]], 3)
             # print( i, stack.get_shape() )
             current_input = stack
-
+        """
         outputdepth = 3 # final image is 3 channel
-        h = bilinear_resize_tanh_deconv_block(current_input, self.is_training, rev_filter_sizes[-1], outputdepth, name=('g_tanh_deconv') )
+        h = bilinear_resize_tanh_deconv_block(current_input, True, rev_filter_sizes[-1], outputdepth, name=('g_tanh_deconv') )
         return conv2d(h, outputdepth, hh=1, ww=1, mean=0.11, stddev=0.04, name='final_conv')
 
 
