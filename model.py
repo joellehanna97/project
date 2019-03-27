@@ -20,9 +20,10 @@ def SRGAN_g(t_image, is_train=False, reuse=False):
     gen_filter_sizes = [3, 3, 3, 3]
     with tf.variable_scope("SRGAN_g"):
         conv_outputs = []
-        print(current_input.get_shape())
+
 
         current_input = t_image
+        print(current_input.get_shape())
         current_inputdepth = t_image.shape[3]
         for i, outputdepth in enumerate(gen_layer_depths):
             result = conv_block(current_input, True, gen_filter_sizes[i], outputdepth, name=('g_conv_block'+str(i)) )
