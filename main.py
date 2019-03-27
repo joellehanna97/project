@@ -1,13 +1,17 @@
-import os
-import time
+import os, time, pickle, random, time
+from datetime import datetime
+from time import localtime, strftime
+import logging, scipy
 import math
 import tensorflow as tf
 import numpy as np
 import tensorlayer as tl
+from utils import *
 
 from ops import *
 from model import *
 from config import config, log_config
+
 
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"] = "1"
@@ -43,6 +47,7 @@ def train():
     ###====================== PRE-LOAD DATA ===========================###
     train_video_folders = '/media/saeed-lts5/Data-Saeed/SuperResolution/youtube8m-dataset/frames'
     train_vid_list = sorted(tl.files.load_folder_list(path=train_video_folders))
+    ###========================== DEFINE MODEL ============================###
 
     #set up placeholders
     t_image = tf.placeholder(tf.float32, [1,82,82,6], name = 't_video_input_to_SRGAN_generator')
