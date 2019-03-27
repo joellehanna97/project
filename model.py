@@ -54,12 +54,8 @@ def SRGAN_g(t_image, is_train=False, reuse=False):
 
 """
 def SRGAN_g(t_image, is_train=False, reuse=False):
-    """
-    """
     Generator in Photo-Realistic Single Image Super-Resolution Using a Generative Adversarial Network
     feature maps (n) and stride (s) feature maps (n) and stride (s)
-    """
-    """
     w_init = tf.random_normal_initializer(stddev=0.02)
     b_init = None  # tf.constant_initializer(value=0.0)
     g_init = tf.random_normal_initializer(1., 0.02)
