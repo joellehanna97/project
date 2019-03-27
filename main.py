@@ -6,7 +6,6 @@ import numpy as np
 import tensorlayer as tl
 
 from ops import *
-from datasets import *
 from model import *
 from config import config, log_config
 
