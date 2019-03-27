@@ -48,7 +48,7 @@ def SRGAN_g(t_image, is_train=False, reuse=False):
 
         outputdepth = 3 # final image is 3 channel
         h = bilinear_resize_tanh_deconv_block(current_input, self.is_training, rev_filter_sizes[-1], outputdepth, name=('g_tanh_deconv') )
-        return conv2d(h, outputdepth, hh=1, ww=1, mean=0.11, stddev=0.04, name='final_conv')es
+        return conv2d(h, outputdepth, hh=1, ww=1, mean=0.11, stddev=0.04, name='final_conv')
 
 
 
