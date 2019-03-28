@@ -131,8 +131,8 @@ def train():
 					   train_lr_vid_img_list[105-1:105+2], path=train_lr_vid_list[0] + '/frames/', n_threads=32)
     """
     ## use first `batch_size` of train set to have a quick test during training
-    train_vid_imgs = tl.prepro.threading_data(train_vid_imgs, fn=tl.prepro.crop, wrg=82, hrg=82, is_random=False)
-    train_target_vid_imgs = tl.prepro.threading_data(train_target_vid_imgs, fn=tl.prepro.crop, wrg=82, hrg=82, is_random=False) #328 328
+    train_vid_imgs = tl.prepro.threading_data(train_vid_imgs, fn = crop_sub_imgs_fn,is_random=False) #fn=tl.prepro.crop, wrg=82, hrg=82, is_random=False)
+    train_target_vid_imgs = tl.prepro.threading_data(train_target_vid_imgs, fn = crop_sub_imgs_fn,is_random=False)#fn=tl.prepro.crop, wrg=82, hrg=82, is_random=False) #328 328
     train_vid_seqs = [np.concatenate([train_vid_imgs[0], train_vid_imgs[1]],2)]
     print(type(np.asarray(train_vid_seqs)))
     print(np.shape(train_vid_seqs))
@@ -207,9 +207,9 @@ def train():
 
             b_imgs_384 = tl.prepro.threading_data(b_imgs_384, fn=crop_custom, w=328, h=328, is_random=False)
             """
-            b_imgs_96 = tl.prepro.threading_data(b_imgs_96, fn=tl.prepro.crop, wrg=82, hrg=82, is_random=False)
+            b_imgs_96 = tl.prepro.threading_data(b_imgs_96, fn = crop_sub_imgs_fn,is_random=False)#fn=tl.prepro.crop, wrg=82, hrg=82, is_random=False)
 
-            b_imgs_384 = tl.prepro.threading_data(b_imgs_384, fn=tl.prepro.crop, wrg=82, hrg=82, is_random=False)#fn=tl.prepro.crop, wrg=82, hrg=82, is_random=False)
+            b_imgs_384 = tl.prepro.threading_data(b_imgs_384, fn = crop_sub_imgs_fn,is_random=False)#fn=tl.prepro.crop, wrg=82, hrg=82, is_random=False)#fn=tl.prepro.crop, wrg=82, hrg=82, is_random=False)
             #b_imgs_384 = tl.prepro.threading_data(b_imgs_384, fn=tl.prepro.crop, wrg=160, hrg=160, is_random=False)
             #b_seqs_96 = np.stack([np.concatenate([b_imgs_96[0], b_imgs_96[1], b_imgs_96[2]], 2),
 			#        np.concatenate([b_imgs_96[3], b_imgs_96[4], b_imgs_96[5]], 2),
@@ -292,9 +292,9 @@ def train():
 
             b_imgs_384 = tl.prepro.threading_data(b_imgs_384, fn=crop_custom, w=328, h=328, is_random=False)
             """
-            b_imgs_96 = tl.prepro.threading_data(b_imgs_96, fn=tl.prepro.crop, wrg=82, hrg=82, is_random=False)
+            b_imgs_96 = tl.prepro.threading_data(b_imgs_96, fn = crop_sub_imgs_fn,is_random=False)#fn=tl.prepro.crop, wrg=82, hrg=82, is_random=False)
 
-            b_imgs_384 = tl.prepro.threading_data(b_imgs_384, fn=tl.prepro.crop, wrg=82, hrg=82, is_random=False)#fn=tl.prepro.crop, wrg=82, hrg=82, is_random=False)
+            b_imgs_384 = tl.prepro.threading_data(b_imgs_384, fn = crop_sub_imgs_fn,is_random=False)#fn=tl.prepro.crop, wrg=82, hrg=82, is_random=False)#fn=tl.prepro.crop, wrg=82, hrg=82, is_random=False)
             #b_imgs_384 = tl.prepro.threading_data(b_imgs_384, fn=tl.prepro.crop, wrg=160, hrg=160, is_random=False)
             #b_seqs_96 = np.stack([np.concatenate([b_imgs_96[0], b_imgs_96[1], b_imgs_96[2]], 2),
             #        np.concatenate([b_imgs_96[3], b_imgs_96[4], b_imgs_96[5]], 2),
