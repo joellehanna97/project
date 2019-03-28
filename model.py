@@ -90,6 +90,7 @@ def SRGAN_g(t_image, is_train=False, reuse=False):
         # B residual blacks end
         print('2')
         print(n.outputs.get_shape())
+        """
 
         n = Conv2d(n, 256, (3, 3), (1, 1), act=None, padding='SAME', W_init=w_init, name='n256s1/1')
         n = SubpixelConv2d(n, scale=2, n_out_channel=None, act=tf.nn.relu, name='pixelshufflerx2/1')
@@ -101,10 +102,11 @@ def SRGAN_g(t_image, is_train=False, reuse=False):
 
         print('4')
         print(n.outputs.get_shape())
+        """
 
         n = Conv2d(n, 3, (1, 1), (1, 1), act=tf.nn.tanh, padding='SAME', W_init=w_init, name='out')
 
-        print('5')    
+        print('5')
         print(n.outputs.get_shape())
 
         #outputdepth = 3 # final image is 3 channel
