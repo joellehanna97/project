@@ -116,7 +116,7 @@ def train():
     #train_lr_vid_img_list = sorted(tl.files.load_file_list(path=train_lr_vid_list[0] + '/frames/', regx='.*.png', printable=False))
 
     #train_target_vid_imgs = tl.vis.read_images([train_hr_vid_img_list[15],train_hr_vid_img_list[45],train_hr_vid_img_list[75],train_hr_vid_img_list[105]], path=train_hr_vid_list[0] + '/frames/', n_threads=32)
-    train_target_vid_imgs = tl.vis.read_images([train_hr_vid_img_list[15]], path=train_vid_list[0] + '/frames/', n_threads=32)
+    train_target_vid_imgs = tl.vis.read_images([train_vid_img_list[15]], path=train_vid_list[0] + '/frames/', n_threads=32)
     indices_1 = [14,16]
     train_vid_img_list_s = [train_vid_img_list[i] for i in indices_1]
     train_vid_imgs = tl.vis.read_images(train_vid_img_list_s, path=train_vid_list[0] + '/frames/', n_threads=32)
