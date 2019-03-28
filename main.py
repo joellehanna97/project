@@ -133,7 +133,7 @@ def train():
     ## use first `batch_size` of train set to have a quick test during training
     train_vid_imgs = tl.prepro.threading_data(train_vid_imgs, fn=tl.prepro.crop, wrg=82, hrg=82, is_random=False)
     train_target_vid_imgs = tl.prepro.threading_data(train_target_vid_imgs, fn=tl.prepro.crop, wrg=82, hrg=82, is_random=False) #328 328
-    train_vid_seqs = np.stack([np.concatenate([train_vid_imgs[0], train_vid_imgs[1]],2)])
+    train_vid_seqs = np.stack([np.concatenate([train_vid_imgs[0], train_vid_imgs[1]],3)])
     """
     train_lr_vid_seqs = np.stack([np.concatenate([train_lr_vid_imgs[0], train_lr_vid_imgs[1], train_lr_vid_imgs[2]], 2),
 			np.concatenate([train_lr_vid_imgs[3], train_lr_vid_imgs[4], train_lr_vid_imgs[5]], 2),
