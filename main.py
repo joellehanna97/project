@@ -280,6 +280,8 @@ def train():
         train_all_img_list = list(zip(train_vid_list))
         random.shuffle(train_all_img_list)
         train_vid_list = zip(*train_all_img_list)
+    
+        print(type(train_vid_list))
         print("Shuffled time: %4.4fs" % (time.time() - step_time))
 
         ## If your machine have enough memory, please pre-load the whole train set.
