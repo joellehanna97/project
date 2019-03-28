@@ -7,6 +7,8 @@ import tensorflow as tf
 import numpy as np
 import tensorlayer as tl
 from utils import *
+from scipy.misc import imsave
+import cv2 as cv
 
 from ops import *
 from model import *
@@ -236,6 +238,7 @@ def train():
             print("successful")
             print(type(out))
             print(np.shape(out))
+            cv.imwrite('test',out)
 
         ## save model
         if (epoch != 0) and (epoch % 10 == 0):
