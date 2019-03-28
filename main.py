@@ -29,8 +29,7 @@ n_epoch = config.TRAIN.n_epoch
 lr_decay = config.TRAIN.lr_decay
 decay_every = config.TRAIN.decay_every
 
-#ni = int(np.sqrt(batch_size))
-ni = 2
+ni = int(np.sqrt(batch_size))
 
 def train():
 
@@ -52,8 +51,8 @@ def train():
     ###========================== DEFINE MODEL ============================###
 
     #set up placeholders
-    t_image = tf.placeholder(tf.float32, [4,82,82,6], name = 't_video_input_to_SRGAN_generator')
-    t_target_image = tf.placeholder(tf.float32, [4, 82, 82, 3], name='t_target_image')
+    t_image = tf.placeholder(tf.float32, [1,82,82,6], name = 't_video_input_to_SRGAN_generator')
+    t_target_image = tf.placeholder(tf.float32, [1, 82, 82, 3], name='t_target_image')
 
     #Sample generated frame from generator:
     net_g = SRGAN_g(t_image, is_train=True, reuse=False)
@@ -118,7 +117,8 @@ def train():
     #train_lr_vid_img_list = sorted(tl.files.load_file_list(path=train_lr_vid_list[0] + '/frames/', regx='.*.png', printable=False))
 
     #train_target_vid_imgs = tl.vis.read_images([train_hr_vid_img_list[15],train_hr_vid_img_list[45],train_hr_vid_img_list[75],train_hr_vid_img_list[105]], path=train_hr_vid_list[0] + '/frames/', n_threads=32)
-    train_target_vid_imgs = tl.vis.read_images([train_vid_img_list[15],train_vid_img_list[45],train_vid_img_list[75],train_vid_img_list[105]], path=train_vid_list[0] + '/frames/', n_threads=32)
+    #train_target_vid_imgs = tl.vis.read_images([train_vid_img_list[15],train_vid_img_list[45],train_vid_img_list[75],train_vid_img_list[105]], path=train_vid_list[0] + '/frames/', n_threads=32)
+    train_target_vid_imgs = tl.vis.read_images([train_vid_img_list[15], path=train_vid_list[0]] + '/frames/', n_threads=32)
     indices_1 = [14,16]
     indices_2 = [44,46]
     indices_3 = [74,76]
@@ -128,7 +128,8 @@ def train():
     train_vid_img_list_s3 = [train_vid_img_list[i] for i in indices_3]
     train_vid_img_list_s4 = [train_vid_img_list[i] for i in indices_4]
 
-    train_vid_imgs = tl.vis.read_images(train_vid_img_list_s1+train_vid_img_list_s2+train_vid_img_list_s3+train_vid_img_list_s4, path=train_vid_list[0] + '/frames/', n_threads=32)
+    #train_vid_imgs = tl.vis.read_images(train_vid_img_list_s1+train_vid_img_list_s2+train_vid_img_list_s3+train_vid_img_list_s4, path=train_vid_list[0] + '/frames/', n_threads=32)
+    train_vid_imgs = tl.vis.read_images(train_vid_img_list_s1, path=train_vid_list[0] + '/frames/', n_threads=32)
 
 
     """
@@ -143,25 +144,22 @@ def train():
     ## use first `batch_size` of train set to have a quick test during training
     train_vid_imgs = tl.prepro.threading_data(train_vid_imgs, fn = crop_sub_imgs_fn,is_random=False) #fn=tl.prepro.crop, wrg=82, hrg=82, is_random=False)
     train_target_vid_imgs = tl.prepro.threading_data(train_target_vid_imgs, fn = crop_sub_imgs_fn,is_random=False)#fn=tl.prepro.crop, wrg=82, hrg=82, is_random=False) #328 328
-    #train_vid_seqs = [np.concatenate([train_vid_imgs[0], train_vid_imgs[1]],2)]
-    train_vid_seqs = np.stack([np.concatenate([train_vid_imgs[0], train_vid_imgs[1]], 2),
-			np.concatenate([train_vid_imgs[2], train_vid_imgs[3]], 2),
-			np.concatenate([train_vid_imgs[4], train_vid_imgs[5]], 2),
-			np.concatenate([train_vid_imgs[6], train_vid_imgs[7]], 2)])
-
-    print(type((train_vid_seqs)))
+    train_vid_seqs = [np.concatenate([train_vid_imgs[0], train_vid_imgs[1]],2)]
+    print(type(np.asarray(train_vid_seqs)))
     print(np.shape(train_vid_seqs))
 
-    tl.vis.save_images(train_target_vid_imgs, [ni, ni], save_dir_ginit + '/_train_sample_384.png')
-    tl.vis.save_images(train_vid_seqs[:,:,:,0:2], [ni, ni], save_dir_ginit + '/_train_sample_96_1.png')
-    tl.vis.save_images(train_vid_seqs[:,:,:,2:4], [ni, ni], save_dir_ginit + '/_train_sample_96_2.png')
-    tl.vis.save_images(train_vid_seqs[:,:,:,4:6], [ni, ni], save_dir_ginit + '/_train_sample_96_3.png')
-    tl.vis.save_images(train_vid_seqs[:,:,:,6:8], [ni, ni], save_dir_ginit + '/_train_sample_96_4.png')
+    """
+    train_lr_vid_seqs = np.stack([np.concatenate([train_lr_vid_imgs[0], train_lr_vid_imgs[1], train_lr_vid_imgs[2]], 2),
+			np.concatenate([train_lr_vid_imgs[3], train_lr_vid_imgs[4], train_lr_vid_imgs[5]], 2),
+			np.concatenate([train_lr_vid_imgs[6], train_lr_vid_imgs[7], train_lr_vid_imgs[8]], 2),
+			np.concatenate([train_lr_vid_imgs[9], train_lr_vid_imgs[10], train_lr_vid_imgs[11]], 2)])
+    """
+    tl.vis.save_images(train_vid_imgs, [ni, ni], save_dir_ginit + '/_train_sample_384.png')
+    #tl.vis.save_images(np.asarray(train_vid_seqs), [ni, ni], save_dir_ginit + '/_train_sample_96_1.png')
     """
     tl.vis.save_images(train_lr_vid_seqs[:,:,:,3:6], [ni, ni], save_dir_ginit + '/_train_sample_96_2.png')
     tl.vis.save_images(train_lr_vid_seqs[:,:,:,6:9], [ni, ni], save_dir_ginit + '/_train_sample_96_3.png')
     """
-    print('saved')
     #this is for GAN
     tl.vis.save_images(train_vid_imgs, [ni, ni], save_dir_gan + '/_train_sample_384.png')
     #tl.vis.save_images(train_vid_seqs, [ni, ni], save_dir_gan + '/_train_sample_96_1.png')
@@ -246,9 +244,6 @@ def train():
             print("[*] save images")
             tl.vis.save_images(out, [ni, ni], save_dir_ginit + '/train_%d.png' % epoch)
             print("successful")
-            print(type(out))
-            print(np.shape(out))
-            cv.imwrite('test',out)
 
         ## save model
         if (epoch != 0) and (epoch % 10 == 0):
