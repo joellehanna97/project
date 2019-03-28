@@ -118,7 +118,7 @@ def train():
 
     #train_target_vid_imgs = tl.vis.read_images([train_hr_vid_img_list[15],train_hr_vid_img_list[45],train_hr_vid_img_list[75],train_hr_vid_img_list[105]], path=train_hr_vid_list[0] + '/frames/', n_threads=32)
     #train_target_vid_imgs = tl.vis.read_images([train_vid_img_list[15],train_vid_img_list[45],train_vid_img_list[75],train_vid_img_list[105]], path=train_vid_list[0] + '/frames/', n_threads=32)
-    train_target_vid_imgs = tl.vis.read_images([train_vid_img_list[15], path=train_vid_list[0]] + '/frames/', n_threads=32)
+    train_target_vid_imgs = tl.vis.read_images([train_vid_img_list[15]], path=train_vid_list[0] + '/frames/', n_threads=32)
     indices_1 = [14,16]
     indices_2 = [44,46]
     indices_3 = [74,76]
