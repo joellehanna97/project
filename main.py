@@ -229,7 +229,7 @@ def train():
         ## quick evaluation on train set
 
         if (epoch != 0) and (epoch % 10 == 0):
-            out = sess.run(net_g_test, {t_image: train_vid_seqs})  #net_g_test.outputs#; print('gen sub-image:', out.shape, out.min(), out.max())
+            out = sess.run(net_g_test.outputs, {t_image: train_vid_seqs})  #net_g_test.outputs#; print('gen sub-image:', out.shape, out.min(), out.max())
             print("[*] save images")
             tl.vis.save_images(out, [ni, ni], save_dir_ginit + '/train_%d.png' % epoch)
 
