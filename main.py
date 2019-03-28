@@ -234,6 +234,8 @@ def train():
             print("[*] save images")
             tl.vis.save_images(out, [ni, ni], save_dir_ginit + '/train_%d.png' % epoch)
             print("successful")
+            print(type(out))
+            print(np.shape(out))
 
         ## save model
         if (epoch != 0) and (epoch % 10 == 0):
