@@ -163,7 +163,7 @@ def train():
 
     print(" ** fixed learning rate: %f (for init G)" % lr_init)
 
-    train_vid_list = train_vid_list[0:12] #5000
+    train_vid_list = train_vid_list[0:100] #5000
     #train_lr_vid_list = train_lr_vid_list[0:12] #5000
     for epoch in range(0, n_epoch_init + 1):
 
