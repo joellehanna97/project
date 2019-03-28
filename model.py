@@ -71,8 +71,6 @@ def SRGAN_g(t_image, is_train=False, reuse=False):
     with tf.variable_scope("SRGAN_g", reuse=reuse) as vs:
         # tl.layers.set_name_reuse(reuse) # remove for TL 1.8.0+
         n = InputLayer(t_image, name='in')
-        print(t_image.get_shape())
-        print('shape input g')
         n = Conv2d(n, 64, (3, 3), (1, 1), act=tf.nn.relu, padding='SAME', W_init=w_init, name='n64s1/c')
         temp = n
 
@@ -84,19 +82,30 @@ def SRGAN_g(t_image, is_train=False, reuse=False):
             nn = BatchNormLayer(nn, is_train=is_train, gamma_init=g_init, name='n64s1/b2/%s' % i)
             nn = ElementwiseLayer([n, nn], tf.add, name='b_residual_add/%s' % i)
             n = nn
-
+        print('1')
+        print(n.outputs.get_shape())
         n = Conv2d(n, 64, (3, 3), (1, 1), act=None, padding='SAME', W_init=w_init, b_init=b_init, name='n64s1/c/m')
         n = BatchNormLayer(n, is_train=is_train, gamma_init=g_init, name='n64s1/b/m')
         n = ElementwiseLayer([n, temp], tf.add, name='add3')
         # B residual blacks end
+        print('2')
+        print(n.outputs.get_shape())
 
         n = Conv2d(n, 256, (3, 3), (1, 1), act=None, padding='SAME', W_init=w_init, name='n256s1/1')
         n = SubpixelConv2d(n, scale=2, n_out_channel=None, act=tf.nn.relu, name='pixelshufflerx2/1')
+        print('3')
+        print(n.outputs.get_shape())
 
         n = Conv2d(n, 256, (3, 3), (1, 1), act=None, padding='SAME', W_init=w_init, name='n256s1/2')
         n = SubpixelConv2d(n, scale=2, n_out_channel=None, act=tf.nn.relu, name='pixelshufflerx2/2')
 
+        print('4')
+        print(n.outputs.get_shape())
+
         n = Conv2d(n, 3, (1, 1), (1, 1), act=tf.nn.tanh, padding='SAME', W_init=w_init, name='out')
+
+        print('5')    
+        print(n.outputs.get_shape())
 
         #outputdepth = 3 # final image is 3 channel
         #h = bilinear_resize_tanh_deconv_block(current_input, True, rev_filter_sizes[-1], outputdepth, name=('g_tanh_deconv') )
