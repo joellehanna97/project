@@ -330,7 +330,7 @@ def train():
         log = "[*] Epoch: [%2d/%2d] time: %4.4fs, d_loss: %.8f g_loss: %.8f" % (epoch, n_epoch, time.time() - epoch_time, total_d_loss / n_iter,
                                                                                 total_g_loss / n_iter)
         print(log)
-
+        """
         ## quick evaluation on train set
         if (epoch != 0) and (epoch % 10 == 0):
             out = sess.run(net_g_test.outputs, {t_image: sample_imgs_96})  #; print('gen sub-image:', out.shape, out.min(), out.max())
@@ -341,8 +341,8 @@ def train():
         if (epoch != 0) and (epoch % 10 == 0):
             tl.files.save_npz(net_g.all_params, name=checkpoint_dir + '/g_{}.npz'.format(tl.global_flag['mode']), sess=sess)
             tl.files.save_npz(net_d.all_params, name=checkpoint_dir + '/d_{}.npz'.format(tl.global_flag['mode']), sess=sess)
-        
 
+        """
 
 if __name__ == '__main__':
     import argparse
