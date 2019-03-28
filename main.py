@@ -276,14 +276,15 @@ def train():
         #     b_imgs_96 = tl.prepro.threading_data(b_imgs_384, fn=downsample_fn)
 
         # shuffle images
+        """
         step_time = time.time()
         train_all_img_list = list(zip(train_vid_list))
         random.shuffle(train_all_img_list)
         train_vid_list = zip(*train_all_img_list)
-    
+
         print(type(train_vid_list))
         print("Shuffled time: %4.4fs" % (time.time() - step_time))
-
+        """
         ## If your machine have enough memory, please pre-load the whole train set.
         for idx in range(0, len(train_vid_list)):
             step_time = time.time()
