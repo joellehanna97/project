@@ -29,7 +29,7 @@ n_epoch = config.TRAIN.n_epoch
 lr_decay = config.TRAIN.lr_decay
 decay_every = config.TRAIN.decay_every
 
-ni = int(np.sqrt(batch_size))
+#ni = int(np.sqrt(batch_size))
 ni = 2
 
 def train():
@@ -152,12 +152,16 @@ def train():
     print(type((train_vid_seqs)))
     print(np.shape(train_vid_seqs))
 
-    tl.vis.save_images(train_vid_imgs, [ni, ni], save_dir_ginit + '/_train_sample_384.png')
-    #tl.vis.save_images(np.asarray(train_vid_seqs), [ni, ni], save_dir_ginit + '/_train_sample_96_1.png')
+    tl.vis.save_images(train_target_vid_imgs, [ni, ni], save_dir_ginit + '/_train_sample_384.png')
+    tl.vis.save_images(train_vid_seqs[:,:,:,0:2], [ni, ni], save_dir_ginit + '/_train_sample_96_1.png')
+    tl.vis.save_images(train_vid_seqs[:,:,:,2:4], [ni, ni], save_dir_ginit + '/_train_sample_96_2.png')
+    tl.vis.save_images(train_vid_seqs[:,:,:,4:6], [ni, ni], save_dir_ginit + '/_train_sample_96_3.png')
+    tl.vis.save_images(train_vid_seqs[:,:,:,6:8], [ni, ni], save_dir_ginit + '/_train_sample_96_4.png')
     """
     tl.vis.save_images(train_lr_vid_seqs[:,:,:,3:6], [ni, ni], save_dir_ginit + '/_train_sample_96_2.png')
     tl.vis.save_images(train_lr_vid_seqs[:,:,:,6:9], [ni, ni], save_dir_ginit + '/_train_sample_96_3.png')
     """
+    print('saved')
     #this is for GAN
     tl.vis.save_images(train_vid_imgs, [ni, ni], save_dir_gan + '/_train_sample_384.png')
     #tl.vis.save_images(train_vid_seqs, [ni, ni], save_dir_gan + '/_train_sample_96_1.png')
