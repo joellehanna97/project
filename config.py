@@ -5,7 +5,7 @@ config = edict()
 config.TRAIN = edict()
 
 ## Adam
-config.TRAIN.batch_size = 1 # 16 # 
+config.TRAIN.batch_size = 16 # 16 # 
 config.TRAIN.lr_init = 1e-4  #initial learning rate
 config.TRAIN.beta1 = 0.9  # decay rate
 
