@@ -134,7 +134,7 @@ def train():
     train_vid_imgs = tl.prepro.threading_data(train_vid_imgs, fn=tl.prepro.crop, wrg=82, hrg=82, is_random=False)
     train_target_vid_imgs = tl.prepro.threading_data(train_target_vid_imgs, fn=tl.prepro.crop, wrg=82, hrg=82, is_random=False) #328 328
     train_vid_seqs = [np.concatenate([train_vid_imgs[0], train_vid_imgs[1]],2)]
-    print(type(train_vid_seqs))
+    print(type(np.asarray(train_vid_seqs)))
     print(np.shape(train_vid_seqs))
     """
     train_lr_vid_seqs = np.stack([np.concatenate([train_lr_vid_imgs[0], train_lr_vid_imgs[1], train_lr_vid_imgs[2]], 2),
@@ -143,7 +143,7 @@ def train():
 			np.concatenate([train_lr_vid_imgs[9], train_lr_vid_imgs[10], train_lr_vid_imgs[11]], 2)])
     """
     tl.vis.save_images(train_vid_imgs, [ni, ni], save_dir_ginit + '/_train_sample_384.png')
-    tl.vis.save_images(train_vid_seqs[:,:,:,0:2], [ni, ni], save_dir_ginit + '/_train_sample_96_1.png')
+    tl.vis.save_images(train_vid_seqs, [ni, ni], save_dir_ginit + '/_train_sample_96_1.png')
     """
     tl.vis.save_images(train_lr_vid_seqs[:,:,:,3:6], [ni, ni], save_dir_ginit + '/_train_sample_96_2.png')
     tl.vis.save_images(train_lr_vid_seqs[:,:,:,6:9], [ni, ni], save_dir_ginit + '/_train_sample_96_3.png')
