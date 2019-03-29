@@ -203,7 +203,8 @@ def train():
     tl.vis.save_images(train_lr_vid_seqs[:,:,:,6:9], [ni, ni], save_dir_ginit + '/_train_sample_96_3.png')
     """
     #this is for GAN
-    tl.vis.save_images(train_target_vid_imgs, [ni, ni], save_dir_gan + '/_train_sample_384.png')
+    tl.vis.save_images(train_vid_seqs[:,:,:,0:3], [ni, ni], save_dir_gan + '/_train_sample_96_1.png')
+    tl.vis.save_images(train_vid_seqs[:,:,:,3:6], [ni, ni], save_dir_gan + '/_train_sample_96_2.png')
     #tl.vis.save_images(train_vid_seqs, [ni, ni], save_dir_gan + '/_train_sample_96_1.png')
     """
     tl.vis.save_images(train_lr_vid_seqs[:,:,:,3:6], [ni, ni], save_dir_gan + '/_train_sample_96_2.png')
@@ -216,7 +217,7 @@ def train():
 
     print(" ** fixed learning rate: %f (for init G)" % lr_init)
 
-    train_vid_list = train_vid_list[0:12] #5000
+    train_vid_list = train_vid_list[0:5] #5000
     #train_lr_vid_list = train_lr_vid_list[0:12] #5000
     for epoch in range(0, n_epoch_init + 1):
 
@@ -400,7 +401,7 @@ def train():
         log = "[*] Epoch: [%2d/%2d] time: %4.4fs, d_loss: %.8f g_loss: %.8f" % (epoch, n_epoch, time.time() - epoch_time, total_d_loss / n_iter,
                                                                                 total_g_loss / n_iter)
         print(log)
-        """
+
         ## quick evaluation on train set
         if (epoch != 0) and (epoch % 10 == 0):
             out = sess.run(net_g_test.outputs, {t_image: sample_imgs_96})  #; print('gen sub-image:', out.shape, out.min(), out.max())
@@ -412,7 +413,7 @@ def train():
             tl.files.save_npz(net_g.all_params, name=checkpoint_dir + '/g_{}.npz'.format(tl.global_flag['mode']), sess=sess)
             tl.files.save_npz(net_d.all_params, name=checkpoint_dir + '/d_{}.npz'.format(tl.global_flag['mode']), sess=sess)
 
-        """
+
 
 if __name__ == '__main__':
     import argparse
