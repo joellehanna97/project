@@ -152,10 +152,10 @@ def train():
     #print(np.shape(train_vid_seqs))
 
 
-    train_lr_vid_seqs = np.stack([np.concatenate([train_lr_vid_imgs[0], train_lr_vid_imgs[1]], 2),
-			np.concatenate([train_lr_vid_imgs[2], train_lr_vid_imgs[3]], 2),
-			np.concatenate([train_lr_vid_imgs[4], train_lr_vid_imgs[5]], 2),
-			np.concatenate([train_lr_vid_imgs[6], train_lr_vid_imgs[7]], 2)])
+    train_vid_seqs = np.stack([np.concatenate([train_vid_imgs[0], train_vid_imgs[1]], 2),
+			np.concatenate([train_vid_imgs[2], train_vid_imgs[3]], 2),
+			np.concatenate([train_vid_imgs[4], train_vid_imgs[5]], 2),
+			np.concatenate([train_vid_imgs[6], train_vid_imgs[7]], 2)])
 
     tl.vis.save_images(train_target_vid_imgs, [ni, ni], save_dir_ginit + '/_train_sample_384.png')
     #tl.vis.save_images(np.asarray(train_vid_seqs), [ni, ni], save_dir_ginit + '/_train_sample_96_1.png')
