@@ -154,7 +154,7 @@ def train():
 			np.concatenate([train_lr_vid_imgs[6], train_lr_vid_imgs[7], train_lr_vid_imgs[8]], 2),
 			np.concatenate([train_lr_vid_imgs[9], train_lr_vid_imgs[10], train_lr_vid_imgs[11]], 2)])
     """
-    tl.vis.save_images(train_vid_imgs, [ni, ni], save_dir_ginit + '/_train_sample_384.png')
+    tl.vis.save_images(train_target_vid_imgs, [ni, ni], save_dir_ginit + '/_train_sample_384.png')
     #tl.vis.save_images(np.asarray(train_vid_seqs), [ni, ni], save_dir_ginit + '/_train_sample_96_1.png')
     """
     tl.vis.save_images(train_lr_vid_seqs[:,:,:,3:6], [ni, ni], save_dir_ginit + '/_train_sample_96_2.png')
@@ -242,7 +242,8 @@ def train():
         if (epoch != 0) and (epoch % 10 == 0):
             out = sess.run(net_g_test.outputs, {t_image: train_vid_seqs})  #net_g_test.outputs#; print('gen sub-image:', out.shape, out.min(), out.max())
             print("[*] save images")
-            tl.vis.save_images(out, [ni, ni], save_dir_ginit + '/train_%d.png' % epoch)
+            #tl.vis.save_images(out, [ni, ni], save_dir_ginit + '/train_%d.png' % epoch)
+            tl.vis.save_image(out, save_dir_ginit + '/train_%d.png' % epoch)
             print("successful")
 
         ## save model
