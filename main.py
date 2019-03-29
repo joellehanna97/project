@@ -208,7 +208,7 @@ def train():
             #train_lr_vid_img_list = sorted(tl.files.load_file_list(path=train_lr_vid_list[idx] + '/frames/', regx='.*.png', printable=False))
 
             b_imgs_384 = tl.vis.read_images([train_vid_img_list[15],
-                                                    train_vid_img_list[45],train_vid_img_list[75],train_vid_img_list[105]], path=train_hr_vid_list[idx] + '/frames/', n_threads=32)
+                                                    train_vid_img_list[45],train_vid_img_list[75],train_vid_img_list[105]], path=train_vid_list[idx] + '/frames/', n_threads=32)
             #b_imgs_384 = tl.vis.read_images([train_vid_img_list[45]], path=train_vid_list[idx] + '/frames/', n_threads=32) #target
             #b_imgs_96 = tl.vis.read_images(train_lr_vid_img_list[15-1:15+2]+
 			#		           train_lr_vid_img_list[45-1:45+2]+
