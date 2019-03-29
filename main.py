@@ -66,7 +66,21 @@ def train():
     _, logits_fake = SRGAN_d(net_g.outputs, is_train=True, reuse=True) #net_g.outputs
 
     #maybe add vgg (?)
+
+    ## vgg inference. 0, 1, 2, 3 BILINEAR NEAREST BICUBIC AREA
+    t_target_image_224 = tf.image.resize_images(
+        t_target_image, size=[224, 224], method=0,
+        align_corners=False)  # resize_target_image_for_vgg # http://tensorlayer.readthedocs.io/en/latest/_modules/tensorlayer/layers.html#UpSampling2dLayer
+    t_predict_image_224 = tf.image.resize_images(net_g.outputs, size=[224, 224], method=0, align_corners=False)  # resize_generate_image_for_vgg
+
+    net_vgg, vgg_target_emb = Vgg19_simple_api((t_target_image_224 + 1) / 2, reuse=False)
+    _, vgg_predict_emb = Vgg19_simple_api((t_predict_image_224 + 1) / 2, reuse=True)
+
+    ## test inference
     net_g_test = SRGAN_g(t_image, is_train=False, reuse=True)
+
+    ssim_valid = tf.reduce_mean(tf.image.ssim(net_g_test.outputs, t_target_image, 1))
+    mse_valid = tf.losses.mean_squared_error(net_g_test.outputs, t_target_image)
 
     ###========================== DEFINE TRAIN OPS ==========================###
     # Calculate GAN losses
@@ -75,6 +89,7 @@ def train():
 
     g_gan_loss = 1e-3 * tl.cost.sigmoid_cross_entropy(logits_fake, tf.ones_like(logits_fake), name='g')
     mse_loss = tl.cost.mean_squared_error(net_g.outputs, t_target_image, is_mean=True) #net_g.outputs
+    vgg_loss = 2e-6 * tl.cost.mean_squared_error(vgg_predict_emb.outputs, vgg_target_emb.outputs, is_mean=True)
     #vgg_loss = 2e-6 * tl.cost.mean_squared_error(vgg_predict_emb.outputs, vgg_target_emb.outputs, is_mean=True)
 
     # maybe add vgg_loss, ms_ssim_loss, and clipping_loss (?)
@@ -83,8 +98,10 @@ def train():
     #self.clipping_loss = tf.reduce_mean(tf.square(g_mean_added - g_mean_added_clipped))
 
     # Combine losses into single functions for the discriminator and the generator
+
     d_loss = d_loss1 + d_loss2
-    g_loss = mse_loss + g_gan_loss #vgg_loss +
+    g_loss = mse_loss + g_gan_loss + vgg_loss
+    g_loss_2 = mse_loss + vgg_loss
 
     # Record relevant variables
     ## Tensorboard summaries
@@ -114,6 +131,22 @@ def train():
 
     tl.files.load_and_assign_npz(sess=sess, name=checkpoint_input_g, network=net_g)
     tl.files.load_and_assign_npz(sess=sess, name=checkpoint_input_d, network=net_d)
+    ###============================= LOAD VGG ===============================###
+    vgg19_npy_path = "vgg19.npy"
+    if not os.path.isfile(vgg19_npy_path):
+        print("Please download vgg19.npz from : https://github.com/machrisaa/tensorflow-vgg")
+        exit()
+    npz = np.load(vgg19_npy_path, encoding='latin1').item()
+
+    params = []
+    for val in sorted(npz.items()):
+        W = np.asarray(val[1][0])
+        b = np.asarray(val[1][1])
+        print("  Loading %s: %s, %s" % (val[0], W.shape, b.shape))
+        params.extend([W, b])
+    tl.files.assign_params(sess, params, net_vgg)
+    # net_vgg.print_params(False)
+    # net_vgg.print_layers()
 
     ###============================= TRAINING ===============================###
     train_vid_img_list = sorted(tl.files.load_file_list(path=train_vid_list[0] + '/frames/', regx='.*.png', printable=False))
@@ -357,9 +390,9 @@ def train():
             #b_imgs_96_c = np.concatenate((b_imgs_96, b_imgs_96), axis=3)
             errD, _ = sess.run([d_loss, d_optim], {t_image: b_seqs_96, t_target_image: b_imgs_384})
             ## update G
-            errG, errM, errA, _ = sess.run([g_loss, mse_loss, g_gan_loss, g_optim], {t_image: b_seqs_96, t_target_image: b_imgs_384})
-            print("Epoch [%2d/%2d] %4d time: %4.4fs, d_loss: %.8f g_loss: %.8f (mse: %.6f adv: %.6f)" %
-                  (epoch, n_epoch, n_iter, time.time() - step_time, errD, errG, errM, errA))
+            errG, errM, errA, , errV, _ = sess.run([g_loss, mse_loss, g_gan_loss,vgg_loss, g_optim], {t_image: b_seqs_96, t_target_image: b_imgs_384})
+            print("Epoch [%2d/%2d] %4d time: %4.4fs, d_loss: %.8f g_loss: %.8f (mse: %.6f vgg: %.6f adv: %.6f)" %
+                  (epoch, n_epoch, n_iter, time.time() - step_time, errD, errG, errM, errV,  errA))
             total_d_loss += errD
             total_g_loss += errG
             n_iter += 1
