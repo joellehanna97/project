@@ -177,7 +177,7 @@ def train():
 
     print(" ** fixed learning rate: %f (for init G)" % lr_init)
 
-    train_vid_list = train_vid_list[0:12] #5000
+    train_vid_list = train_vid_list[0:5] #5000
     #train_lr_vid_list = train_lr_vid_list[0:12] #5000
     for epoch in range(0, n_epoch_init + 1):
 
@@ -311,13 +311,24 @@ def train():
             train_vid_img_list = sorted(tl.files.load_file_list(path=train_vid_list[idx] + '/frames/', regx='.*.png', printable=False))
             #train_lr_vid_img_list = sorted(tl.files.load_file_list(path=train_lr_vid_list[idx] + '/frames/', regx='.*.png', printable=False))
 
-            b_imgg_384 = tl.vis.read_images([train_vid_img_list[45]], path=train_vid_list[idx] + '/frames/', n_threads=32) #target
+            #b_imgs_384 = tl.vis.read_images([train_vid_img_list[45]], path=train_vid_list[idx] + '/frames/', n_threads=32) #target
+            b_imgs_384 = tl.vis.read_images([train_vid_img_list[15],
+                                        train_vid_img_list[45],train_vid_img_list[75],train_vid_img_list[105]], path=train_vid_list[idx] + '/frames/', n_threads=32)
             #b_imgs_96 = tl.vis.read_images(train_lr_vid_img_list[15-1:15+2]+
             #		           train_lr_vid_img_list[45-1:45+2]+
             #		           train_lr_vid_img_list[75-1:75+2]+
             #		           train_lr_vid_img_list[105-1:105+2], path=train_lr_vid_list[idx] + '/frames/', n_threads=32)
-            train_vid_img_list_s = [train_vid_img_list[i] for i in indices_2]
-            b_imgs_96 = tl.vis.read_images(train_vid_img_list_s, path=train_vid_list[idx] + '/frames/', n_threads=32)
+            #train_vid_img_list_s = [train_vid_img_list[i] for i in indices_2]
+            #b_imgs_96 = tl.vis.read_images(train_vid_img_list_s, path=train_vid_list[idx] + '/frames/', n_threads=32)
+            indices_1 = [14,16]
+            indices_2 = [44,46]
+            indices_3 = [74,76]
+            indices_4 = [104,106]
+            train_vid_img_list_s1 = [train_vid_img_list[i] for i in indices_1]
+            train_vid_img_list_s2 = [train_vid_img_list[i] for i in indices_2]
+            train_vid_img_list_s3 = [train_vid_img_list[i] for i in indices_3]
+            train_vid_img_list_s4 = [train_vid_img_list[i] for i in indices_4]
+            b_imgs_96 = tl.vis.read_images(train_vid_img_list_s1+train_vid_img_list_s2+train_vid_img_list_s3+train_vid_img_list_s4, path=train_vid_list[idx] + '/frames/', n_threads=32)
             """
             b_imgs_96 = tl.prepro.threading_data(b_imgs_96, fn=crop_custom, w=82, h=82, is_random=False)
 
@@ -331,7 +342,11 @@ def train():
             #        np.concatenate([b_imgs_96[3], b_imgs_96[4], b_imgs_96[5]], 2),
             #        np.concatenate([b_imgs_96[6], b_imgs_96[7], b_imgs_96[8]], 2),
             #        np.concatenate([b_imgs_96[9], b_imgs_96[10], b_imgs_96[11]], 2)])
-            b_seqs_96 = [np.concatenate([b_imgs_96[0], b_imgs_96[1]],2)]
+            #b_seqs_96 = [np.concatenate([b_imgs_96[0], b_imgs_96[1]],2)]
+            b_seqs_96 = np.stack([np.concatenate([b_imgs_96[0], b_imgs_96[1]], 2),
+        			np.concatenate([b_imgs_96[2], b_imgs_96[3]], 2),
+        			np.concatenate([b_imgs_96[4], b_imgs_96[5]], 2),
+        			np.concatenate([b_imgs_96[6], b_imgs_96[7]], 2)])
             ## update D
             #b_imgs_96_c = np.concatenate((b_imgs_96, b_imgs_96), axis=3)
             errD, _ = sess.run([d_loss, d_optim], {t_image: b_seqs_96, t_target_image: b_imgs_384})
