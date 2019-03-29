@@ -159,7 +159,9 @@ def train():
 
     tl.vis.save_images(train_target_vid_imgs, [ni, ni], save_dir_ginit + '/_train_sample_384.png')
     #tl.vis.save_images(np.asarray(train_vid_seqs), [ni, ni], save_dir_ginit + '/_train_sample_96_1.png')
-    tl.vis.save_images(train_vid_seqs[:,:,:,0:2], [1, 1], save_dir_ginit + '/_train_sample_96_1.png')
+    print(np.shape(train_vid_seqs[:,:,:,0:2]))
+    print(np.shape(train_vid_seqs))
+    tl.vis.save_images(train_vid_seqs[:,:,:,0:2], [ni, ni], save_dir_ginit + '/_train_sample_96_1.png')
     print('pass')
 
     """
