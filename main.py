@@ -164,7 +164,7 @@ def train():
     tl.vis.save_images(train_lr_vid_seqs[:,:,:,6:9], [ni, ni], save_dir_ginit + '/_train_sample_96_3.png')
     """
     #this is for GAN
-    tl.vis.save_images(train_vid_imgs, [ni, ni], save_dir_gan + '/_train_sample_384.png')
+    tl.vis.save_images(train_target_vid_imgs, [ni, ni], save_dir_gan + '/_train_sample_384.png')
     #tl.vis.save_images(train_vid_seqs, [ni, ni], save_dir_gan + '/_train_sample_96_1.png')
     """
     tl.vis.save_images(train_lr_vid_seqs[:,:,:,3:6], [ni, ni], save_dir_gan + '/_train_sample_96_2.png')
