@@ -129,7 +129,7 @@ def train():
     sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=False))
     tl.layers.initialize_global_variables(sess)
 
-    tl.files.load_and_assign_npz(sess=sess, name= name=checkpoint_dir + '/g_{}_init.npz'.format(tl.global_flag['mode']), network=net_g)
+    tl.files.load_and_assign_npz(sess=sess, name= heckpoint_dir + '/g_srgan_init.npz', network=net_g)
     tl.files.load_and_assign_npz(sess=sess, name=checkpoint_input_d, network=net_d)
     #tl.files.load_and_assign_npz(sess=sess, name= name=checkpoint_dir + '/g_{}_init.npz'.format(tl.global_flag['mode']), network=net_d)
     ###============================= LOAD VGG ===============================###
