@@ -29,6 +29,9 @@ n_epoch = config.TRAIN.n_epoch
 lr_decay = config.TRAIN.lr_decay
 decay_every = config.TRAIN.decay_every
 
+train_only_generator = False
+train_using_gan = True
+
 ni = int(np.sqrt(batch_size))
 
 
@@ -129,8 +132,8 @@ def train():
     sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=False))
     tl.layers.initialize_global_variables(sess)
 
-    tl.files.load_and_assign_npz(sess=sess, name= checkpoint_dir + '/g_srgan_init.npz', network=net_g)
-    tl.files.load_and_assign_npz(sess=sess, name=checkpoint_input_d, network=net_d)
+    tl.files.load_and_assign_npz(sess=sess, name= checkpoint_dir + '/g_srgan.npz', network=net_g)
+    tl.files.load_and_assign_npz(sess=sess, name= checkpoint_dir + '/d_srgan.npz', network=net_d)
     #tl.files.load_and_assign_npz(sess=sess, name= name=checkpoint_dir + '/g_{}_init.npz'.format(tl.global_flag['mode']), network=net_d)
     ###============================= LOAD VGG ===============================###
     vgg19_npy_path = "vgg19.npy"
@@ -214,7 +217,11 @@ def train():
 
     train_vid_list = train_vid_list[0:5000] #5000
 
-    for epoch in range(85, n_epoch_init + 1): #0
+    for epoch in range(0, n_epoch_init + 1): #0
+
+        if (train_only_generator == False):
+            print("Training only generator is Off. Continuing to GAN ...")
+            break
 
         epoch_time = time.time()
         total_mse_loss, n_iter = 0, 0
@@ -301,7 +308,10 @@ def train():
             tl.files.save_npz(net_g.all_params, name=checkpoint_dir + '/g_{}_init.npz'.format(tl.global_flag['mode']), sess=sess)
 
     ###========================= train GAN (SRGAN) =========================###
-    for epoch in range(0, n_epoch + 1):
+    for epoch in range(13, n_epoch + 1):
+        if (train_using_gan == False):
+            print("Using GAN is deactivated. Exiting loop ...")
+            break
         ## update learning rate
         if epoch != 0 and (epoch % decay_every == 0):
             new_lr_decay = lr_decay**(epoch // decay_every)
