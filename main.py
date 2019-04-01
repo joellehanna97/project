@@ -214,7 +214,7 @@ def train():
 
     train_vid_list = train_vid_list[0:5000] #5000
 
-    for epoch in range(0, n_epoch_init + 1):
+    for epoch in range(85, n_epoch_init + 1): #0
 
         epoch_time = time.time()
         total_mse_loss, n_iter = 0, 0

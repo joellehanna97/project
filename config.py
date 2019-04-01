@@ -10,7 +10,7 @@ config.TRAIN.lr_init = 1e-4  #initial learning rate
 config.TRAIN.beta1 = 0.9  # decay rate
 
 ## initialize G
-config.TRAIN.n_epoch_init = 20 #100
+config.TRAIN.n_epoch_init = 100#100
     # config.TRAIN.lr_decay_init = 0.1
     # config.TRAIN.decay_every_init = int(config.TRAIN.n_epoch_init / 2)
 
