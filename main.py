@@ -308,7 +308,7 @@ def train():
             tl.files.save_npz(net_g.all_params, name=checkpoint_dir + '/g_{}_init.npz'.format(tl.global_flag['mode']), sess=sess)
 
     ###========================= train GAN (SRGAN) =========================###
-    for epoch in range(13, n_epoch + 1):
+    for epoch in range(40, n_epoch + 1):
         if (train_using_gan == False):
             print("Using GAN is deactivated. Exiting loop ...")
             break
