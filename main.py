@@ -550,7 +550,7 @@ def evaluate():
 
     print("LR size: %s /  generated HR size: %s" % (size, out.shape))  # LR size: (339, 510, 3) /  gen HR size: (1, 1356, 2040, 3)
     print("[*] save images")
-    print(np.type(out[0]))
+    print(type(out[0]))
     tl.vis.save_image(out[0], save_dir + '/valid_gen.png')
     #tl.vis.save_images(out, [ni, ni], save_dir + '/valid_gen2.png')
 
