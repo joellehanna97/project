@@ -480,8 +480,6 @@ def evaluate():
     # for im in valid_hr_imgs:
     #     print(im.shape)
     # exit()
-    print('len')
-    print(len(valid_hr_imgs))
 
     ###========================== DEFINE MODEL ============================###
     #imid = 0
@@ -492,15 +490,10 @@ def evaluate():
     train_vid_seqs =[np.concatenate([train_vid_img_list_s1[0], train_vid_img_list_s1[1]], 2)]
 
 
-
     train_vid_seqs = np.asarray(train_vid_seqs)
-
 
     tl.vis.save_image(train_vid_seqs[:,:,:,0:3], save_dir + '/valid_first.png')
     tl.vis.save_image(train_vid_seqs[:,:,:,3:6], save_dir + '/valid_third.png')
-    print('size of')
-    print(train_vid_seqs.shape)
-
 
     #train_vid_seqs = tl.prepro.threading_data(train_vid_seqs, fn = crop_sub_imgs_fn,is_random=False)
 
@@ -508,15 +501,10 @@ def evaluate():
 
     #(1, 1080, 1920, 6)
 
-
-
     train_vid_seqs = (train_vid_seqs / 127.5) - 1
 
-
-
-    print('size is ')
     size = train_vid_seqs.shape
-    print(size)
+
 
     # t_image = tf.placeholder('float32', [None, size[0], size[1], size[2]], name='input_image') # the old version of TL need to specify the image size
     #t_image = tf.placeholder('float32', [32, None, None, 3], name='input_image')
@@ -562,7 +550,7 @@ def evaluate():
 
     print("LR size: %s /  generated HR size: %s" % (size, out.shape))  # LR size: (339, 510, 3) /  gen HR size: (1, 1356, 2040, 3)
     print("[*] save images")
-
+    print(np.type(out[0]))
     tl.vis.save_image(out[0], save_dir + '/valid_gen.png')
     #tl.vis.save_images(out, [ni, ni], save_dir + '/valid_gen2.png')
 
