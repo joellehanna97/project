@@ -490,7 +490,14 @@ def evaluate():
     train_vid_seqs =[np.concatenate([train_vid_img_list_s1[0], train_vid_img_list_s1[1]], 2)]
 
     train_vid_seqs = np.asarray(train_vid_seqs)
-    train_vid_seqs = tl.prepro.threading_data(train_vid_seqs, fn = crop_sub_imgs_fn,is_random=False)
+
+
+
+    #train_vid_seqs = tl.prepro.threading_data(train_vid_seqs, fn = crop_sub_imgs_fn,is_random=False)
+
+    train_vid_seqs = tl.prepro.threading_data(train_vid_seqs, fn = downsample_fn,is_random=False)
+
+    #train_vid_seqs = (train_vid_seqs / 127.5) - 1
 
 
 
