@@ -495,14 +495,15 @@ def evaluate():
 
     #train_vid_seqs = tl.prepro.threading_data(train_vid_seqs, fn = crop_sub_imgs_fn,is_random=False)
 
-    train_vid_seqs = tl.prepro.threading_data(train_vid_seqs, fn = downsample_fn,is_random=False)
+    train_vid_seqs = tl.prepro.threading_data(train_vid_seqs, fn = downsample_fn)#,is_random=False)
 
     #train_vid_seqs = (train_vid_seqs / 127.5) - 1
 
 
 
-
+    print('size is ')
     size = train_vid_seqs.shape
+    print(size)
 
     # t_image = tf.placeholder('float32', [None, size[0], size[1], size[2]], name='input_image') # the old version of TL need to specify the image size
     #t_image = tf.placeholder('float32', [32, None, None, 3], name='input_image')
