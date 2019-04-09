@@ -496,7 +496,9 @@ def evaluate():
 
     #train_vid_seqs = tl.prepro.threading_data(train_vid_seqs, fn = crop_sub_imgs_fn,is_random=False)
 
-    train_vid_seqs = tl.prepro.threading_data(train_vid_seqs, fn = tl.prepro.imresize, [82,82])#,is_random=False)
+    #train_vid_seqs = tl.prepro.threading_data(train_vid_seqs, fn = tl.prepro.imresize, [82,82])#,is_random=False)
+
+    #(1, 1080, 1920, 6)
 
 
 
@@ -510,7 +512,7 @@ def evaluate():
 
     # t_image = tf.placeholder('float32', [None, size[0], size[1], size[2]], name='input_image') # the old version of TL need to specify the image size
     #t_image = tf.placeholder('float32', [32, None, None, 3], name='input_image')
-    t_image = tf.placeholder('float32', [1, 82, 82, 6], name='input_image')
+    t_image = tf.placeholder('float32', [1, 1080, 1920, 6], name='input_image')
 
     net_g = SRGAN_g(t_image, is_train=False, reuse=False)
 
@@ -525,7 +527,7 @@ def evaluate():
     #out = sess.run(net_g.outputs, {t_image: [valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img]})
 
     # Warmup on a dummy image
-    im_warmup = 0.2 * np.ones((82, 82, 6), dtype=np.uint8)
+    im_warmup = 0.2 * np.ones((1080, 1920, 6), dtype=np.uint8)
 
 
     start_time = time.time()
