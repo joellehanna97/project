@@ -495,6 +495,8 @@ def evaluate():
     tl.vis.save_image(train_vid_seqs[:,:,:,0:3], save_dir + '/valid_first.png')
     tl.vis.save_image(train_vid_seqs[:,:,:,3:6], save_dir + '/valid_third.png')
 
+
+    print(type(train_vid_seqs[:,:,:,0:3]))
     #train_vid_seqs = tl.prepro.threading_data(train_vid_seqs, fn = crop_sub_imgs_fn,is_random=False)
 
     #train_vid_seqs = tl.prepro.threading_data(train_vid_seqs, fn = tl.prepro.imresize, [82,82])#,is_random=False)
