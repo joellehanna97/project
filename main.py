@@ -482,7 +482,7 @@ def evaluate():
     # exit()
 
     ###========================== DEFINE MODEL ============================###
-    #imid = 0  # 
+    #imid = 0  #
     #valid_lr_img = valid_lr_imgs[imid]
     indices_1 = [0,2]
     train_vid_img_list_s1 = [valid_hr_imgs[i] for i in indices_1]
@@ -548,9 +548,7 @@ def evaluate():
     #out_bicu = scipy.misc.imresize(valid_lr_img, [size[0] * 4, size[1] * 4], interp='bicubic', mode=None)
     #tl.vis.save_image(out_bicu, save_dir + '/valid_bicubic.png')
 
-
-
-def evaluate__():
+def evaluate_all():
     ni = 1
     save_dir = "results_video/"
 
