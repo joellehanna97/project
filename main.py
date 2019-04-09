@@ -132,8 +132,11 @@ def train():
     sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=False))
     tl.layers.initialize_global_variables(sess)
 
-    tl.files.load_and_assign_npz(sess=sess, name= checkpoint_dir + '/g_srgan.npz', network=net_g)
-    tl.files.load_and_assign_npz(sess=sess, name= checkpoint_dir + '/d_srgan.npz', network=net_d)
+    #tl.files.load_and_assign_npz(sess=sess, name= checkpoint_dir + '/g_srgan.npz', network=net_g)
+    #tl.files.load_and_assign_npz(sess=sess, name= checkpoint_dir + '/d_srgan.npz', network=net_d)
+
+    tl.files.load_and_assign_npz(sess=sess, name=checkpoint_input_g, network=net_g)
+    tl.files.load_and_assign_npz(sess=sess, name=checkpoint_input_d, network=net_d)
     #tl.files.load_and_assign_npz(sess=sess, name= name=checkpoint_dir + '/g_{}_init.npz'.format(tl.global_flag['mode']), network=net_d)
     ###============================= LOAD VGG ===============================###
     vgg19_npy_path = "vgg19.npy"
@@ -157,12 +160,16 @@ def train():
     #train_lr_vid_img_list = sorted(tl.files.load_file_list(path=train_lr_vid_list[0] + '/frames/', regx='.*.png', printable=False))
 
     #train_target_vid_imgs = tl.vis.read_images([train_hr_vid_img_list[15],train_hr_vid_img_list[45],train_hr_vid_img_list[75],train_hr_vid_img_list[105]], path=train_hr_vid_list[0] + '/frames/', n_threads=32)
-    train_target_vid_imgs = tl.vis.read_images([train_vid_img_list[15],train_vid_img_list[45],train_vid_img_list[75],train_vid_img_list[105]], path=train_vid_list[0] + '/frames/', n_threads=32)
+    train_target_vid_imgs = tl.vis.read_images([train_vid_img_list[20],train_vid_img_list[50],train_vid_img_list[80],train_vid_img_list[110]], path=train_vid_list[0] + '/frames/', n_threads=32)
     #train_target_vid_imgs = tl.vis.read_images([train_vid_img_list[45]], path=train_vid_list[0] + '/frames/', n_threads=32)
-    indices_1 = [14,16]
-    indices_2 = [44,46]
-    indices_3 = [74,76]
-    indices_4 = [104,106]
+    #indices_1 = [14,16]
+    #indices_2 = [44,46]
+    #indices_3 = [74,76]
+    #indices_4 = [104,106]
+    indices_1 = [19,21]
+    indices_2 = [49,51]
+    indices_3 = [79,81]
+    indices_4 = [109,111]
     train_vid_img_list_s1 = [train_vid_img_list[i] for i in indices_1]
     train_vid_img_list_s2 = [train_vid_img_list[i] for i in indices_2]
     train_vid_img_list_s3 = [train_vid_img_list[i] for i in indices_3]
@@ -215,13 +222,21 @@ def train():
 
     print(" ** fixed learning rate: %f (for init G)" % lr_init)
 
-    train_vid_list = train_vid_list[0:5000] #5000
+    train_vid_list = train_vid_list[0:500] #5000
 
     for epoch in range(0, n_epoch_init + 1): #0
 
         if (train_only_generator == False):
             print("Training only generator is Off. Continuing to GAN ...")
             break
+
+        ## Evaluation on train set (first 4 images of training set)
+        if (epoch % 1 == 0):
+            #start_time = time.time()
+            out = sess.run(net_g_test.outputs, {t_image: train_lr_vid_seqs})  #; print('gen sub-image:', out.shape, out.min(), out.max())
+            #print("took: %4.4fs" % (time.time() - start_time))
+            print("[Evauation] save training images")
+            tl.vis.save_images(out, [ni, ni], save_dir_ginit + '/train_%d.png' % epoch)
 
         epoch_time = time.time()
         total_mse_loss, n_iter = 0, 0
@@ -249,17 +264,23 @@ def train():
             train_vid_img_list = sorted(tl.files.load_file_list(path=train_vid_list[idx] + '/frames/', regx='.*.png', printable=False))
             #train_lr_vid_img_list = sorted(tl.files.load_file_list(path=train_lr_vid_list[idx] + '/frames/', regx='.*.png', printable=False))
 
-            b_imgs_384 = tl.vis.read_images([train_vid_img_list[15],
-                                                    train_vid_img_list[45],train_vid_img_list[75],train_vid_img_list[105]], path=train_vid_list[idx] + '/frames/', n_threads=32)
+            #b_imgs_384 = tl.vis.read_images([train_vid_img_list[15],
+            #                                        train_vid_img_list[45],train_vid_img_list[75],train_vid_img_list[105]], path=train_vid_list[idx] + '/frames/', n_threads=32)
+            b_imgs_384 = tl.vis.read_images([train_vid_img_list[20],train_vid_img_list[50],train_vid_img_list[80],train_vid_img_list[110]], path=train_vid_list[idx] + '/frames/', n_threads=32)
+            #train_target_vid_imgs = tl.vis.read_images([train_vid_img_list[45]], path=train_vid_list[0] + '/frames/', n_threads=32)
+            #indices_1 = [14,16]
+            #indices_2 = [44,46]
+            #indices_3 = [74,76]
+            #indices_4 = [104,106]
+            indices_1 = [19,21]
+            indices_2 = [49,51]
+            indices_3 = [79,81]
+            indices_4 = [109,111]
             #b_imgs_384 = tl.vis.read_images([train_vid_img_list[45]], path=train_vid_list[idx] + '/frames/', n_threads=32) #target
             #b_imgs_96 = tl.vis.read_images(train_lr_vid_img_list[15-1:15+2]+
 			#		           train_lr_vid_img_list[45-1:45+2]+
 			#		           train_lr_vid_img_list[75-1:75+2]+
 			#		           train_lr_vid_img_list[105-1:105+2], path=train_lr_vid_list[idx] + '/frames/', n_threads=32)
-            indices_1 = [14,16]
-            indices_2 = [44,46]
-            indices_3 = [74,76]
-            indices_4 = [104,106]
             train_vid_img_list_s1 = [train_vid_img_list[i] for i in indices_1]
             train_vid_img_list_s2 = [train_vid_img_list[i] for i in indices_2]
             train_vid_img_list_s3 = [train_vid_img_list[i] for i in indices_3]
@@ -296,7 +317,7 @@ def train():
 
         ## quick evaluation on train set
 
-        if (epoch != 0) and (epoch % 10 == 0):
+        if (epoch != 0) and (epoch % 1 == 0):
             out = sess.run(net_g_test.outputs, {t_image: train_vid_seqs})  #net_g_test.outputs#; print('gen sub-image:', out.shape, out.min(), out.max())
             print("[*] save images")
             tl.vis.save_images(out, [ni, ni], save_dir_ginit + '/train_%d.png' % epoch)
@@ -308,10 +329,18 @@ def train():
             tl.files.save_npz(net_g.all_params, name=checkpoint_dir + '/g_{}_init.npz'.format(tl.global_flag['mode']), sess=sess)
 
     ###========================= train GAN (SRGAN) =========================###
-    for epoch in range(40, n_epoch + 1):
+    for epoch in range(0, n_epoch + 1): #94
         if (train_using_gan == False):
             print("Using GAN is deactivated. Exiting loop ...")
             break
+
+        ## Evaluation on train set (first 4 images of training set)
+        if (epoch % 1 == 0):
+            out = sess.run(net_g_test.outputs, {t_image: train_lr_vid_seqs})
+            print("[Evauation] save training images")
+            tl.vis.save_images(out, [ni, ni], save_dir_gan + '/train_%d.png' % epoch)
+
+
         ## update learning rate
         if epoch != 0 and (epoch % decay_every == 0):
             new_lr_decay = lr_decay**(epoch // decay_every)
@@ -322,6 +351,8 @@ def train():
             #sess.run(tf.assign(lr_v, lr_init))
             log = " ** init lr: %f  decay_every_init: %d, lr_decay: %f (for GAN)" % (lr_init, decay_every, lr_decay)
             print(log)
+
+
 
         epoch_time = time.time()
         total_d_loss, total_g_loss, n_iter = 0, 0, 0
@@ -357,18 +388,25 @@ def train():
             #train_lr_vid_img_list = sorted(tl.files.load_file_list(path=train_lr_vid_list[idx] + '/frames/', regx='.*.png', printable=False))
 
             #b_imgs_384 = tl.vis.read_images([train_vid_img_list[45]], path=train_vid_list[idx] + '/frames/', n_threads=32) #target
-            b_imgs_384 = tl.vis.read_images([train_vid_img_list[15],
-                                        train_vid_img_list[45],train_vid_img_list[75],train_vid_img_list[105]], path=train_vid_list[idx] + '/frames/', n_threads=32)
+            #b_imgs_384 = tl.vis.read_images([train_vid_img_list[15],
+            #                            train_vid_img_list[45],train_vid_img_list[75],train_vid_img_list[105]], path=train_vid_list[idx] + '/frames/', n_threads=32)
+
+            b_imgs_384 = tl.vis.read_images([train_vid_img_list[20],train_vid_img_list[50],train_vid_img_list[80],train_vid_img_list[110]], path=train_vid_list[idx] + '/frames/', n_threads=32)
+            #train_target_vid_imgs = tl.vis.read_images([train_vid_img_list[45]], path=train_vid_list[0] + '/frames/', n_threads=32)
+            #indices_1 = [14,16]
+            #indices_2 = [44,46]
+            #indices_3 = [74,76]
+            #indices_4 = [104,106]
+            indices_1 = [19,21]
+            indices_2 = [49,51]
+            indices_3 = [79,81]
+            indices_4 = [109,111]
             #b_imgs_96 = tl.vis.read_images(train_lr_vid_img_list[15-1:15+2]+
             #		           train_lr_vid_img_list[45-1:45+2]+
             #		           train_lr_vid_img_list[75-1:75+2]+
             #		           train_lr_vid_img_list[105-1:105+2], path=train_lr_vid_list[idx] + '/frames/', n_threads=32)
             #train_vid_img_list_s = [train_vid_img_list[i] for i in indices_2]
             #b_imgs_96 = tl.vis.read_images(train_vid_img_list_s, path=train_vid_list[idx] + '/frames/', n_threads=32)
-            indices_1 = [14,16]
-            indices_2 = [44,46]
-            indices_3 = [74,76]
-            indices_4 = [104,106]
             train_vid_img_list_s1 = [train_vid_img_list[i] for i in indices_1]
             train_vid_img_list_s2 = [train_vid_img_list[i] for i in indices_2]
             train_vid_img_list_s3 = [train_vid_img_list[i] for i in indices_3]
@@ -408,15 +446,101 @@ def train():
         print(log)
 
         ## quick evaluation on train set
-        if (epoch != 0) and (epoch % 10 == 0):
+        if (epoch != 0) and (epoch % 1 == 0):
             out = sess.run(net_g_test.outputs, {t_image: train_vid_seqs})  #; print('gen sub-image:', out.shape, out.min(), out.max())
             print("[*] save images")
             tl.vis.save_images(out, [ni, ni], save_dir_gan + '/train_%d.png' % epoch)
 
         ## save model
-        if (epoch != 0) and (epoch % 10 == 0):
+        if (epoch != 0) and (epoch % 1 == 0):
             tl.files.save_npz(net_g.all_params, name=checkpoint_dir + '/g_{}.npz'.format(tl.global_flag['mode']), sess=sess)
             tl.files.save_npz(net_d.all_params, name=checkpoint_dir + '/d_{}.npz'.format(tl.global_flag['mode']), sess=sess)
+
+
+
+def evaluate():
+    ni = 1
+    save_dir = "results_video/"
+
+    tl.files.exists_or_mkdir(save_dir)
+
+    checkpoint_dir = "checkpoint"
+
+    ###====================== PRE-LOAD DATA ===========================###
+    ## Read images from folder
+    train_lr_path = '/home/saeed-lts5/Documents/Super_Resolution/srgan_video/srgan_video-master/video_input/s00_city_HR'
+    ###========================== Video Output ============================###
+    #video = cv2.VideoWriter('/home/saeed/Documents/Super_Resolution/srgan/srgan-master/video_1.mp4', -1, 1, (width,height))
+    height, width = 768, 1024
+    #height, width = 120*4, 180*4
+    print(height)
+    print(width)
+
+    fourcc = cv2.VideoWriter_fourcc(*"MJPG")
+    video_1 = cv2.VideoWriter(save_dir + 'video_f1.avi', fourcc, 30.0, (width, height))
+    #video_2 = cv2.VideoWriter(save_dir + 'video_f2_recurr__.avi', fourcc, 30.0, (width, height))
+
+    from natsort import natsorted
+
+    train_lr_img_list = natsorted(tl.files.load_file_list(path=train_lr_path, regx='.*.bmp', printable=False))
+
+    print(len(train_lr_img_list))
+
+    t_image = tf.placeholder('float32', [1, None, None, 6], name='input_image')
+
+    net_g = SRGAN_g(t_image, is_train=False, reuse=False)
+
+    ###========================== RESTORE MODEL =============================###
+    sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=False))
+    tl.layers.initialize_global_variables(sess)
+    tl.files.load_and_assign_npz(sess=sess, name=checkpoint_dir + '/g_srgan.npz', network=net_g)
+    ###============================= Testing ===============================###
+
+    #train_hr_img_list = train_hr_img_list[0:60]
+    #train_lr_img_list = train_lr_img_list[0:60]
+    out = tl.vis.read_images(train_lr_img_list[0:0+1], path=train_lr_path , n_threads=32)
+    step_time = time.time()
+    out = tl.prepro.threading_data(out, fn=crop_sub_imgs_fn , is_random=False) # change crop function (?)
+    log = "[*] time croppinggg: %4.4fs" % (time.time() - step_time)
+    print(log)
+    for idx in range(1, len(train_lr_img_list) - 1):
+        step_time = time.time()
+        indices = [idx - 1, idx + 1]
+        train_vid_img_list = [train_lr_img_list[i] for i in indices]
+        b_imgs_384 = tl.vis.read_images(train_hr_img_list[idx:idx+1], path=train_lr_path , n_threads=32)
+        b_imgs_96 = tl.vis.read_images(train_vid_img_list, path=train_lr_path , n_threads=32)
+
+        b_imgs_96 = tl.prepro.threading_data(b_imgs_96, fn=crop_sub_imgs_fn, is_random=False)
+
+        #b_imgs_96 = tl.vis.read_images(train_lr_img_list[idx:idx+1], path=train_lr_path , n_threads=32)
+
+        b_seqs_96 = np.stack([np.concatenate([b_imgs_96[0], b_imgs_96[1]], 2)])
+        #b_seqs_96 = np.stack([np.concatenate([out[0], b_imgs_96[1]], 2)])
+        b_seq_384 = np.stack(np.array(b_imgs_384))
+        #b_seqs_96 = (b_seqs_96 / 127.5) - 1
+        step_time = time.time()
+        out = sess.run(net_g.outputs, {t_image: b_seqs_96})
+        log = "[*] time 1: %4.4fs" % (time.time() - step_time)
+        print(log)
+        step_time = time.time()
+
+        tl.vis.save_images(out, [ni, ni], save_dir + 'SR_%d_f3.png' % idx)
+
+
+        out = np.array(out) * 127.5 + 127.5
+
+        image_v = np.reshape(out,(out.shape[1],out.shape[2],out.shape[3]))
+
+        video_1.write(np.uint8( cv2.cvtColor(image_v, cv2.COLOR_BGR2RGB) ))
+
+
+        print(out[0].shape)
+        #out = np.expand_dims(scipy.misc.imresize(out[0], [height / 4, width / 4], interp='bicubic'), axis=0)
+        #print(out[0].shape)
+        #log = "[*] time: %4.4fs" % (time.time() - step_time)
+        #print(log)
+
+    video_1.release()
 
 
 if __name__ == '__main__':
