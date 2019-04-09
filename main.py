@@ -490,7 +490,8 @@ def evaluate():
     train_vid_seqs =[np.concatenate([train_vid_img_list_s1[0], train_vid_img_list_s1[1]], 2)]
 
     train_vid_seqs = np.asarray(train_vid_seqs)
-
+    print('size of')
+    print(train_vid_seqs.shape)
 
 
     #train_vid_seqs = tl.prepro.threading_data(train_vid_seqs, fn = crop_sub_imgs_fn,is_random=False)
