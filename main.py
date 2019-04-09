@@ -135,9 +135,9 @@ def train():
     #tl.files.load_and_assign_npz(sess=sess, name= checkpoint_dir + '/g_srgan.npz', network=net_g)
     #tl.files.load_and_assign_npz(sess=sess, name= checkpoint_dir + '/d_srgan.npz', network=net_d)
 
-    tl.files.load_and_assign_npz(sess=sess, name=checkpoint_input_g, network=net_g)
+    #tl.files.load_and_assign_npz(sess=sess, name=checkpoint_input_g, network=net_g)
     tl.files.load_and_assign_npz(sess=sess, name=checkpoint_input_d, network=net_d)
-    #tl.files.load_and_assign_npz(sess=sess, name= name=checkpoint_dir + '/g_{}_init.npz'.format(tl.global_flag['mode']), network=net_d)
+    tl.files.load_and_assign_npz(sess=sess, name= name=checkpoint_dir + '/g_{}_init.npz'.format(tl.global_flag['mode']), network=net_g)
     ###============================= LOAD VGG ===============================###
     vgg19_npy_path = "vgg19.npy"
     if not os.path.isfile(vgg19_npy_path):
