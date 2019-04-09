@@ -481,7 +481,27 @@ def evaluate():
     #     print(im.shape)
     # exit()
 
+
+    t_image = tf.placeholder('float32', [1, size[1], size[2], 6], name='input_image')
+
+    net_g = SRGAN_g(t_image, is_train=False, reuse=False)
+
+    ###========================== RESTORE G =============================###
+    sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=False))
+    tl.layers.initialize_global_variables(sess)
+    tl.files.load_and_assign_npz(sess=sess, name=checkpoint_dir + '/g_srgan.npz', network=net_g)
+
+    ###======================= EVALUATION =============================###
+
+    # Warmup on a dummy image
+    im_warmup = 0.2 * np.ones((size[1], size[2], 6), dtype=np.uint8)
+    start_time = time.time()
+    out = sess.run(net_g.outputs, {t_image: [im_warmup]})
+    print("warm up took: %4.4fs" % (time.time() - start_time))
+
     ###========================== DEFINE MODEL ============================###
+
+
     #imid = 0
     #valid_lr_img = valid_lr_imgs[imid]
     print(len(valid_hr_imgs))
@@ -511,29 +531,14 @@ def evaluate():
 
         # t_image = tf.placeholder('float32', [None, size[0], size[1], size[2]], name='input_image') # the old version of TL need to specify the image size
         #t_image = tf.placeholder('float32', [32, None, None, 3], name='input_image')
-        t_image = tf.placeholder('float32', [1, size[1], size[2], 6], name='input_image')
+        ### hereeeeeee
 
-        net_g = SRGAN_g(t_image, is_train=False, reuse=False)
 
-        ###========================== RESTORE G =============================###
-        sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=False))
-        tl.layers.initialize_global_variables(sess)
-        tl.files.load_and_assign_npz(sess=sess, name=checkpoint_dir + '/g_srgan.npz', network=net_g)
 
-        ###======================= EVALUATION =============================###
-        start_time = time.time()
         #while 1 == 1:
         #out = sess.run(net_g.outputs, {t_image: [valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img]})
 
-        # Warmup on a dummy image
-        im_warmup = 0.2 * np.ones((size[1], size[2], 6), dtype=np.uint8)
-
-
-        start_time = time.time()
-        out = sess.run(net_g.outputs, {t_image: [im_warmup]})
-        print("warm up took: %4.4fs" % (time.time() - start_time))
-
-
+        """
         print(train_vid_seqs.shape)
         start_time = time.time()
         out = sess.run(net_g.outputs, {t_image: train_vid_seqs})
@@ -543,6 +548,7 @@ def evaluate():
         start_time = time.time()
         out = sess.run(net_g.outputs, {t_image: immm})
         print("test 2 took: %4.4fs" % (time.time() - start_time))
+        """
 
         start_time = time.time()
         #while 1 == 1:
