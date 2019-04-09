@@ -557,8 +557,8 @@ def evaluate():
 
     tl.vis.save_image(out[0], save_dir + '/valid_gen.png')
     #tl.vis.save_images(out, [ni, ni], save_dir + '/valid_gen2.png')
-    tl.vis.save_image(train_vid_seqs[0], save_dir + '/valid_first.png')
-    tl.vis.save_image(train_vid_seqs[1], save_dir + '/valid_third.png')
+    tl.vis.save_image(train_vid_seqs[:,:,:,0:3], save_dir + '/valid_first.png')
+    tl.vis.save_image(train_vid_seqs[:,:,:,3:6], save_dir + '/valid_third.png')
 
     #out_bicu = scipy.misc.imresize(valid_lr_img, [size[0] * 4, size[1] * 4], interp='bicubic', mode=None)
     #tl.vis.save_image(out_bicu, save_dir + '/valid_bicubic.png')
