@@ -512,11 +512,11 @@ def evaluate():
         train_vid_seqs =[np.concatenate([train_vid_img_list_s1[0], train_vid_img_list_s1[1]], 2)]
 
         train_vid_seqs = np.asarray(train_vid_seqs)
-        mod_0 = i*3
-        mod_1 = i*3 + 1
-        mod_2 = i*3 + 2
-        tl.vis.save_image(train_vid_seqs[0,:,:,0:3], save_dir + '/frame_%d.png' %mod_0)
-        tl.vis.save_image(train_vid_seqs[0,:,:,3:6], save_dir + '/frame_%d.png' %mod_2)
+        #mod_0 = i*3
+        mod_1 = i*2 + 1
+        #mod_2 = i*3 + 2
+        #tl.vis.save_image(train_vid_seqs[0,:,:,0:3], save_dir + '/frame_%d.png' %mod_0)
+        #tl.vis.save_image(train_vid_seqs[0,:,:,3:6], save_dir + '/frame_%d.png' %mod_2)
 
         #train_vid_seqs = tl.prepro.threading_data(train_vid_seqs, fn = crop_sub_imgs_fn,is_random=False)
 
@@ -555,7 +555,7 @@ def evaluate():
         #out = sess.run(net_g.outputs, {t_image: [valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img]})
 
         out = sess.run(net_g.outputs, {t_image: train_vid_seqs})
-        print("test 3 took: %4.4fs" % (time.time() - start_time))
+        print("Frame %d took: %4.4fs" %mod_1, % (time.time() - start_time))
 
         print("LR size: %s /  generated HR size: %s" % (size, out.shape))  # LR size: (339, 510, 3) /  gen HR size: (1, 1356, 2040, 3)
         print("[*] save images")
