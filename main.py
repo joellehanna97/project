@@ -499,7 +499,7 @@ def evaluate():
 
     # t_image = tf.placeholder('float32', [None, size[0], size[1], size[2]], name='input_image') # the old version of TL need to specify the image size
     #t_image = tf.placeholder('float32', [32, None, None, 3], name='input_image')
-    t_image = tf.placeholder('float32', [82, 82, 6], name='input_image')
+    t_image = tf.placeholder('float32', [1, 82, 82, 6], name='input_image')
 
     net_g = SRGAN_g(t_image, is_train=False, reuse=False)
 
