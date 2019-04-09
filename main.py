@@ -495,8 +495,7 @@ def evaluate():
     tl.vis.save_image(train_vid_seqs[:,:,:,0:3], save_dir + '/valid_first.png')
     tl.vis.save_image(train_vid_seqs[:,:,:,3:6], save_dir + '/valid_third.png')
 
-
-    print(type(train_vid_seqs[:,:,:,0:3]))
+    print(train_vid_seqs[:,:,:,0:3].shape)
     #train_vid_seqs = tl.prepro.threading_data(train_vid_seqs, fn = crop_sub_imgs_fn,is_random=False)
 
     #train_vid_seqs = tl.prepro.threading_data(train_vid_seqs, fn = tl.prepro.imresize, [82,82])#,is_random=False)
@@ -552,7 +551,7 @@ def evaluate():
 
     print("LR size: %s /  generated HR size: %s" % (size, out.shape))  # LR size: (339, 510, 3) /  gen HR size: (1, 1356, 2040, 3)
     print("[*] save images")
-    print(type(out[0]))
+    print(out[0].shape)
     tl.vis.save_image(out[0], save_dir + '/valid_gen.png')
     #tl.vis.save_images(out, [ni, ni], save_dir + '/valid_gen2.png')
 
