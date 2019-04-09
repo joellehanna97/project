@@ -456,7 +456,6 @@ def train():
             tl.files.save_npz(net_g.all_params, name=checkpoint_dir + '/g_{}.npz'.format(tl.global_flag['mode']), sess=sess)
             tl.files.save_npz(net_d.all_params, name=checkpoint_dir + '/d_{}.npz'.format(tl.global_flag['mode']), sess=sess)
 
-
 def evaluate():
     ## create folders to save result images
     save_dir = "samples/{}".format(tl.global_flag['mode'])
@@ -482,7 +481,7 @@ def evaluate():
     # exit()
 
     ###========================== DEFINE MODEL ============================###
-    #imid = 0  #
+    #imid = 0
     #valid_lr_img = valid_lr_imgs[imid]
     indices_1 = [0,2]
     train_vid_img_list_s1 = [valid_hr_imgs[i] for i in indices_1]
@@ -492,10 +491,10 @@ def evaluate():
     train_vid_seqs = np.asarray(train_vid_seqs)
     train_vid_seqs = tl.prepro.threading_data(train_vid_seqs, fn = crop_sub_imgs_fn,is_random=False)
 
-    #valid_hr_img = valid_hr_imgs[imid]
+    # valid_hr_img = valid_hr_imgs[imid]
     # valid_lr_img = get_imgs_fn('test.png', 'data2017/')  # if you want to test your own image
-    #valid_lr_img = (valid_lr_img / 127.5) - 1  # rescale to ［－1, 1]
-    #valid_lr_img = valid_lr_img[:,:,:3]
+    # valid_lr_img = (valid_lr_img / 127.5) - 1  # rescale to ［－1, 1]
+    # valid_lr_img = valid_lr_img[:,:,:3]
     # print(valid_lr_img.min(), valid_lr_img.max())
 
     size = train_vid_seqs.shape
@@ -547,7 +546,7 @@ def evaluate():
 
     #out_bicu = scipy.misc.imresize(valid_lr_img, [size[0] * 4, size[1] * 4], interp='bicubic', mode=None)
     #tl.vis.save_image(out_bicu, save_dir + '/valid_bicubic.png')
-
+"""
 def evaluate_all():
     ni = 1
     save_dir = "results_video/"
@@ -631,7 +630,7 @@ def evaluate_all():
         #print(log)
 
     video_1.release()
-
+"""
 
 if __name__ == '__main__':
     import argparse
