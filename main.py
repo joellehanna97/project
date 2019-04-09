@@ -489,10 +489,13 @@ def evaluate():
 
     train_vid_seqs =[np.concatenate([train_vid_img_list_s1[0], train_vid_img_list_s1[1]], 2)]
 
-    tl.vis.save_image(train_vid_seqs[:,:,:,0:3], save_dir + '/valid_first.png')
-    tl.vis.save_image(train_vid_seqs[:,:,:,3:6], save_dir + '/valid_third.png')
+
 
     train_vid_seqs = np.asarray(train_vid_seqs)
+
+
+    tl.vis.save_image(train_vid_seqs[:,:,:,0:3], save_dir + '/valid_first.png')
+    tl.vis.save_image(train_vid_seqs[:,:,:,3:6], save_dir + '/valid_third.png')
     print('size of')
     print(train_vid_seqs.shape)
 
