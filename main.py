@@ -456,6 +456,7 @@ def train():
             tl.files.save_npz(net_g.all_params, name=checkpoint_dir + '/g_{}.npz'.format(tl.global_flag['mode']), sess=sess)
             tl.files.save_npz(net_d.all_params, name=checkpoint_dir + '/d_{}.npz'.format(tl.global_flag['mode']), sess=sess)
 
+
 def evaluate():
     ## create folders to save result images
     save_dir = "samples/{}".format(tl.global_flag['mode'])
@@ -516,10 +517,10 @@ def evaluate():
 
     # Warmup on a dummy image
     im_warmup = 0.2 * np.ones((81, 81, 6), dtype=np.uint8)
-    for i in xrange(2):
-        start_time = time.time()
-        out = sess.run(net_g.outputs, {t_image: [im_warmup]})
-        print("warm up took: %4.4fs" % (time.time() - start_time))
+
+    start_time = time.time()
+    out = sess.run(net_g.outputs, {t_image: [im_warmup]})
+    print("warm up took: %4.4fs" % (time.time() - start_time))
 
     start_time = time.time()
     out = sess.run(net_g.outputs, {t_image: [train_vid_seqs]})
