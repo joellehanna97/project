@@ -29,7 +29,7 @@ n_epoch = config.TRAIN.n_epoch
 lr_decay = config.TRAIN.lr_decay
 decay_every = config.TRAIN.decay_every
 
-train_only_generator = False
+train_only_generator = True
 train_using_gan = True
 
 ni = int(np.sqrt(batch_size))
@@ -233,7 +233,7 @@ def train():
         ## Evaluation on train set (first 4 images of training set)
         if (epoch % 1 == 0):
             #start_time = time.time()
-            out = sess.run(net_g_test.outputs, {t_image: train_lr_vid_seqs})  #; print('gen sub-image:', out.shape, out.min(), out.max())
+            out = sess.run(net_g_test.outputs, {t_image: train_vid_seqs})  #; print('gen sub-image:', out.shape, out.min(), out.max())
             #print("took: %4.4fs" % (time.time() - start_time))
             print("[Evauation] save training images")
             tl.vis.save_images(out, [ni, ni], save_dir_ginit + '/train_%d.png' % epoch)
@@ -336,7 +336,7 @@ def train():
 
         ## Evaluation on train set (first 4 images of training set)
         if (epoch % 1 == 0):
-            out = sess.run(net_g_test.outputs, {t_image: train_lr_vid_seqs})
+            out = sess.run(net_g_test.outputs, {t_image: train_vid_seqs})
             print("[Evauation] save training images")
             tl.vis.save_images(out, [ni, ni], save_dir_gan + '/train_%d.png' % epoch)
 
