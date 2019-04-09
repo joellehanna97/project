@@ -484,79 +484,82 @@ def evaluate():
     ###========================== DEFINE MODEL ============================###
     #imid = 0
     #valid_lr_img = valid_lr_imgs[imid]
-    indices_1 = [0,2]
-    train_vid_img_list_s1 = [valid_hr_imgs[i] for i in indices_1]
+    print(len(valid_hr_imgs))
+    for i in range(0,len(valid_hr_imgs)):
+        indices_1 = [i,i+1]
+        train_vid_img_list_s1 = [valid_hr_imgs[j] for j in indices_1]
 
-    train_vid_seqs =[np.concatenate([train_vid_img_list_s1[0], train_vid_img_list_s1[1]], 2)]
+        train_vid_seqs =[np.concatenate([train_vid_img_list_s1[0], train_vid_img_list_s1[1]], 2)]
 
+        train_vid_seqs = np.asarray(train_vid_seqs)
+        mod_0 = i*3
+        mod_1 = i*3 + 1
+        mod_2 = i*3 + 2
+        tl.vis.save_image(train_vid_seqs[0,:,:,0:3], save_dir + '/frame_%d.png' %mod_0)
+        tl.vis.save_image(train_vid_seqs[0,:,:,3:6], save_dir + '/frame_%d.png' %mod_2)
 
-    train_vid_seqs = np.asarray(train_vid_seqs)
+        #train_vid_seqs = tl.prepro.threading_data(train_vid_seqs, fn = crop_sub_imgs_fn,is_random=False)
 
-    tl.vis.save_image(train_vid_seqs[0,:,:,0:3], save_dir + '/valid_first.png')
-    tl.vis.save_image(train_vid_seqs[0,:,:,3:6], save_dir + '/valid_third.png')
+        #train_vid_seqs = tl.prepro.threading_data(train_vid_seqs, fn = tl.prepro.imresize, [82,82])#,is_random=False)
 
-    #train_vid_seqs = tl.prepro.threading_data(train_vid_seqs, fn = crop_sub_imgs_fn,is_random=False)
+        #(1, 1080, 1920, 6)
 
-    #train_vid_seqs = tl.prepro.threading_data(train_vid_seqs, fn = tl.prepro.imresize, [82,82])#,is_random=False)
+        train_vid_seqs = (train_vid_seqs / 127.5) - 1
 
-    #(1, 1080, 1920, 6)
-
-    train_vid_seqs = (train_vid_seqs / 127.5) - 1
-
-    size = train_vid_seqs.shape
-
-
-    # t_image = tf.placeholder('float32', [None, size[0], size[1], size[2]], name='input_image') # the old version of TL need to specify the image size
-    #t_image = tf.placeholder('float32', [32, None, None, 3], name='input_image')
-    t_image = tf.placeholder('float32', [1, size[1], size[2], 6], name='input_image')
-
-    net_g = SRGAN_g(t_image, is_train=False, reuse=False)
-
-    ###========================== RESTORE G =============================###
-    sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=False))
-    tl.layers.initialize_global_variables(sess)
-    tl.files.load_and_assign_npz(sess=sess, name=checkpoint_dir + '/g_srgan.npz', network=net_g)
-
-    ###======================= EVALUATION =============================###
-    start_time = time.time()
-    #while 1 == 1:
-    #out = sess.run(net_g.outputs, {t_image: [valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img]})
-
-    # Warmup on a dummy image
-    im_warmup = 0.2 * np.ones((size[1], size[2], 6), dtype=np.uint8)
+        size = train_vid_seqs.shape
 
 
-    start_time = time.time()
-    out = sess.run(net_g.outputs, {t_image: [im_warmup]})
-    print("warm up took: %4.4fs" % (time.time() - start_time))
+        # t_image = tf.placeholder('float32', [None, size[0], size[1], size[2]], name='input_image') # the old version of TL need to specify the image size
+        #t_image = tf.placeholder('float32', [32, None, None, 3], name='input_image')
+        t_image = tf.placeholder('float32', [1, size[1], size[2], 6], name='input_image')
+
+        net_g = SRGAN_g(t_image, is_train=False, reuse=False)
+
+        ###========================== RESTORE G =============================###
+        sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=False))
+        tl.layers.initialize_global_variables(sess)
+        tl.files.load_and_assign_npz(sess=sess, name=checkpoint_dir + '/g_srgan.npz', network=net_g)
+
+        ###======================= EVALUATION =============================###
+        start_time = time.time()
+        #while 1 == 1:
+        #out = sess.run(net_g.outputs, {t_image: [valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img]})
+
+        # Warmup on a dummy image
+        im_warmup = 0.2 * np.ones((size[1], size[2], 6), dtype=np.uint8)
 
 
-    print(train_vid_seqs.shape)
-    start_time = time.time()
-    out = sess.run(net_g.outputs, {t_image: train_vid_seqs})
-    print("test 1 took: %4.4fs" % (time.time() - start_time))
-
-    immm = train_vid_seqs
-    start_time = time.time()
-    out = sess.run(net_g.outputs, {t_image: immm})
-    print("test 2 took: %4.4fs" % (time.time() - start_time))
-
-    start_time = time.time()
-    #while 1 == 1:
-    #out = sess.run(net_g.outputs, {t_image: [valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img]})
-
-    out = sess.run(net_g.outputs, {t_image: train_vid_seqs})
-    print("test 3 took: %4.4fs" % (time.time() - start_time))
-
-    print("LR size: %s /  generated HR size: %s" % (size, out.shape))  # LR size: (339, 510, 3) /  gen HR size: (1, 1356, 2040, 3)
-    print("[*] save images")
-    tl.vis.save_image(out[0], save_dir + '/valid_gen.png')
-
-    #tl.vis.save_images(out, [ni, ni], save_dir + '/valid_gen2.png')
+        start_time = time.time()
+        out = sess.run(net_g.outputs, {t_image: [im_warmup]})
+        print("warm up took: %4.4fs" % (time.time() - start_time))
 
 
-    #out_bicu = scipy.misc.imresize(valid_lr_img, [size[0] * 4, size[1] * 4], interp='bicubic', mode=None)
-    #tl.vis.save_image(out_bicu, save_dir + '/valid_bicubic.png')
+        print(train_vid_seqs.shape)
+        start_time = time.time()
+        out = sess.run(net_g.outputs, {t_image: train_vid_seqs})
+        print("test 1 took: %4.4fs" % (time.time() - start_time))
+
+        immm = train_vid_seqs
+        start_time = time.time()
+        out = sess.run(net_g.outputs, {t_image: immm})
+        print("test 2 took: %4.4fs" % (time.time() - start_time))
+
+        start_time = time.time()
+        #while 1 == 1:
+        #out = sess.run(net_g.outputs, {t_image: [valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img]})
+
+        out = sess.run(net_g.outputs, {t_image: train_vid_seqs})
+        print("test 3 took: %4.4fs" % (time.time() - start_time))
+
+        print("LR size: %s /  generated HR size: %s" % (size, out.shape))  # LR size: (339, 510, 3) /  gen HR size: (1, 1356, 2040, 3)
+        print("[*] save images")
+        tl.vis.save_image(out[0], save_dir + '/frame_%d.png' %mod_1)
+
+        #tl.vis.save_images(out, [ni, ni], save_dir + '/valid_gen2.png')
+
+
+        #out_bicu = scipy.misc.imresize(valid_lr_img, [size[0] * 4, size[1] * 4], interp='bicubic', mode=None)
+        #tl.vis.save_image(out_bicu, save_dir + '/valid_bicubic.png')
 """
 def evaluate_all():
     ni = 1
