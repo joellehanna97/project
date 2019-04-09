@@ -482,7 +482,7 @@ def evaluate():
     # exit()
 
 
-    t_image = tf.placeholder('float32', [1, size[1], size[2], 6], name='input_image')
+    t_image = tf.placeholder('float32', [1, 1080, 1920, 6], name='input_image')
 
     net_g = SRGAN_g(t_image, is_train=False, reuse=False)
 
@@ -494,7 +494,7 @@ def evaluate():
     ###======================= EVALUATION =============================###
 
     # Warmup on a dummy image
-    im_warmup = 0.2 * np.ones((size[1], size[2], 6), dtype=np.uint8)
+    im_warmup = 0.2 * np.ones((1080, 1920, 6), dtype=np.uint8)
     start_time = time.time()
     out = sess.run(net_g.outputs, {t_image: [im_warmup]})
     print("warm up took: %4.4fs" % (time.time() - start_time))
