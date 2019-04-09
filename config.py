@@ -26,7 +26,7 @@ config.TRAIN.lr_img_path = 'data2017/DIV2K_train_LR_bicubic/X4/'
 config.VALID = edict()
 ## test set location
 config.VALID.hr_img_path = 'data2017/DIV2K_valid_HR/'
-config.VALID.video_test_path = 'video_test'
+config.VALID.video_test_path = 'video_test/'
 config.VALID.lr_img_path = 'data2017/DIV2K_valid_LR_bicubic/X4/'
 
 def log_config(filename, cfg):
