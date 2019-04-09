@@ -512,7 +512,7 @@ def evaluate():
 
     # t_image = tf.placeholder('float32', [None, size[0], size[1], size[2]], name='input_image') # the old version of TL need to specify the image size
     #t_image = tf.placeholder('float32', [32, None, None, 3], name='input_image')
-    t_image = tf.placeholder('float32', [1, 1080, 1920, 6], name='input_image')
+    t_image = tf.placeholder('float32', [1, size[1], size[2], 6], name='input_image')
 
     net_g = SRGAN_g(t_image, is_train=False, reuse=False)
 
@@ -527,7 +527,7 @@ def evaluate():
     #out = sess.run(net_g.outputs, {t_image: [valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img]})
 
     # Warmup on a dummy image
-    im_warmup = 0.2 * np.ones((1080, 1920, 6), dtype=np.uint8)
+    im_warmup = 0.2 * np.ones((size[1], size[2], 6), dtype=np.uint8)
 
 
     start_time = time.time()
@@ -554,10 +554,11 @@ def evaluate():
 
     print("LR size: %s /  generated HR size: %s" % (size, out.shape))  # LR size: (339, 510, 3) /  gen HR size: (1, 1356, 2040, 3)
     print("[*] save images")
+
     tl.vis.save_image(out[0], save_dir + '/valid_gen.png')
     #tl.vis.save_images(out, [ni, ni], save_dir + '/valid_gen2.png')
-    #tl.vis.save_image(valid_lr_img, save_dir + '/valid_lr.png')
-    #tl.vis.save_image(valid_hr_img, save_dir + '/valid_hr.png')
+    tl.vis.save_image(train_vid_seqs[0], save_dir + '/valid_first.png')
+    tl.vis.save_image(train_vid_seqs[1], save_dir + '/valid_third.png')
 
     #out_bicu = scipy.misc.imresize(valid_lr_img, [size[0] * 4, size[1] * 4], interp='bicubic', mode=None)
     #tl.vis.save_image(out_bicu, save_dir + '/valid_bicubic.png')
