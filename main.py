@@ -496,9 +496,11 @@ def evaluate():
 
     #train_vid_seqs = tl.prepro.threading_data(train_vid_seqs, fn = crop_sub_imgs_fn,is_random=False)
 
-    train_vid_seqs = tl.prepro.threading_data(train_vid_seqs, fn = downsample_fn)#,is_random=False)
+    train_vid_seqs = tl.prepro.threading_data(train_vid_seqs, fn = tl.prepro.imresize, [82,82])#,is_random=False)
 
-    #train_vid_seqs = (train_vid_seqs / 127.5) - 1
+
+
+    train_vid_seqs = (train_vid_seqs / 127.5) - 1
 
 
 
