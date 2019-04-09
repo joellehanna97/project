@@ -496,6 +496,7 @@ def evaluate():
 
 
     size = train_vid_seqs.shape
+    print('size is')
     print(size)
     # t_image = tf.placeholder('float32', [None, size[0], size[1], size[2]], name='input_image') # the old version of TL need to specify the image size
     #t_image = tf.placeholder('float32', [32, None, None, 3], name='input_image')
