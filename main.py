@@ -482,7 +482,7 @@ def evaluate():
     # exit()
 
     ###========================== DEFINE MODEL ============================###
-    #imid = 0  # 0: 企鹅  81: 蝴蝶 53: 鸟  64: 古堡
+    #imid = 0  # 
     #valid_lr_img = valid_lr_imgs[imid]
     indices_1 = [0,2]
     train_vid_img_list_s1 = [valid_hr_imgs[i] for i in indices_1]
