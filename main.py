@@ -480,6 +480,8 @@ def evaluate():
     # for im in valid_hr_imgs:
     #     print(im.shape)
     # exit()
+    print('len')
+    print(len(valid_hr_imgs))
 
     ###========================== DEFINE MODEL ============================###
     #imid = 0
