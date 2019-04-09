@@ -516,6 +516,7 @@ def evaluate():
     # Warmup on a dummy image
     im_warmup = 0.2 * np.ones((82, 82, 6), dtype=np.uint8)
 
+
     start_time = time.time()
     out = sess.run(net_g.outputs, {t_image: [im_warmup]})
     print("warm up took: %4.4fs" % (time.time() - start_time))
@@ -523,10 +524,10 @@ def evaluate():
 
     print(train_vid_seqs.shape)
     start_time = time.time()
-    out = sess.run(net_g.outputs, {t_image: [train_vid_seqs]})
+    out = sess.run(net_g.outputs, {t_image: train_vid_seqs})
     print("test 1 took: %4.4fs" % (time.time() - start_time))
 
-    immm = [train_vid_seqs]
+    immm = train_vid_seqs
     start_time = time.time()
     out = sess.run(net_g.outputs, {t_image: immm})
     print("test 2 took: %4.4fs" % (time.time() - start_time))
@@ -535,7 +536,7 @@ def evaluate():
     #while 1 == 1:
     #out = sess.run(net_g.outputs, {t_image: [valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img]})
 
-    out = sess.run(net_g.outputs, {t_image: [train_vid_seqs]})
+    out = sess.run(net_g.outputs, {t_image: train_vid_seqs})
     print("test 3 took: %4.4fs" % (time.time() - start_time))
 
     print("LR size: %s /  generated HR size: %s" % (size, out.shape))  # LR size: (339, 510, 3) /  gen HR size: (1, 1356, 2040, 3)
