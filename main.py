@@ -493,7 +493,7 @@ def evaluate():
     train_vid_seqs = tl.prepro.threading_data(train_vid_seqs, fn = crop_sub_imgs_fn,is_random=False)
 
 
-    size = train_vid_seqs.shape()
+    size = train_vid_seqs.shape
     # t_image = tf.placeholder('float32', [None, size[0], size[1], size[2]], name='input_image') # the old version of TL need to specify the image size
     #t_image = tf.placeholder('float32', [32, None, None, 3], name='input_image')
     t_image = tf.placeholder('float32', [1, 81, 81, 6], name='input_image')
