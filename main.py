@@ -466,7 +466,7 @@ def evaluate():
     ###====================== PRE-LOAD DATA ===========================###
     # train_hr_img_list = sorted(tl.files.load_file_list(path=config.TRAIN.hr_img_path, regx='.*.png', printable=False))
     # train_lr_img_list = sorted(tl.files.load_file_list(path=config.TRAIN.lr_img_path, regx='.*.png', printable=False))
-    valid_hr_img_list = sorted(tl.files.load_file_list(path=config.VALID.video_test_path, regx='.*.png', printable=False))
+    valid_hr_img_list = sorted(tl.files.load_file_list(path=config.VALID.video_test_path, regx='.*.jpg', printable=False))
     #valid_lr_img_list = sorted(tl.files.load_file_list(path=config.VALID.lr_img_path, regx='.*.png', printable=False))
 
     ## If your machine have enough memory, please pre-load the whole train set.
@@ -492,11 +492,6 @@ def evaluate():
     train_vid_seqs = np.asarray(train_vid_seqs)
     train_vid_seqs = tl.prepro.threading_data(train_vid_seqs, fn = crop_sub_imgs_fn,is_random=False)
 
-    # valid_hr_img = valid_hr_imgs[imid]
-    # valid_lr_img = get_imgs_fn('test.png', 'data2017/')  # if you want to test your own image
-    # valid_lr_img = (valid_lr_img / 127.5) - 1  # rescale to ［－1, 1]
-    # valid_lr_img = valid_lr_img[:,:,:3]
-    # print(valid_lr_img.min(), valid_lr_img.max())
 
     size = train_vid_seqs.shape()
     # t_image = tf.placeholder('float32', [None, size[0], size[1], size[2]], name='input_image') # the old version of TL need to specify the image size
