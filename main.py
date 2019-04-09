@@ -520,6 +520,8 @@ def evaluate():
     out = sess.run(net_g.outputs, {t_image: [im_warmup]})
     print("warm up took: %4.4fs" % (time.time() - start_time))
 
+
+    print(train_vid_seqs.shape)
     start_time = time.time()
     out = sess.run(net_g.outputs, {t_image: [train_vid_seqs]})
     print("test 1 took: %4.4fs" % (time.time() - start_time))
