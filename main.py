@@ -457,6 +457,13 @@ def train():
             tl.files.save_npz(net_d.all_params, name=checkpoint_dir + '/d_{}.npz'.format(tl.global_flag['mode']), sess=sess)
 
 
+def sort_alphanum(a):
+
+    convert = lambda text: int(text) if text.isdigit() else text
+    alphanum_key = lambda key: [ convert(c) for c in re.split('([0-9]+)', key) ]
+    return sorted(a, key = alphanum_key)
+
+
 def evaluate():
     ## create folders to save result images
     save_dir = "samples/{}".format(tl.global_flag['mode'])
@@ -466,11 +473,16 @@ def evaluate():
     ###====================== PRE-LOAD DATA ===========================###
     valid_hr_img_list = sorted(tl.files.load_file_list(path=config.VALID.video_test_path, regx='.*.jpg', printable=False))
 
+
+    #valid_lr_img_list = sorted(tl.files.load_file_list(path=config.VALID.lr_img_path, regx='.*.png', printable=False))
+    all_files = [f for f in os.listdir('/home/best_student/Documents/SR_Joelle/project/frames_to_test') if f.endswith('.jpg')]
+    sorted_files = sort_alphanum(all_files)
     for file in valid_hr_img_list:
         print(file)
-    #valid_lr_img_list = sorted(tl.files.load_file_list(path=config.VALID.lr_img_path, regx='.*.png', printable=False))
 
     valid_hr_imgs = tl.vis.read_images(valid_hr_img_list, path=config.VALID.video_test_path, n_threads=32)
+
+
 
     t_image = tf.placeholder('float32', [1, 1080, 1920, 6], name='input_image')
 
@@ -523,6 +535,11 @@ def evaluate():
         print("LR size: %s /  generated HR size: %s" % (size, out.shape))  # LR size: (339, 510, 3) /  gen HR size: (1, 1356, 2040, 3)
         print("[*] save images")
         tl.vis.save_image(out[0], save_dir + '/frame_%d.jpg' %mod_1)
+
+
+
+
+
 
 
 
