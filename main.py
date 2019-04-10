@@ -478,11 +478,11 @@ def evaluate():
     #valid_lr_img_list = sorted(tl.files.load_file_list(path=config.VALID.lr_img_path, regx='.*.png', printable=False))
     all_files = [f for f in os.listdir('/home/best_student/Documents/SR_Joelle/project/frames_to_test') if f.endswith('.jpg')]
     sorted_files = sort_alphanum(all_files)
-    for file in valid_hr_img_list:
+    for file in sorted_files:
         print(file)
 
-    valid_hr_imgs = tl.vis.read_images(valid_hr_img_list, path=config.VALID.video_test_path, n_threads=32)
-
+    #valid_hr_imgs = tl.vis.read_images(valid_hr_img_list, path=config.VALID.video_test_path, n_threads=32)
+    valid_hr_imgs = tl.vis.read_images(sorted_files, path=config.VALID.video_test_path, n_threads=32)
 
 
     t_image = tf.placeholder('float32', [1, 1080, 1920, 6], name='input_image')
