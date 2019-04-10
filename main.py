@@ -465,6 +465,9 @@ def evaluate():
 
     ###====================== PRE-LOAD DATA ===========================###
     valid_hr_img_list = sorted(tl.files.load_file_list(path=config.VALID.video_test_path, regx='.*.jpg', printable=False))
+
+    for file in valid_hr_img_list:
+        print(file)
     #valid_lr_img_list = sorted(tl.files.load_file_list(path=config.VALID.lr_img_path, regx='.*.png', printable=False))
 
     valid_hr_imgs = tl.vis.read_images(valid_hr_img_list, path=config.VALID.video_test_path, n_threads=32)
