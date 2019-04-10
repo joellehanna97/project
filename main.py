@@ -8,6 +8,7 @@ import numpy as np
 import tensorlayer as tl
 from utils import *
 from scipy.misc import imsave
+import re
 
 from ops import *
 from model import *
