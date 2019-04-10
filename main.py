@@ -464,23 +464,10 @@ def evaluate():
     checkpoint_dir = "checkpoint"
 
     ###====================== PRE-LOAD DATA ===========================###
-    # train_hr_img_list = sorted(tl.files.load_file_list(path=config.TRAIN.hr_img_path, regx='.*.png', printable=False))
-    # train_lr_img_list = sorted(tl.files.load_file_list(path=config.TRAIN.lr_img_path, regx='.*.png', printable=False))
     valid_hr_img_list = sorted(tl.files.load_file_list(path=config.VALID.video_test_path, regx='.*.jpg', printable=False))
     #valid_lr_img_list = sorted(tl.files.load_file_list(path=config.VALID.lr_img_path, regx='.*.png', printable=False))
 
-    ## If your machine have enough memory, please pre-load the whole train set.
-    # train_hr_imgs = tl.vis.read_images(train_hr_img_list, path=config.TRAIN.hr_img_path, n_threads=32)
-    # for im in train_hr_imgs:
-    #     print(im.shape)
-    #valid_lr_imgs = tl.vis.read_images(valid_lr_img_list, path=config.VALID.lr_img_path, n_threads=32)
-    # for im in valid_lr_imgs:
-    #     print(im.shape)
     valid_hr_imgs = tl.vis.read_images(valid_hr_img_list, path=config.VALID.video_test_path, n_threads=32)
-    # for im in valid_hr_imgs:
-    #     print(im.shape)
-    # exit()
-
 
     t_image = tf.placeholder('float32', [1, 1080, 1920, 6], name='input_image')
 
@@ -515,12 +502,6 @@ def evaluate():
         #mod_0 = i*3
         mod_1 = i*2 + 1
         #mod_2 = i*3 + 2
-        #tl.vis.save_image(train_vid_seqs[0,:,:,0:3], save_dir + '/frame_%d.png' %mod_0)
-        #tl.vis.save_image(train_vid_seqs[0,:,:,3:6], save_dir + '/frame_%d.png' %mod_2)
-
-        #train_vid_seqs = tl.prepro.threading_data(train_vid_seqs, fn = crop_sub_imgs_fn,is_random=False)
-
-        #train_vid_seqs = tl.prepro.threading_data(train_vid_seqs, fn = tl.prepro.imresize, [82,82])#,is_random=False)
 
         #(1, 1080, 1920, 6)
 
@@ -528,28 +509,7 @@ def evaluate():
 
         size = train_vid_seqs.shape
 
-
-        # t_image = tf.placeholder('float32', [None, size[0], size[1], size[2]], name='input_image') # the old version of TL need to specify the image size
-        #t_image = tf.placeholder('float32', [32, None, None, 3], name='input_image')
         ### hereeeeeee
-
-
-
-        #while 1 == 1:
-        #out = sess.run(net_g.outputs, {t_image: [valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img]})
-
-        """
-        print(train_vid_seqs.shape)
-        start_time = time.time()
-        out = sess.run(net_g.outputs, {t_image: train_vid_seqs})
-        print("test 1 took: %4.4fs" % (time.time() - start_time))
-
-        immm = train_vid_seqs
-        start_time = time.time()
-        out = sess.run(net_g.outputs, {t_image: immm})
-        print("test 2 took: %4.4fs" % (time.time() - start_time))
-        """
-
         start_time = time.time()
         #while 1 == 1:
         #out = sess.run(net_g.outputs, {t_image: [valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img]})
@@ -561,96 +521,7 @@ def evaluate():
         print("[*] save images")
         tl.vis.save_image(out[0], save_dir + '/frame_%d.png' %mod_1)
 
-        #tl.vis.save_images(out, [ni, ni], save_dir + '/valid_gen2.png')
 
-
-        #out_bicu = scipy.misc.imresize(valid_lr_img, [size[0] * 4, size[1] * 4], interp='bicubic', mode=None)
-        #tl.vis.save_image(out_bicu, save_dir + '/valid_bicubic.png')
-"""
-def evaluate_all():
-    ni = 1
-    save_dir = "results_video/"
-
-    tl.files.exists_or_mkdir(save_dir)
-
-    checkpoint_dir = "checkpoint"
-
-    ###====================== PRE-LOAD DATA ===========================###
-    ## Read images from folder
-    train_lr_path = '/home/saeed-lts5/Documents/Super_Resolution/srgan_video/srgan_video-master/video_input/s00_city_HR'
-    ###========================== Video Output ============================###
-    #video = cv2.VideoWriter('/home/saeed/Documents/Super_Resolution/srgan/srgan-master/video_1.mp4', -1, 1, (width,height))
-    height, width = 768, 1024
-    #height, width = 120*4, 180*4
-    print(height)
-    print(width)
-
-    fourcc = cv2.VideoWriter_fourcc(*"MJPG")
-    video_1 = cv2.VideoWriter(save_dir + 'video_f1.avi', fourcc, 30.0, (width, height))
-    #video_2 = cv2.VideoWriter(save_dir + 'video_f2_recurr__.avi', fourcc, 30.0, (width, height))
-
-    from natsort import natsorted
-
-    train_lr_img_list = natsorted(tl.files.load_file_list(path=train_lr_path, regx='.*.bmp', printable=False))
-
-    print(len(train_lr_img_list))
-
-    t_image = tf.placeholder('float32', [1, None, None, 6], name='input_image')
-
-    net_g = SRGAN_g(t_image, is_train=False, reuse=False)
-
-    ###========================== RESTORE MODEL =============================###
-    sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=False))
-    tl.layers.initialize_global_variables(sess)
-    tl.files.load_and_assign_npz(sess=sess, name=checkpoint_dir + '/g_srgan.npz', network=net_g)
-    ###============================= Testing ===============================###
-
-    #train_hr_img_list = train_hr_img_list[0:60]
-    #train_lr_img_list = train_lr_img_list[0:60]
-    out = tl.vis.read_images(train_lr_img_list[0:0+1], path=train_lr_path , n_threads=32)
-    step_time = time.time()
-    out = tl.prepro.threading_data(out, fn=crop_sub_imgs_fn , is_random=False) # change crop function (?)
-    log = "[*] time croppinggg: %4.4fs" % (time.time() - step_time)
-    print(log)
-    for idx in range(1, len(train_lr_img_list) - 1):
-        step_time = time.time()
-        indices = [idx - 1, idx + 1]
-        train_vid_img_list = [train_lr_img_list[i] for i in indices]
-        b_imgs_384 = tl.vis.read_images(train_hr_img_list[idx:idx+1], path=train_lr_path , n_threads=32)
-        b_imgs_96 = tl.vis.read_images(train_vid_img_list, path=train_lr_path , n_threads=32)
-
-        b_imgs_96 = tl.prepro.threading_data(b_imgs_96, fn=crop_sub_imgs_fn, is_random=False)
-
-        #b_imgs_96 = tl.vis.read_images(train_lr_img_list[idx:idx+1], path=train_lr_path , n_threads=32)
-
-        b_seqs_96 = np.stack([np.concatenate([b_imgs_96[0], b_imgs_96[1]], 2)])
-        #b_seqs_96 = np.stack([np.concatenate([out[0], b_imgs_96[1]], 2)])
-        b_seq_384 = np.stack(np.array(b_imgs_384))
-        #b_seqs_96 = (b_seqs_96 / 127.5) - 1
-        step_time = time.time()
-        out = sess.run(net_g.outputs, {t_image: b_seqs_96})
-        log = "[*] time 1: %4.4fs" % (time.time() - step_time)
-        print(log)
-        step_time = time.time()
-
-        tl.vis.save_images(out, [ni, ni], save_dir + 'SR_%d_f3.png' % idx)
-
-
-        out = np.array(out) * 127.5 + 127.5
-
-        image_v = np.reshape(out,(out.shape[1],out.shape[2],out.shape[3]))
-
-        video_1.write(np.uint8( cv2.cvtColor(image_v, cv2.COLOR_BGR2RGB) ))
-
-
-        print(out[0].shape)
-        #out = np.expand_dims(scipy.misc.imresize(out[0], [height / 4, width / 4], interp='bicubic'), axis=0)
-        #print(out[0].shape)
-        #log = "[*] time: %4.4fs" % (time.time() - step_time)
-        #print(log)
-
-    video_1.release()
-"""
 
 if __name__ == '__main__':
     import argparse
