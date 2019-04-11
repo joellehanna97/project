@@ -587,13 +587,18 @@ def validate():
 
         train_vid_img_list = sorted(tl.files.load_file_list(path=train_vid_list[i] + '/frames/', regx='.*.png', printable=False))
         #b_imgs_384 = tl.vis.read_images([train_vid_img_list[110]], path=train_vid_list[100] + '/frames/', n_threads=32)
-        indices_1 = [i,i+2]
+        indices_1 = [19,21]
         train_vid_img_list_s1 = [train_vid_img_list[j] for j in indices_1]
 
+        train_target_vid_imgs = tl.vis.read_images([train_vid_img_list[20],train_vid_img_list[50],train_vid_img_list[80],train_vid_img_list[110]], path=train_vid_list[0] + '/frames/', n_threads=32)
 
 
-        train_vid_img_list_s1 = tl.vis.read_images(train_vid_img_list_s1,path=train_vid_list[i] + '/frames/', n_threads=32)
-        target = tl.vis.read_images(train_vid_img_list[i+1],path=train_vid_list[i] + '/frames/', n_threads=32)
+
+        #train_vid_img_list_s1 = tl.vis.read_images(train_vid_img_list_s1,path=train_vid_list[i] + '/frames/', n_threads=32)
+        target = tl.vis.read_images(train_vid_img_list[20],path=train_vid_list[i] + '/frames/', n_threads=32)
+        print('shape is')
+        print(target.shape)
+        target = tl.prepro.threading_data(target, fn = crop_sub_imgs_fn_2, is_random = False)
         tl.vis.save_image(target, save_dir + '/target_%d.png' %i)
 
         train_vid_img_list_s1 = tl.prepro.threading_data(train_vid_img_list_s1, fn = crop_sub_imgs_fn_2, is_random=False)
