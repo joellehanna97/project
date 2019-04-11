@@ -583,7 +583,7 @@ def validate():
 
     ###========================== DEFINE MODEL ============================###
 
-    for i in range(0,len(train_vid_list)+1):
+    for i in range(0,len(train_vid_list)):
 
         train_vid_img_list = sorted(tl.files.load_file_list(path=train_vid_list[i] + '/frames/', regx='.*.png', printable=False))
         #b_imgs_384 = tl.vis.read_images([train_vid_img_list[110]], path=train_vid_list[100] + '/frames/', n_threads=32)
@@ -594,7 +594,7 @@ def validate():
 
         train_vid_img_list_s1 = tl.vis.read_images(train_vid_img_list_s1,path=train_vid_list[i] + '/frames/', n_threads=32)
 
-        target = tl.vis.read_images(train_vid_img_list[20],path=train_vid_list[i] + '/frames/', n_threads=32)
+        target = tl.vis.read_images([train_vid_img_list[20]],path=train_vid_list[i] + '/frames/', n_threads=32)
         """
         print('shape is')
         print(np.shape(target))
