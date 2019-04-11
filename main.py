@@ -611,7 +611,7 @@ def validate():
         print('size is')
         print(size)
 
-
+        """
         ### hereeeeeee
         start_time = time.time()
         #while 1 == 1:
@@ -623,6 +623,7 @@ def validate():
         print("LR size: %s /  generated HR size: %s" % (size, out.shape))  # LR size: (339, 510, 3) /  gen HR size: (1, 1356, 2040, 3)
         print("[*] save images")
         tl.vis.save_image(out[0], save_dir + '/frame_%d.jpg' %mod_1)
+        """
 
 
 if __name__ == '__main__':
