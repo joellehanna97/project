@@ -593,8 +593,9 @@ def validate():
         #train_target_vid_imgs = tl.vis.read_images([train_vid_img_list[20],train_vid_img_list[50],train_vid_img_list[80],train_vid_img_list[110]], path=train_vid_list[0] + '/frames/', n_threads=32)
 
         train_vid_img_list_s1 = tl.vis.read_images(train_vid_img_list_s1,path=train_vid_list[i] + '/frames/', n_threads=32)
-        """
+
         target = tl.vis.read_images(train_vid_img_list[20],path=train_vid_list[i] + '/frames/', n_threads=32)
+        """
         print('shape is')
         print(np.shape(target))
         print('type is')
