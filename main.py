@@ -547,15 +547,14 @@ def validate():
 
     train_vid_img_list = sorted(tl.files.load_file_list(path=train_vid_list[100] + '/frames/', regx='.*.png', printable=False))
 
-    b_imgs_384 = tl.vis.read_images([train_vid_img_list[110]], path=train_vid_list[100] + '/frames/', n_threads=32)
+
 
     #print('len train_vid_img_list')
     #print(len(train_vid_img_list)) # 150
     #print('len train_vid_list')
     #print(len(train_vid_list)) # 6757
 
-    print('shape is')
-    print(b_imgs_384[0].shape)
+
 
     train_vid_list = train_vid_list[5000:5020]
     # valid_lr_img_list = sorted(tl.files.load_file_list(path=config.VALID.lr_img_path, regx='.*.png', printable=False))
@@ -588,8 +587,11 @@ def validate():
     ###========================== DEFINE MODEL ============================###
 
     for i in range(0,len(train_vid_list)):
+
+        train_vid_img_list = sorted(tl.files.load_file_list(path=train_vid_list[i] + '/frames/', regx='.*.png', printable=False))
+        #b_imgs_384 = tl.vis.read_images([train_vid_img_list[110]], path=train_vid_list[100] + '/frames/', n_threads=32)
         indices_1 = [i,i+1]
-        train_vid_img_list_s1 = [train_vid_list[j] for j in indices_1]
+        train_vid_img_list_s1 = [train_vid_img_list[j] for j in indices_1]
 
         train_vid_seqs =[np.concatenate([train_vid_img_list_s1[0], train_vid_img_list_s1[1]], 2)]
 
@@ -597,6 +599,7 @@ def validate():
         #mod_0 = i*3
         mod_1 = i*2 + 1
         #mod_2 = i*3 + 2
+
 
         #(1, 360, 640, 6)
 
