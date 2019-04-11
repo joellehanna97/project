@@ -545,16 +545,12 @@ def validate():
     train_video_folders = '/media/saeed-lts5/Data-Saeed/SuperResolution/youtube8m-dataset/frames'
     train_vid_list = sorted(tl.files.load_folder_list(path=train_video_folders))
 
-    train_vid_img_list = sorted(tl.files.load_file_list(path=train_vid_list[100] + '/frames/', regx='.*.png', printable=False))
-
-
+    train_vid_img_list = sorted(tl.files.load_file_list(path=train_vid_list[30] + '/frames/', regx='.*.png', printable=False))
 
     #print('len train_vid_img_list')
     #print(len(train_vid_img_list)) # 150
     #print('len train_vid_list')
     #print(len(train_vid_list)) # 6757
-
-
 
     train_vid_list = train_vid_list[5000:5020]
     # valid_lr_img_list = sorted(tl.files.load_file_list(path=config.VALID.lr_img_path, regx='.*.png', printable=False))
@@ -587,9 +583,7 @@ def validate():
 
     ###========================== DEFINE MODEL ============================###
 
-
     for i in range(0,len(train_vid_list)):
-
 
         train_vid_img_list = sorted(tl.files.load_file_list(path=train_vid_list[i] + '/frames/', regx='.*.png', printable=False))
         #b_imgs_384 = tl.vis.read_images([train_vid_img_list[110]], path=train_vid_list[100] + '/frames/', n_threads=32)
@@ -604,7 +598,7 @@ def validate():
 
         train_vid_seqs = np.asarray(train_vid_seqs)
         #mod_0 = i*3
-        mod_1 = i*2 + 1
+        #mod_1 = i*2 + 1
         #mod_2 = i*3 + 2
 
         #(1, 360, 640, 6)
@@ -621,11 +615,12 @@ def validate():
         #out = sess.run(net_g.outputs, {t_image: [valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img]})
 
         out = sess.run(net_g.outputs, {t_image: train_vid_seqs})
-        print("Frame %d took: %4.4fs" %(mod_1, (time.time() - start_time)))
+        print("Frame %d took: %4.4fs" %(i, (time.time() - start_time)))
 
         print("LR size: %s /  generated HR size: %s" % (size, out.shape))  # LR size: (339, 510, 3) /  gen HR size: (1, 1356, 2040, 3)
         print("[*] save images")
-        tl.vis.save_image(out[0], save_dir + '/frame_%d.jpg' %mod_1)
+        tl.vis.save_image(out[0], save_dir + '/frame_%d.png' %i)
+
 
 
 
