@@ -504,9 +504,6 @@ def evaluate():
 
     ###========================== DEFINE MODEL ============================###
 
-
-    #imid = 0
-    #valid_lr_img = valid_lr_imgs[imid]
     print(len(valid_hr_imgs))
     for i in range(0,len(valid_hr_imgs)):
         indices_1 = [i,i+1]
@@ -538,10 +535,80 @@ def evaluate():
         tl.vis.save_image(out[0], save_dir + '/frame_%d.jpg' %mod_1)
 
 
+def validate():
+    ## create folders to save result images
+    save_dir = "samples/{}".format(tl.global_flag['mode'])
+    tl.files.exists_or_mkdir(save_dir)
+    checkpoint_dir = "checkpoint"
+
+    ###====================== PRE-LOAD DATA ===========================###
+    train_video_folders = '/media/saeed-lts5/Data-Saeed/SuperResolution/youtube8m-dataset/frames'
+    train_vid_list = sorted(tl.files.load_folder_list(path=train_video_folders))
+
+    train_vid_img_list = sorted(tl.files.load_file_list(path=train_vid_list[0] + '/frames/', regx='.*.png', printable=False))
+
+    print('len train_vid_img_list')
+    print(len(train_vid_img_list))
+
+    train_vid_list = train_vid_list[8000:8020]
+    #valid_lr_img_list = sorted(tl.files.load_file_list(path=config.VALID.lr_img_path, regx='.*.png', printable=False))
+    all_files = [f for f in os.listdir('/home/best_student/Documents/SR_Joelle/project/frames_to_test') if f.endswith('.jpg')]
+    sorted_files = sort_alphanum(all_files)
+    for file in sorted_files:
+        print(file)
+
+    #valid_hr_imgs = tl.vis.read_images(valid_hr_img_list, path=config.VALID.video_test_path, n_threads=32)
+    valid_hr_imgs = tl.vis.read_images(sorted_files, path=config.VALID.video_test_path, n_threads=32)
 
 
+    t_image = tf.placeholder('float32', [1, 1080, 1920, 6], name='input_image')
 
+    net_g = SRGAN_g(t_image, is_train=False, reuse=False)
 
+    ###========================== RESTORE G =============================###
+    sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=False))
+    tl.layers.initialize_global_variables(sess)
+    tl.files.load_and_assign_npz(sess=sess, name=checkpoint_dir + '/g_srgan.npz', network=net_g)
+
+    ###======================= EVALUATION =============================###
+
+    # Warmup on a dummy image
+    im_warmup = 0.2 * np.ones((1080, 1920, 6), dtype=np.uint8)
+    start_time = time.time()
+    out = sess.run(net_g.outputs, {t_image: [im_warmup]})
+    print("warm up took: %4.4fs" % (time.time() - start_time))
+
+    ###========================== DEFINE MODEL ============================###
+
+    print(len(valid_hr_imgs))
+    for i in range(0,len(valid_hr_imgs)):
+        indices_1 = [i,i+1]
+        train_vid_img_list_s1 = [valid_hr_imgs[j] for j in indices_1]
+
+        train_vid_seqs =[np.concatenate([train_vid_img_list_s1[0], train_vid_img_list_s1[1]], 2)]
+
+        train_vid_seqs = np.asarray(train_vid_seqs)
+        #mod_0 = i*3
+        mod_1 = i*2 + 1
+        #mod_2 = i*3 + 2
+
+        #(1, 1080, 1920, 6)
+
+        train_vid_seqs = (train_vid_seqs / 127.5) - 1
+
+        size = train_vid_seqs.shape
+
+        ### hereeeeeee
+        start_time = time.time()
+        #while 1 == 1:
+        #out = sess.run(net_g.outputs, {t_image: [valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img, valid_lr_img]})
+
+        out = sess.run(net_g.outputs, {t_image: train_vid_seqs})
+        print("Frame %d took: %4.4fs" %(mod_1, (time.time() - start_time)))
+
+        print("LR size: %s /  generated HR size: %s" % (size, out.shape))  # LR size: (339, 510, 3) /  gen HR size: (1, 1356, 2040, 3)
+        print("[*] save images")
+        tl.vis.save_image(out[0], save_dir + '/frame_%d.jpg' %mod_1)
 
 
 if __name__ == '__main__':
@@ -558,5 +625,7 @@ if __name__ == '__main__':
         train()
     elif tl.global_flag['mode'] == 'evaluate':
         evaluate()
+    elif tl.global_flag['mode'] == 'validate':
+        validate()
     else:
         raise Exception("Unknow --mode")
