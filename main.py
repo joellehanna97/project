@@ -593,7 +593,7 @@ def validate():
         indices_1 = [i,i+1]
         train_vid_img_list_s1 = [train_vid_img_list[j] for j in indices_1]
 
-        train_vid_img_list_s1 = tl.vis.read_images(train_vid_img_list_s1,path=train_vid_list[100] + '/frames/', n_threads=32)
+        train_vid_img_list_s1 = tl.vis.read_images(train_vid_img_list_s1,path=train_vid_list[i] + '/frames/', n_threads=32)
 
         train_vid_seqs =[np.concatenate([train_vid_img_list_s1[0], train_vid_img_list_s1[1]], 2)]
 
