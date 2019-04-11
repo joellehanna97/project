@@ -567,7 +567,7 @@ def validate():
     #valid_hr_imgs = tl.vis.read_images(valid_hr_img_list, path=config.VALID.video_test_path, n_threads=32)
     #valid_hr_imgs = tl.vis.read_images(sorted_files, path=config.VALID.video_test_path, n_threads=32)
 
-    t_image = tf.placeholder('float32', [1, 360, 640, 6], name='input_image')
+    #t_image = tf.placeholder('float32', [1, 360, 640, 6], name='input_image')
 
     net_g = SRGAN_g(t_image, is_train=False, reuse=False)
 
@@ -577,17 +577,19 @@ def validate():
     tl.files.load_and_assign_npz(sess=sess, name=checkpoint_dir + '/g_srgan.npz', network=net_g)
 
     ###======================= EVALUATION =============================###
-
+    """
     # Warmup on a dummy image
     im_warmup = 0.2 * np.ones((360, 640, 6), dtype=np.uint8)
     start_time = time.time()
     out = sess.run(net_g.outputs, {t_image: [im_warmup]})
     print("warm up took: %4.4fs" % (time.time() - start_time))
+    """
 
     ###========================== DEFINE MODEL ============================###
 
 
     for i in range(0,len(train_vid_list)):
+
 
         train_vid_img_list = sorted(tl.files.load_file_list(path=train_vid_list[i] + '/frames/', regx='.*.png', printable=False))
         #b_imgs_384 = tl.vis.read_images([train_vid_img_list[110]], path=train_vid_list[100] + '/frames/', n_threads=32)
@@ -611,7 +613,17 @@ def validate():
         print('size is')
         print(size)
 
+        t_image = tf.placeholder('float32', [1, size[1], size[2], 6], name='input_image')
+
         """
+        net_g = SRGAN_g(t_image, is_train=False, reuse=False)
+
+
+        sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=False))
+        tl.layers.initialize_global_variables(sess)
+        tl.files.load_and_assign_npz(sess=sess, name=checkpoint_dir + '/g_srgan.npz', network=net_g)
+        """
+
         ### hereeeeeee
         start_time = time.time()
         #while 1 == 1:
@@ -623,7 +635,7 @@ def validate():
         print("LR size: %s /  generated HR size: %s" % (size, out.shape))  # LR size: (339, 510, 3) /  gen HR size: (1, 1356, 2040, 3)
         print("[*] save images")
         tl.vis.save_image(out[0], save_dir + '/frame_%d.jpg' %mod_1)
-        """
+
 
 
 if __name__ == '__main__':
