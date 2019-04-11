@@ -586,11 +586,6 @@ def validate():
 
     ###========================== DEFINE MODEL ============================###
 
-    print('type is')
-    print(type(train_vid_list[0]))
-    print('shape is')
-    print(train_vid_list[0].shape)
-
 
     for i in range(0,len(train_vid_list)):
 
@@ -613,6 +608,9 @@ def validate():
         train_vid_seqs = (train_vid_seqs / 127.5) - 1
 
         size = train_vid_seqs.shape
+        print('size is')
+        print(size)
+
 
         ### hereeeeeee
         start_time = time.time()
