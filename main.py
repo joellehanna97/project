@@ -545,12 +545,12 @@ def validate():
     train_video_folders = '/media/saeed-lts5/Data-Saeed/SuperResolution/youtube8m-dataset/frames'
     train_vid_list = sorted(tl.files.load_folder_list(path=train_video_folders))
 
-    train_vid_img_list = sorted(tl.files.load_file_list(path=train_vid_list[0] + '/frames/', regx='.*.png', printable=False))
+    train_vid_img_list = sorted(tl.files.load_file_list(path=train_vid_list[5000] + '/frames/', regx='.*.png', printable=False))
 
     print('len train_vid_img_list')
-    print(len(train_vid_img_list))
+    print(len(train_vid_img_list)) # 150
     print('len train_vid_list')
-    print(len(train_vid_list))
+    print(len(train_vid_list)) # 6757
 
     train_vid_list = train_vid_list[8000:8020]
     #valid_lr_img_list = sorted(tl.files.load_file_list(path=config.VALID.lr_img_path, regx='.*.png', printable=False))
