@@ -595,14 +595,14 @@ def validate():
         train_vid_img_list_s1 = tl.vis.read_images(train_vid_img_list_s1,path=train_vid_list[i] + '/frames/', n_threads=32)
 
         target = tl.vis.read_images([train_vid_img_list[20]],path=train_vid_list[i] + '/frames/', n_threads=32)
-        """
+
         print('shape is')
         print(np.shape(target))
         print('type is')
         print(type(target))
         target = tl.prepro.threading_data(target, fn = crop_sub_imgs_fn_2, is_random = False)
         tl.vis.save_image(target, save_dir + '/target_%d.png' %i)
-        """
+        
 
         train_vid_img_list_s1 = tl.prepro.threading_data(train_vid_img_list_s1, fn = crop_sub_imgs_fn_2, is_random=False)
 
