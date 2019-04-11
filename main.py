@@ -586,6 +586,12 @@ def validate():
 
     ###========================== DEFINE MODEL ============================###
 
+    print('type is')
+    print(type(train_vid_list[0]))
+    print('shape is')
+    print(train_vid_list[0].shape)
+
+
     for i in range(0,len(train_vid_list)):
 
         train_vid_img_list = sorted(tl.files.load_file_list(path=train_vid_list[i] + '/frames/', regx='.*.png', printable=False))
@@ -601,7 +607,6 @@ def validate():
         #mod_0 = i*3
         mod_1 = i*2 + 1
         #mod_2 = i*3 + 2
-
 
         #(1, 360, 640, 6)
 
