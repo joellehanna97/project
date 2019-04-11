@@ -568,14 +568,14 @@ def validate():
     #valid_hr_imgs = tl.vis.read_images(sorted_files, path=config.VALID.video_test_path, n_threads=32)
 
     #t_image = tf.placeholder('float32', [1, 360, 640, 6], name='input_image')
-
+    """
     net_g = SRGAN_g(t_image, is_train=False, reuse=False)
 
     ###========================== RESTORE G =============================###
     sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=False))
     tl.layers.initialize_global_variables(sess)
     tl.files.load_and_assign_npz(sess=sess, name=checkpoint_dir + '/g_srgan.npz', network=net_g)
-
+    """
     ###======================= EVALUATION =============================###
     """
     # Warmup on a dummy image
@@ -615,14 +615,14 @@ def validate():
 
         t_image = tf.placeholder('float32', [1, size[1], size[2], 6], name='input_image')
 
-        """
+
         net_g = SRGAN_g(t_image, is_train=False, reuse=False)
 
-
+        
         sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=False))
         tl.layers.initialize_global_variables(sess)
         tl.files.load_and_assign_npz(sess=sess, name=checkpoint_dir + '/g_srgan.npz', network=net_g)
-        """
+
 
         ### hereeeeeee
         start_time = time.time()
