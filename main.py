@@ -549,6 +549,8 @@ def validate():
 
     print('len train_vid_img_list')
     print(len(train_vid_img_list))
+    print('len train_vid_list')
+    print(len(train_vid_list))
 
     train_vid_list = train_vid_list[8000:8020]
     #valid_lr_img_list = sorted(tl.files.load_file_list(path=config.VALID.lr_img_path, regx='.*.png', printable=False))
