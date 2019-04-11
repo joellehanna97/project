@@ -568,7 +568,7 @@ def validate():
     #valid_hr_imgs = tl.vis.read_images(valid_hr_img_list, path=config.VALID.video_test_path, n_threads=32)
     #valid_hr_imgs = tl.vis.read_images(sorted_files, path=config.VALID.video_test_path, n_threads=32)
 
-    t_image = tf.placeholder('float32', [1, 1080, 1920, 6], name='input_image')
+    t_image = tf.placeholder('float32', [1, 360, 640, 6], name='input_image')
 
     net_g = SRGAN_g(t_image, is_train=False, reuse=False)
 
@@ -580,17 +580,16 @@ def validate():
     ###======================= EVALUATION =============================###
 
     # Warmup on a dummy image
-    im_warmup = 0.2 * np.ones((1080, 1920, 6), dtype=np.uint8)
+    im_warmup = 0.2 * np.ones((360, 640, 6), dtype=np.uint8)
     start_time = time.time()
     out = sess.run(net_g.outputs, {t_image: [im_warmup]})
     print("warm up took: %4.4fs" % (time.time() - start_time))
 
     ###========================== DEFINE MODEL ============================###
 
-    print(len(valid_hr_imgs))
-    for i in range(0,len(valid_hr_imgs)):
+    for i in range(0,len(train_vid_list)):
         indices_1 = [i,i+1]
-        train_vid_img_list_s1 = [valid_hr_imgs[j] for j in indices_1]
+        train_vid_img_list_s1 = [train_vid_list[j] for j in indices_1]
 
         train_vid_seqs =[np.concatenate([train_vid_img_list_s1[0], train_vid_img_list_s1[1]], 2)]
 
@@ -599,7 +598,7 @@ def validate():
         mod_1 = i*2 + 1
         #mod_2 = i*3 + 2
 
-        #(1, 1080, 1920, 6)
+        #(1, 360, 640, 6)
 
         train_vid_seqs = (train_vid_seqs / 127.5) - 1
 
