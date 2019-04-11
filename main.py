@@ -567,23 +567,23 @@ def validate():
     #valid_hr_imgs = tl.vis.read_images(valid_hr_img_list, path=config.VALID.video_test_path, n_threads=32)
     #valid_hr_imgs = tl.vis.read_images(sorted_files, path=config.VALID.video_test_path, n_threads=32)
 
-    #t_image = tf.placeholder('float32', [1, 360, 640, 6], name='input_image')
-    """
+    t_image = tf.placeholder('float32', [1, 240, 300, 6], name='input_image')
+
     net_g = SRGAN_g(t_image, is_train=False, reuse=False)
 
     ###========================== RESTORE G =============================###
     sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=False))
     tl.layers.initialize_global_variables(sess)
     tl.files.load_and_assign_npz(sess=sess, name=checkpoint_dir + '/g_srgan.npz', network=net_g)
-    """
+
     ###======================= EVALUATION =============================###
-    """
+
     # Warmup on a dummy image
-    im_warmup = 0.2 * np.ones((360, 640, 6), dtype=np.uint8)
+    im_warmup = 0.2 * np.ones((240, 300, 6), dtype=np.uint8)
     start_time = time.time()
     out = sess.run(net_g.outputs, {t_image: [im_warmup]})
     print("warm up took: %4.4fs" % (time.time() - start_time))
-    """
+
 
     ###========================== DEFINE MODEL ============================###
 
@@ -598,6 +598,8 @@ def validate():
 
         train_vid_img_list_s1 = tl.vis.read_images(train_vid_img_list_s1,path=train_vid_list[i] + '/frames/', n_threads=32)
 
+        train_vid_img_list_s1 = tl.prepro.threading_data(train_vid_img_list_s1, fn = crop_sub_imgs_fn_2, is_random=False)
+
         train_vid_seqs =[np.concatenate([train_vid_img_list_s1[0], train_vid_img_list_s1[1]], 2)]
 
         train_vid_seqs = np.asarray(train_vid_seqs)
@@ -607,22 +609,11 @@ def validate():
 
         #(1, 360, 640, 6)
 
-        train_vid_seqs = (train_vid_seqs / 127.5) - 1
+        #train_vid_seqs = (train_vid_seqs / 127.5) - 1
 
         size = train_vid_seqs.shape
         print('size is')
         print(size)
-
-        t_image = tf.placeholder('float32', [1, size[1], size[2], 6], name='input_image')
-
-
-        net_g = SRGAN_g(t_image, is_train=False, reuse=False)
-
-        
-        sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=False))
-        tl.layers.initialize_global_variables(sess)
-        tl.files.load_and_assign_npz(sess=sess, name=checkpoint_dir + '/g_srgan.npz', network=net_g)
-
 
         ### hereeeeeee
         start_time = time.time()
