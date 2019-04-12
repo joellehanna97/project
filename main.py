@@ -600,9 +600,10 @@ def validate():
         print(np.shape(target))
         print('type is')
         print(type(target))
+        """
         target = tl.prepro.threading_data(target, fn = crop_sub_imgs_fn_2, is_random = False)
         tl.vis.save_image(target[0,:,:,:], save_dir + '/target_%d.png' %i)
-
+        """
 
         train_vid_img_list_s1 = tl.prepro.threading_data(train_vid_img_list_s1, fn = crop_sub_imgs_fn_2, is_random=False)
 
@@ -618,9 +619,14 @@ def validate():
         #train_vid_seqs = (train_vid_seqs / 127.5) - 1
 
         size = train_vid_seqs.shape
-        print('size is')
+        print('size vid seq is')
         print(size)
 
+        size = target.shape
+        print('size target is')
+        print(size)
+
+        """
         ### hereeeeeee
         start_time = time.time()
         #while 1 == 1:
@@ -632,7 +638,7 @@ def validate():
         print("LR size: %s /  generated HR size: %s" % (size, out.shape))  # LR size: (339, 510, 3) /  gen HR size: (1, 1356, 2040, 3)
         print("[*] save images")
         tl.vis.save_image(out[0], save_dir + '/frame_%d.png' %i)
-
+        """
 
 
 
