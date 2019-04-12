@@ -552,7 +552,7 @@ def validate():
     #print('len train_vid_list')
     #print(len(train_vid_list)) # 6757
 
-    train_vid_list = train_vid_list[5000:5020]
+    train_vid_list = train_vid_list[5020:5040]
     # valid_lr_img_list = sorted(tl.files.load_file_list(path=config.VALID.lr_img_path, regx='.*.png', printable=False))
     """
     all_files = [f for f in os.listdir('/home/best_student/Documents/SR_Joelle/project/frames_to_test') if f.endswith('.jpg')]
@@ -601,8 +601,8 @@ def validate():
 
         target = tl.prepro.threading_data(target, fn = crop_sub_imgs_fn_2, is_random = False)
         print('cropped')
-        target = (255. / 2.) * target
-        target = target.astype(np.uint8)
+        #target = (255. / 2.) * target
+        #target = target.astype(np.uint8)
         tl.vis.save_image(target[0,:,:,:], save_dir + '/target_%d.png' %i)
         print('saved')
 
