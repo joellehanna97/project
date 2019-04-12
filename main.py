@@ -601,7 +601,7 @@ def validate():
 
         target = tl.prepro.threading_data(target, fn = crop_sub_imgs_fn_2, is_random = False)
         print('cropped')
-        target = 127 * target
+        target = (255. / 2.) * target
         target = target.astype(np.uint8)
         tl.vis.save_image(target[0,:,:,:], save_dir + '/target_%d.png' %i)
         print('saved')
