@@ -600,13 +600,13 @@ def validate():
         print(np.shape(target))
         print('type is')
         print(type(target))
-        """
+
         target = tl.prepro.threading_data(target, fn = crop_sub_imgs_fn_2, is_random = False)
         tl.vis.save_image(target[0,:,:,:], save_dir + '/target_%d.png' %i)
 
 
         train_vid_img_list_s1 = tl.prepro.threading_data(train_vid_img_list_s1, fn = crop_sub_imgs_fn_2, is_random=False)
-        """
+        
         train_vid_seqs =[np.concatenate([train_vid_img_list_s1[0], train_vid_img_list_s1[1]], 2)]
 
         train_vid_seqs = np.asarray(train_vid_seqs)
