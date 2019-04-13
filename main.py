@@ -595,15 +595,22 @@ def validate():
         train_vid_img_list_s1 = tl.vis.read_images(train_vid_img_list_s1,path=train_vid_list[i] + '/frames/', n_threads=32)
 
         target = tl.vis.read_images([train_vid_img_list[20]],path=train_vid_list[i] + '/frames/', n_threads=32)
+        first_frame = tl.vis.read_images([train_vid_img_list[19]],path=train_vid_list[i] + '/frames/', n_threads=32)
+        second_frame = tl.vis.read_images([train_vid_img_list[21]],path=train_vid_list[i] + '/frames/', n_threads=32)
 
         #print('shape is')
         #print(np.shape(target))
 
         target = tl.prepro.threading_data(target, fn = crop_sub_imgs_fn_2, is_random = False)
+        first_frame = tl.prepro.threading_data(first_frame, fn = crop_sub_imgs_fn_2, is_random = False)
+        second_frame = tl.prepro.threading_data(second_frame, fn = crop_sub_imgs_fn_2, is_random = False)
         print('cropped')
         #target = (255. / 2.) * target
         #target = target.astype(np.uint8)
+
         tl.vis.save_image(target[0,:,:,:], save_dir + '/target_%d.png' %i)
+        tl.vis.save_image(first_frame[0,:,:,:], save_dir + '/first_frame_%d.png' %i)
+        tl.vis.save_image(second_frame[0,:,:,:], save_dir + '/second_frame_%d.png' %i)
         print('saved')
 
 
