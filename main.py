@@ -30,7 +30,7 @@ n_epoch = config.TRAIN.n_epoch
 lr_decay = config.TRAIN.lr_decay
 decay_every = config.TRAIN.decay_every
 
-train_only_generator = False
+train_only_generator = True
 train_using_gan = True
 
 ni = int(np.sqrt(batch_size))
@@ -84,7 +84,10 @@ def train():
     net_g_test = SRGAN_g(t_image, is_train=False, reuse=True)
 
     ssim_valid = tf.reduce_mean(tf.image.ssim(net_g_test.outputs, t_target_image, 1))
-    mse_valid = tf.losses.mean_squared_error(net_g_test.outputs, t_target_image)
+    #mse_valid = tf.losses.mean_squared_error(net_g_test.outputs, t_target_image)
+    mse_valid = tf.losses.absolute_difference(net_g_test.outputs, t_target_image) # --> l1 loss
+
+
 
     ###========================== DEFINE TRAIN OPS ==========================###
     # Calculate GAN losses
@@ -92,7 +95,8 @@ def train():
     d_loss2 = tl.cost.sigmoid_cross_entropy(logits_fake, tf.zeros_like(logits_fake), name='d2')
 
     g_gan_loss = 1e-3 * tl.cost.sigmoid_cross_entropy(logits_fake, tf.ones_like(logits_fake), name='g')
-    mse_loss = tl.cost.mean_squared_error(net_g.outputs, t_target_image, is_mean=True) #net_g.outputs
+    mse_loss = tl.cost.absolute_difference_error(net_g.outputs, t_target_image, is_mean=True) # --> L1 loss
+    #mse_loss = tl.cost.mean_squared_error(net_g.outputs, t_target_image, is_mean=True)
     vgg_loss = 2e-6 * tl.cost.mean_squared_error(vgg_predict_emb.outputs, vgg_target_emb.outputs, is_mean=True)
     #vgg_loss = 2e-6 * tl.cost.mean_squared_error(vgg_predict_emb.outputs, vgg_target_emb.outputs, is_mean=True)
 
@@ -233,6 +237,7 @@ def train():
 
         ## Evaluation on train set (first 4 images of training set)
         if (epoch % 1 == 0):
+            #start_time = time.time()
             #start_time = time.time()
             out = sess.run(net_g_test.outputs, {t_image: train_vid_seqs})  #; print('gen sub-image:', out.shape, out.min(), out.max())
             #print("took: %4.4fs" % (time.time() - start_time))
@@ -570,7 +575,7 @@ def validate():
     ###========================== RESTORE G =============================###
     sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=False))
     tl.layers.initialize_global_variables(sess)
-    tl.files.load_and_assign_npz(sess=sess, name=checkpoint_dir + '/g_srgan_init.npz', network=net_g)
+    tl.files.load_and_assign_npz(sess=sess, name=checkpoint_dir + '/g_srgan.npz', network=net_g)
 
     ###======================= EVALUATION =============================###
 
