@@ -576,7 +576,8 @@ def validate():
     ###========================== RESTORE G =============================###
     sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=False))
     tl.layers.initialize_global_variables(sess)
-    tl.files.load_and_assign_npz(sess=sess, name=checkpoint_dir + '/g_srgan.npz', network=net_g)
+    #tl.files.load_and_assign_npz(sess=sess, name=checkpoint_dir + '/g_srgan.npz', network=net_g)
+    tl.files.load_and_assign_npz(sess=sess, name=checkpoint_dir + '/g_srgan_safe.npz', network=net_g)
 
     ###======================= EVALUATION =============================###
 
@@ -637,7 +638,7 @@ def validate():
         print('size vid seq is')
         print(size)
 
-        size = np.shape(target)
+        size = np.shape(target§
         print('size target is')
         print(size)
 
