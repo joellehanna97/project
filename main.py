@@ -30,7 +30,7 @@ n_epoch = config.TRAIN.n_epoch
 lr_decay = config.TRAIN.lr_decay
 decay_every = config.TRAIN.decay_every
 
-train_only_generator = True
+train_only_generator = False
 train_using_gan = True
 
 ni = int(np.sqrt(batch_size))
@@ -59,18 +59,31 @@ def train():
     #t_image = tf.placeholder(tf.float32, [1,82,82,6], name = 't_video_input_to_SRGAN_generator')
     #t_target_image = tf.placeholder(tf.float32, [1, 82, 82, 3], name='t_target_image')
     t_image = tf.placeholder(tf.float32, [4,82,82,6], name = 't_video_input_to_SRGAN_generator')
+
     t_target_image = tf.placeholder(tf.float32, [4, 82, 82, 3], name='t_target_image')
+
+    # For the discrimator
+    t_target_images_3 = tf.placeholder(tf.float32, [4, 82, 82, 9], name='t_target_images_3')
+    t_images_3 = tf.placeholder(tf.float32, [4, 82, 82, 9], name='t_images_3')
+
+
 
     #Sample generated frame from generator:
     net_g = SRGAN_g(t_image, is_train=True, reuse=False)
     print(net_g.outputs.get_shape())
 
+
     # Evaluate discrimator on real triplets
     net_d, logits_real = SRGAN_d(t_target_image, is_train=True, reuse=False)
     _, logits_fake = SRGAN_d(net_g.outputs, is_train=True, reuse=True)
 
+    """
+    # Evaluate discrimator on real triplets
+    net_d, logits_real = SRGAN_d(t_target_images_3, is_train=True, reuse=False)
+    # Evaluate discrimator on fake triplets
+    _, logits_fake = SRGAN_d(t_images_3, is_train=True, reuse=True)
 
-
+    """
     ## vgg inference. 0, 1, 2, 3 BILINEAR NEAREST BICUBIC AREA
     t_target_image_224 = tf.image.resize_images(
         t_target_image, size=[224, 224], method=0,
@@ -399,6 +412,10 @@ def train():
             #                            train_vid_img_list[45],train_vid_img_list[75],train_vid_img_list[105]], path=train_vid_list[idx] + '/frames/', n_threads=32)
 
             b_imgs_384 = tl.vis.read_images([train_vid_img_list[20],train_vid_img_list[50],train_vid_img_list[80],train_vid_img_list[110]], path=train_vid_list[idx] + '/frames/', n_threads=32)
+            b_imgs_384_3 = tl.vis.read_images(train_vid_img_list[20-1:20+2]+
+					           train_vid_img_list[50-1:50+2]+
+					           train_vid_img_list[80-1:80+2]+
+					           train_vid_img_list[110-1:110+2], path=train_vid_list[idx] + '/frames/', n_threads=32)
             #train_target_vid_imgs = tl.vis.read_images([train_vid_img_list[45]], path=train_vid_list[0] + '/frames/', n_threads=32)
             #indices_1 = [14,16]
             #indices_2 = [44,46]
@@ -427,6 +444,7 @@ def train():
             b_imgs_96 = tl.prepro.threading_data(b_imgs_96, fn = crop_sub_imgs_fn,is_random=False)#fn=tl.prepro.crop, wrg=82, hrg=82, is_random=False)
 
             b_imgs_384 = tl.prepro.threading_data(b_imgs_384, fn = crop_sub_imgs_fn,is_random=False)#fn=tl.prepro.crop, wrg=82, hrg=82, is_random=False)#fn=tl.prepro.crop, wrg=82, hrg=82, is_random=False)
+            b_imgs_384_3 = tl.prepro.threading_data(b_imgs_384_3, fn = crop_sub_imgs_fn,is_random=False)
             #b_imgs_384 = tl.prepro.threading_data(b_imgs_384, fn=tl.prepro.crop, wrg=160, hrg=160, is_random=False)
             #b_seqs_96 = np.stack([np.concatenate([b_imgs_96[0], b_imgs_96[1], b_imgs_96[2]], 2),
             #        np.concatenate([b_imgs_96[3], b_imgs_96[4], b_imgs_96[5]], 2),
@@ -437,6 +455,13 @@ def train():
         			np.concatenate([b_imgs_96[2], b_imgs_96[3]], 2),
         			np.concatenate([b_imgs_96[4], b_imgs_96[5]], 2),
         			np.concatenate([b_imgs_96[6], b_imgs_96[7]], 2)])
+            b_seqs_384 = np.stack([np.concatenate([b_imgs_384_3[0], b_imgs_384_3[1],b_imgs_384_3[2] ], 2),
+        			np.concatenate([b_imgs_384_3[3], b_imgs_384_3[4],b_imgs_384_3[5] ], 2),
+        			np.concatenate([b_imgs_384_3[6], b_imgs_384_3[7],b_imgs_384_3[8] ], 2),
+        			np.concatenate([b_imgs_384_3[9], b_imgs_384_3[10],b_imgs_384_3[11] ], 2)])
+            print('shapes')
+            print(b_imgs_384_3.get_shape())
+            print(b_seqs_384.get_shape())
             ## update D
             #b_imgs_96_c = np.concatenate((b_imgs_96, b_imgs_96), axis=3)
             errD, _ = sess.run([d_loss, d_optim], {t_image: b_seqs_96, t_target_image: b_imgs_384})
@@ -576,8 +601,8 @@ def validate():
     ###========================== RESTORE G =============================###
     sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=False))
     tl.layers.initialize_global_variables(sess)
-    #tl.files.load_and_assign_npz(sess=sess, name=checkpoint_dir + '/g_srgan.npz', network=net_g)
-    tl.files.load_and_assign_npz(sess=sess, name=checkpoint_dir + '/g_srgan_safe.npz', network=net_g)
+    tl.files.load_and_assign_npz(sess=sess, name=checkpoint_dir + '/g_srgan.npz', network=net_g)
+    #tl.files.load_and_assign_npz(sess=sess, name=checkpoint_dir + '/g_srgan_safe.npz', network=net_g)
 
     ###======================= EVALUATION =============================###
 
