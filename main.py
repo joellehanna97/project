@@ -466,12 +466,7 @@ def train():
             net_g.outputs
             print(np.shape(b_fake_3))
             """
-            """
-            b_fake_3 = np.stack([np.concatenate([b_imgs_384_3[0], net_g.outputs[0],b_imgs_384_3[2] ], 2),
-        			np.concatenate([b_imgs_384_3[3], net_g.outputs[1],b_imgs_384_3[5] ], 2),
-        			np.concatenate([b_imgs_384_3[6], net_g.outputs[2],b_imgs_384_3[8] ], 2),
-        			np.concatenate([b_imgs_384_3[9], net_g.outputs[3],b_imgs_384_3[11] ], 2)])
-            """
+
 
             #b_fake_3 = np.concatenate([b_imgs_384_3[0], net_g.outputs[0],b_imgs_384_3[2] ], 2)
             print('lala')
@@ -483,15 +478,23 @@ def train():
             print('numpy')
             print(type(net_g.outputs[0]))
             """
-            print(np.shape(tf.concat([b_imgs_384_3[0], net_g.outputs[0], b_imgs_384_3[2]],2)))
 
-            print(np.shape(np.asarray(net_g.outputs[0])))
-            output = np.reshape(np.asarray(net_g.outputs[0]), (82,82,3))
-            print(np.shape(output))
-            print(np.shape(np.concatenate([b_imgs_384_3[0],output,b_imgs_384_3[2] ], 2)))
 
-            print('shapee')
-            print(np.shape(np.concatenate([b_imgs_384_3[0], b_imgs_384_3[1],b_imgs_384_3[2] ], 2)))
+            b_fake_3 = np.stack([tf.concat([b_imgs_384_3[0], net_g.outputs[0],b_imgs_384_3[2] ], 2),
+        			tf.concat([b_imgs_384_3[3], net_g.outputs[1],b_imgs_384_3[5] ], 2),
+        			tf.concat([b_imgs_384_3[6], net_g.outputs[2],b_imgs_384_3[8] ], 2),
+        			tf.concat([b_imgs_384_3[9], net_g.outputs[3],b_imgs_384_3[11] ], 2)])
+            print(np.shape(b_fake_3))
+
+            #print(np.shape(tf.concat([b_imgs_384_3[0], net_g.outputs[0], b_imgs_384_3[2]],2)))
+
+            #print(np.shape(np.asarray(net_g.outputs[0])))
+            #output = np.reshape(np.asarray(net_g.outputs[0]), (82,82,3))
+            #print(np.shape(output))
+            #print(np.shape(np.concatenate([b_imgs_384_3[0],output,b_imgs_384_3[2] ], 2)))
+
+            #print('shapee')
+            #print(np.shape(np.concatenate([b_imgs_384_3[0], b_imgs_384_3[1],b_imgs_384_3[2] ], 2)))
 
             #b_fake_3 = np.concatenate([b_imgs_384_3[0], np.asarray(net_g.outputs[0]), b_imgs_384_3[2] ], 2)
             print('shapes')
