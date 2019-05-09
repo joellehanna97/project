@@ -501,6 +501,7 @@ def train():
 
             out = sess.run(net_g.outputs, {t_image: b_seqs_96})
             print('out')
+            print('out')
             print(type(out))
             #b_fake_3_value = sess.run(b_)
             #print(type(b_fake_3_value))
