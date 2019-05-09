@@ -479,8 +479,13 @@ def train():
             print(type(net_g.outputs[0]))
             """
 
-
+            """
             b_fake_3 = np.stack([tf.concat([b_imgs_384_3[0], net_g.outputs[0],b_imgs_384_3[2] ], 2),
+        			tf.concat([b_imgs_384_3[3], net_g.outputs[1],b_imgs_384_3[5] ], 2),
+        			tf.concat([b_imgs_384_3[6], net_g.outputs[2],b_imgs_384_3[8] ], 2),
+        			tf.concat([b_imgs_384_3[9], net_g.outputs[3],b_imgs_384_3[11] ], 2)])
+            """
+            b_fake_3 = tf.stack([tf.concat([b_imgs_384_3[0], net_g.outputs[0],b_imgs_384_3[2] ], 2),
         			tf.concat([b_imgs_384_3[3], net_g.outputs[1],b_imgs_384_3[5] ], 2),
         			tf.concat([b_imgs_384_3[6], net_g.outputs[2],b_imgs_384_3[8] ], 2),
         			tf.concat([b_imgs_384_3[9], net_g.outputs[3],b_imgs_384_3[11] ], 2)])
