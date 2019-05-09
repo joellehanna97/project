@@ -460,8 +460,8 @@ def train():
         			np.concatenate([b_imgs_384_3[6], b_imgs_384_3[7],b_imgs_384_3[8] ], 2),
         			np.concatenate([b_imgs_384_3[9], b_imgs_384_3[10],b_imgs_384_3[11] ], 2)])
             print('shapes')
-            print(b_imgs_384_3.get_shape())
-            print(b_seqs_384.get_shape())
+            print(np.shape(b_imgs_384_3))
+            print(np.shape(b_seqs_384))
             ## update D
             #b_imgs_96_c = np.concatenate((b_imgs_96, b_imgs_96), axis=3)
             errD, _ = sess.run([d_loss, d_optim], {t_image: b_seqs_96, t_target_image: b_imgs_384})
