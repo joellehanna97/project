@@ -74,6 +74,7 @@ def train():
 
 
     # Evaluate discrimator on real triplets
+
     net_d, logits_real = SRGAN_d(t_target_image, is_train=True, reuse=False)
     _, logits_fake = SRGAN_d(net_g.outputs, is_train=True, reuse=True)
 
@@ -462,6 +463,9 @@ def train():
             print('shapes')
             print(np.shape(b_imgs_384_3))
             print(np.shape(b_seqs_384))
+
+            b_fake_3 = net_g.outputs
+            print(np.shape(b_fake_3))
             ## update D
             #b_imgs_96_c = np.concatenate((b_imgs_96, b_imgs_96), axis=3)
             errD, _ = sess.run([d_loss, d_optim], {t_image: b_seqs_96, t_target_image: b_imgs_384})
