@@ -479,8 +479,10 @@ def train():
             print(np.shape(b_imgs_384_3[0]))
             print(net_g.outputs[0].get_shape())
             print(np.shape(b_imgs_384_3[2]))
+            print('numpy')
+            print(type(net_g.outputs[0].numpy()))
 
-            print(type(np.asarray(net_g.outputs[0])))
+
             print(np.shape(np.asarray(net_g.outputs[0])))
             output = np.reshape(np.asarray(net_g.outputs[0]), (82,82,3))
             print(np.shape(output))
