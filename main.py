@@ -481,7 +481,7 @@ def train():
             print(np.shape(b_imgs_384_3[2]))
             print(type(np.asarray(net_g.outputs[0])))
             print('shapee')
-            print(np.shape(b_imgs_384_3[0], b_imgs_384_3[1],b_imgs_384_3[2]))
+            print(np.shape(np.concatenate([b_imgs_384_3[0], b_imgs_384_3[1],b_imgs_384_3[2] ], 2)))
 
             #b_fake_3 = np.concatenate([b_imgs_384_3[0], np.asarray(net_g.outputs[0]), b_imgs_384_3[2] ], 2)
             print(np.shape())
