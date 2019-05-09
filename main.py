@@ -72,19 +72,18 @@ def train():
     net_g = SRGAN_g(t_image, is_train=True, reuse=False)
     print(net_g.outputs.get_shape())
 
-
+    """
     # Evaluate discrimator on real triplets
 
     net_d, logits_real = SRGAN_d(t_target_image, is_train=True, reuse=False)
     _, logits_fake = SRGAN_d(net_g.outputs, is_train=True, reuse=True)
-
     """
+
     # Evaluate discrimator on real triplets
     net_d, logits_real = SRGAN_d(t_target_images_3, is_train=True, reuse=False)
     # Evaluate discrimator on fake triplets
     _, logits_fake = SRGAN_d(t_images_3, is_train=True, reuse=True)
 
-    """
     ## vgg inference. 0, 1, 2, 3 BILINEAR NEAREST BICUBIC AREA
     t_target_image_224 = tf.image.resize_images(
         t_target_image, size=[224, 224], method=0,
@@ -469,7 +468,7 @@ def train():
 
 
             #b_fake_3 = np.concatenate([b_imgs_384_3[0], net_g.outputs[0],b_imgs_384_3[2] ], 2)
-            print('lala')
+
             """
             print(type(b_imgs_384_3[0]))
             print(np.shape(b_imgs_384_3[0]))
@@ -489,25 +488,15 @@ def train():
         			tf.concat([b_imgs_384_3[3], net_g.outputs[1],b_imgs_384_3[5] ], 2),
         			tf.concat([b_imgs_384_3[6], net_g.outputs[2],b_imgs_384_3[8] ], 2),
         			tf.concat([b_imgs_384_3[9], net_g.outputs[3],b_imgs_384_3[11] ], 2)])
-            print(np.shape(b_fake_3))
 
-            #print(np.shape(tf.concat([b_imgs_384_3[0], net_g.outputs[0], b_imgs_384_3[2]],2)))
-
-            #print(np.shape(np.asarray(net_g.outputs[0])))
-            #output = np.reshape(np.asarray(net_g.outputs[0]), (82,82,3))
-            #print(np.shape(output))
-            #print(np.shape(np.concatenate([b_imgs_384_3[0],output,b_imgs_384_3[2] ], 2)))
-
-            #print('shapee')
-            #print(np.shape(np.concatenate([b_imgs_384_3[0], b_imgs_384_3[1],b_imgs_384_3[2] ], 2)))
-
-            #b_fake_3 = np.concatenate([b_imgs_384_3[0], np.asarray(net_g.outputs[0]), b_imgs_384_3[2] ], 2)
-            print('shapes')
             print(np.shape(b_seqs_384))
             print(np.shape(b_fake_3))
             ## update D
             #b_imgs_96_c = np.concatenate((b_imgs_96, b_imgs_96), axis=3)
+            """
             errD, _ = sess.run([d_loss, d_optim], {t_image: b_seqs_96, t_target_image: b_imgs_384})
+            """
+            errD, _ = sess.run([d_loss, d_optim], {t_images_3: b_fake_3, t_target_images_3: b_seqs_384})
             ## update G
             errG, errM, errA, errV, _ = sess.run([g_loss, mse_loss, g_gan_loss,vgg_loss, g_optim], {t_image: b_seqs_96, t_target_image: b_imgs_384})
             print("Epoch [%2d/%2d] %4d time: %4.4fs, d_loss: %.8f g_loss: %.8f (mse: %.6f vgg: %.6f adv: %.6f)" %
