@@ -480,7 +480,7 @@ def train():
             print(net_g.outputs[0].get_shape())
             print(np.shape(b_imgs_384_3[2]))
             print('numpy')
-            print(type(net_g.outputs[0].numpy()))
+            print(type(net_g.outputs[0]))
 
 
             print(np.shape(np.asarray(net_g.outputs[0])))
