@@ -481,7 +481,7 @@ def train():
             print(np.shape(b_imgs_384_3[2]))
 
             print(type(np.asarray(net_g.outputs[0])))
-
+            print(np.shape(np.asarray(net_g.outputs[0])))
             output = np.reshape(np.asarray(net_g.outputs[0]), (82,82,3))
             print(np.shape(output))
             print(np.shape(np.concatenate([b_imgs_384_3[0],output,b_imgs_384_3[2] ], 2)))
