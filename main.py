@@ -511,6 +511,8 @@ def train():
             errD, _ = sess.run([d_loss, d_optim], {t_images_3: b_fake_3, t_target_images_3: b_seqs_384})
             print(errD)
             ## update G
+            print(type(b_seqs_96))
+            print(type(b_imgs_384))
             errG, errM, errA, errV, _ = sess.run([g_loss, mse_loss, g_gan_loss,vgg_loss, g_optim], {t_image: b_seqs_96, t_target_image: b_imgs_384})
             print("Epoch [%2d/%2d] %4d time: %4.4fs, d_loss: %.8f g_loss: %.8f (mse: %.6f vgg: %.6f adv: %.6f)" %
                   (epoch, n_epoch, n_iter, time.time() - step_time, errD, errG, errM, errV,  errA))
