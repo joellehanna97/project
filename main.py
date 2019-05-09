@@ -663,7 +663,7 @@ def validate():
         print('size vid seq is')
         print(size)
 
-        size = np.shape(target§
+        size = np.shape(target)
         print('size target is')
         print(size)
 
