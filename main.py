@@ -485,9 +485,6 @@ def train():
         			tf.concat([b_imgs_384_3[6], net_g.outputs[2],b_imgs_384_3[8] ], 2),
         			tf.concat([b_imgs_384_3[9], net_g.outputs[3],b_imgs_384_3[11] ], 2)])
             """
-
-            print(type(b_seqs_384))
-            print(np.shape(b_seqs_384))
             ## update D
             #b_imgs_96_c = np.concatenate((b_imgs_96, b_imgs_96), axis=3)
             """
@@ -501,18 +498,11 @@ def train():
         			np.concatenate([b_imgs_384_3[6], out[2],b_imgs_384_3[8] ], 2),
         			np.concatenate([b_imgs_384_3[9], out[3],b_imgs_384_3[11] ], 2)])
 
-            print('out')
-            print('out')
-            print(type(b_fake_3))
-            print(np.shape(b_fake_3))
             #b_fake_3_value = sess.run(b_)
             #print(type(b_fake_3_value))
             #b_fake_3 = b_fake_3.numpy()
             errD, _ = sess.run([d_loss, d_optim], {t_images_3: b_fake_3, t_target_images_3: b_seqs_384})
-            print(errD)
             ## update G
-            print(type(b_seqs_96))
-            print(type(b_imgs_384))
             #errG, errM, errA, errV, _ = sess.run([g_loss, mse_loss, g_gan_loss,vgg_loss, g_optim], {t_image: b_seqs_96, t_target_image: b_imgs_384})
             errG, errM, errA, errV, _ = sess.run([g_loss, mse_loss, g_gan_loss,vgg_loss, g_optim], {t_image: b_seqs_96, t_target_image: b_imgs_384, t_images_3: b_fake_3 })
             print("Epoch [%2d/%2d] %4d time: %4.4fs, d_loss: %.8f g_loss: %.8f (mse: %.6f vgg: %.6f adv: %.6f)" %
