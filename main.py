@@ -465,14 +465,12 @@ def train():
             print(np.shape(b_seqs_384))
 
 
-            #b_fake_3 = net_g.outputs
-            #print(np.shape(b_fake_3))
+            b_fake_3 = net_g.outputs
+            print(np.shape(b_fake_3))
 
 
             ## update D
             #b_imgs_96_c = np.concatenate((b_imgs_96, b_imgs_96), axis=3)
-            print(np.shape(b_seqs_96))
-            print(np.shape(b_imgs_384))
             errD, _ = sess.run([d_loss, d_optim], {t_image: b_seqs_96, t_target_image: b_imgs_384})
             ## update G
             errG, errM, errA, errV, _ = sess.run([g_loss, mse_loss, g_gan_loss,vgg_loss, g_optim], {t_image: b_seqs_96, t_target_image: b_imgs_384})
