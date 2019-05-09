@@ -38,6 +38,8 @@ ni = int(np.sqrt(batch_size))
 
 def train():
 
+    tf.enable_eager_execution()
+
     ## create folders to save result images and trained model
 
     save_dir_ginit = "samples/{}_ginit".format(tl.global_flag['mode'])
@@ -497,6 +499,7 @@ def train():
             """
             errD, _ = sess.run([d_loss, d_optim], {t_image: b_seqs_96, t_target_image: b_imgs_384})
             """
+            b_fake_3 = b_fake_3.numpy()
             errD, _ = sess.run([d_loss, d_optim], {t_images_3: b_fake_3, t_target_images_3: b_seqs_384})
             ## update G
             errG, errM, errA, errV, _ = sess.run([g_loss, mse_loss, g_gan_loss,vgg_loss, g_optim], {t_image: b_seqs_96, t_target_image: b_imgs_384})
