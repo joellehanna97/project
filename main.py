@@ -460,15 +460,20 @@ def train():
         			np.concatenate([b_imgs_384_3[3], b_imgs_384_3[4],b_imgs_384_3[5] ], 2),
         			np.concatenate([b_imgs_384_3[6], b_imgs_384_3[7],b_imgs_384_3[8] ], 2),
         			np.concatenate([b_imgs_384_3[9], b_imgs_384_3[10],b_imgs_384_3[11] ], 2)])
-            print('shapes')
-            print(np.shape(b_imgs_384_3))
-            print(np.shape(b_seqs_384))
 
-
-            b_fake_3 = net_g.outputs
+            """
+            b_fake_3 = [train_vid_img_list[19], net_g.outputs[0], train_vid_img_list[21]]
+            net_g.outputs
             print(np.shape(b_fake_3))
-
-
+            """
+            b_fake_3 = np.stack([np.concatenate([b_imgs_384_3[0], net_g.outputs[0],b_imgs_384_3[2] ], 2),
+        			np.concatenate([b_imgs_384_3[3], net_g.outputs[1],b_imgs_384_3[5] ], 2),
+        			np.concatenate([b_imgs_384_3[6], net_g.outputs[2],b_imgs_384_3[8] ], 2),
+        			np.concatenate([b_imgs_384_3[9], net_g.outputs[3],b_imgs_384_3[11] ], 2)])
+            print('shapes')
+    
+            print(np.shape(b_seqs_384))
+            print(np.shape(b_fake_3))
             ## update D
             #b_imgs_96_c = np.concatenate((b_imgs_96, b_imgs_96), axis=3)
             errD, _ = sess.run([d_loss, d_optim], {t_image: b_seqs_96, t_target_image: b_imgs_384})
