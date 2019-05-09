@@ -488,8 +488,9 @@ def train():
         			tf.concat([b_imgs_384_3[3], net_g.outputs[1],b_imgs_384_3[5] ], 2),
         			tf.concat([b_imgs_384_3[6], net_g.outputs[2],b_imgs_384_3[8] ], 2),
         			tf.concat([b_imgs_384_3[9], net_g.outputs[3],b_imgs_384_3[11] ], 2)])
-
+            print(type(b_seqs_384))
             print(np.shape(b_seqs_384))
+            print(type(b_fake_3))
             print(np.shape(b_fake_3))
             ## update D
             #b_imgs_96_c = np.concatenate((b_imgs_96, b_imgs_96), axis=3)
