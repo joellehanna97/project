@@ -475,6 +475,7 @@ def train():
 
             #b_fake_3 = np.concatenate([b_imgs_384_3[0], net_g.outputs[0],b_imgs_384_3[2] ], 2)
             print('lala')
+            print(np.shape(b_imgs_384_3[0]))
             print(np.shape(net_g.outputs[0]))
             print(np.shape(b_imgs_384_3[2]))
 
