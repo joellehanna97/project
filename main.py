@@ -483,7 +483,7 @@ def train():
             print('numpy')
             print(type(net_g.outputs[0]))
             """
-            print(np.shape(tf.concat([b_imgs_384_3[0], net_g.outputs[0], b_imgs_384_3[2]]),2))
+            print(np.shape(tf.concat([b_imgs_384_3[0], net_g.outputs[0], b_imgs_384_3[2]],2)))
 
             print(np.shape(np.asarray(net_g.outputs[0])))
             output = np.reshape(np.asarray(net_g.outputs[0]), (82,82,3))
