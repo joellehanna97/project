@@ -30,7 +30,7 @@ n_epoch = config.TRAIN.n_epoch
 lr_decay = config.TRAIN.lr_decay
 decay_every = config.TRAIN.decay_every
 
-train_only_generator = True
+train_only_generator = False
 train_using_gan = True
 
 ni = int(np.sqrt(batch_size))
@@ -469,7 +469,9 @@ def train():
             b_imgs_384 = tl.prepro.threading_data(train_hr_imgs[idx:idx + batch_size], fn=crop_sub_imgs_fn, is_random=True)
             b_imgs_96 = tl.prepro.threading_data(b_imgs_384, fn=downsample_fn)
             """
-            train_vid_img_list = sorted(tl.files.load_file_list(path=train_vid_list[idx] + '/frames/', regx='.*.png', printable=False))
+            #train_vid_img_list = sorted(tl.files.load_file_list(path=train_vid_list[idx] + '/frames/', regx='.*.png', printable=False))
+            train_vid_img_list = sorted(tl.files.load_file_list(path=train_vid_list[idx] + '/frames/', regx='.*.jpg', printable=False))
+            train_vid_flow_list = sorted(tl.files.load_file_list(path=train_vid_list[idx] + '/flownet/', regx='.*.jpg', printable=False))
             #train_lr_vid_img_list = sorted(tl.files.load_file_list(path=train_lr_vid_list[idx] + '/frames/', regx='.*.png', printable=False))
 
             #b_imgs_384 = tl.vis.read_images([train_vid_img_list[45]], path=train_vid_list[idx] + '/frames/', n_threads=32) #target
@@ -506,20 +508,37 @@ def train():
 
             b_imgs_384 = tl.prepro.threading_data(b_imgs_384, fn=crop_custom, w=328, h=328, is_random=False)
             """
+            train_flow_img_19_21 = tl.vis.read_images([train_vid_flow_list[2],train_vid_flow_list[3]], path=train_vid_list[idx] + '/flownet/', n_threads=32)
+            train_flow_img_49_51 = tl.vis.read_images([train_vid_flow_list[4],train_vid_flow_list[5]], path=train_vid_list[idx] + '/flownet/', n_threads=32)
+            train_flow_img_79_81 = tl.vis.read_images([train_vid_flow_list[6],train_vid_flow_list[7]], path=train_vid_list[idx] + '/flownet/', n_threads=32)
+            train_flow_img_109_111 = tl.vis.read_images([train_vid_flow_list[0],train_vid_flow_list[1]], path=train_vid_list[idx] + '/flownet/', n_threads=32)
+
             b_imgs_96 = tl.prepro.threading_data(b_imgs_96, fn = crop_sub_imgs_fn,is_random=False)#fn=tl.prepro.crop, wrg=82, hrg=82, is_random=False)
 
             b_imgs_384 = tl.prepro.threading_data(b_imgs_384, fn = crop_sub_imgs_fn,is_random=False)#fn=tl.prepro.crop, wrg=82, hrg=82, is_random=False)#fn=tl.prepro.crop, wrg=82, hrg=82, is_random=False)
             b_imgs_384_3 = tl.prepro.threading_data(b_imgs_384_3, fn = crop_sub_imgs_fn,is_random=False)
+
+            train_flow_img_19_21 = tl.prepro.threading_data(train_flow_img_19_21, fn = crop_sub_imgs_fn,is_random=False)
+            train_flow_img_49_51 = tl.prepro.threading_data(train_flow_img_49_51, fn = crop_sub_imgs_fn,is_random=False)
+            train_flow_img_79_81 = tl.prepro.threading_data(train_flow_img_79_81, fn = crop_sub_imgs_fn,is_random=False)
+            train_flow_img_109_111 = tl.prepro.threading_data(train_flow_img_109_111, fn = crop_sub_imgs_fn,is_random=False)
             #b_imgs_384 = tl.prepro.threading_data(b_imgs_384, fn=tl.prepro.crop, wrg=160, hrg=160, is_random=False)
             #b_seqs_96 = np.stack([np.concatenate([b_imgs_96[0], b_imgs_96[1], b_imgs_96[2]], 2),
             #        np.concatenate([b_imgs_96[3], b_imgs_96[4], b_imgs_96[5]], 2),
             #        np.concatenate([b_imgs_96[6], b_imgs_96[7], b_imgs_96[8]], 2),
             #        np.concatenate([b_imgs_96[9], b_imgs_96[10], b_imgs_96[11]], 2)])
             #b_seqs_96 = [np.concatenate([b_imgs_96[0], b_imgs_96[1]],2)]
+            """
             b_seqs_96 = np.stack([np.concatenate([b_imgs_96[0], b_imgs_96[1]], 2),
         			np.concatenate([b_imgs_96[2], b_imgs_96[3]], 2),
         			np.concatenate([b_imgs_96[4], b_imgs_96[5]], 2),
         			np.concatenate([b_imgs_96[6], b_imgs_96[7]], 2)])
+            """
+            b_seqs_96 = np.stack([np.concatenate([b_imgs_96[0], train_flow_img_19_21[0],train_flow_img_19_21[1],b_imgs_96[1]], 2),
+        			np.concatenate([b_imgs_96[2], train_flow_img_49_51[0], train_flow_img_49_51[1], b_imgs_96[3]], 2),
+        			np.concatenate([b_imgs_96[4], train_flow_img_79_81[0], train_flow_img_79_81[1],b_imgs_96[5]], 2),
+        			np.concatenate([b_imgs_96[6], train_flow_img_109_111[0], train_flow_img_109_111[1], b_imgs_96[7]], 2)])
+
             b_seqs_384 = np.stack([np.concatenate([b_imgs_384_3[0], b_imgs_384_3[1],b_imgs_384_3[2] ], 2),
         			np.concatenate([b_imgs_384_3[3], b_imgs_384_3[4],b_imgs_384_3[5] ], 2),
         			np.concatenate([b_imgs_384_3[6], b_imgs_384_3[7],b_imgs_384_3[8] ], 2),
