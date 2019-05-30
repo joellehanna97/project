@@ -289,12 +289,13 @@ def train():
             # add here the other images
             # b_imgs_96_2 = tl.prepro.threading_data()
 
-            train_vid_img_list = sorted(tl.files.load_file_list(path=train_vid_list[idx] + '/frames/', regx='.*.png', printable=False))
+            #train_vid_img_list = sorted(tl.files.load_file_list(path=train_vid_list[idx] + '/frames/', regx='.*.png', printable=False))
+            train_vid_img_list = sorted(tl.files.load_file_list(path=train_vid_list[idx] + '/frames/', regx='.*.jpg', printable=False))
             #train_lr_vid_img_list = sorted(tl.files.load_file_list(path=train_lr_vid_list[idx] + '/frames/', regx='.*.png', printable=False))
 
             #b_imgs_384 = tl.vis.read_images([train_vid_img_list[15],
             #                                        train_vid_img_list[45],train_vid_img_list[75],train_vid_img_list[105]], path=train_vid_list[idx] + '/frames/', n_threads=32)
-            print(len(train_vid_img_list))
+
             b_imgs_384 = tl.vis.read_images([train_vid_img_list[20],train_vid_img_list[50],train_vid_img_list[80],train_vid_img_list[110]], path=train_vid_list[idx] + '/frames/', n_threads=32)
             #train_target_vid_imgs = tl.vis.read_images([train_vid_img_list[45]], path=train_vid_list[0] + '/frames/', n_threads=32)
             #indices_1 = [14,16]
