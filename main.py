@@ -52,14 +52,17 @@ def train():
     checkpoint_input_d = "./donotexist.npz"
 
     ###====================== PRE-LOAD DATA ===========================###
-    train_video_folders = '/media/saeed-lts5/Data-Saeed/SuperResolution/youtube8m-dataset/frames'
+    #train_video_folders = '/media/saeed-lts5/Data-Saeed/SuperResolution/youtube8m-dataset/frames'
+    train_video_folders = '/media/saeed-lts5/Data-Saeed/SuperResolution/sports1m-dataset/frames'
     train_vid_list = sorted(tl.files.load_folder_list(path=train_video_folders))
     ###========================== DEFINE MODEL ============================###
 
     #set up placeholders
     #t_image = tf.placeholder(tf.float32, [1,82,82,6], name = 't_video_input_to_SRGAN_generator')
     #t_target_image = tf.placeholder(tf.float32, [1, 82, 82, 3], name='t_target_image')
+
     t_image = tf.placeholder(tf.float32, [4,82,82,6], name = 't_video_input_to_SRGAN_generator')
+    #t_image = tf.placeholder(tf.float32, [4,82,82,12], name = 't_video_input_to_SRGAN_generator')
 
     t_target_image = tf.placeholder(tf.float32, [4, 82, 82, 3], name='t_target_image')
 
@@ -121,7 +124,6 @@ def train():
     #self.clipping_loss = tf.reduce_mean(tf.square(g_mean_added - g_mean_added_clipped))
 
     # Combine losses into single functions for the discriminator and the generator
-
     d_loss = d_loss1 + d_loss2
     g_loss = mse_loss + g_gan_loss + vgg_loss
     g_loss_2 = mse_loss + vgg_loss
@@ -176,11 +178,15 @@ def train():
     # net_vgg.print_layers()
 
     ###============================= TRAINING ===============================###
-    train_vid_img_list = sorted(tl.files.load_file_list(path=train_vid_list[0] + '/frames/', regx='.*.png', printable=False))
-    #train_lr_vid_img_list = sorted(tl.files.load_file_list(path=train_lr_vid_list[0] + '/frames/', regx='.*.png', printable=False))
+    #train_vid_img_list = sorted(tl.files.load_file_list(path=train_vid_list[0] + '/frames/', regx='.*.png', printable=False))
 
-    #train_target_vid_imgs = tl.vis.read_images([train_hr_vid_img_list[15],train_hr_vid_img_list[45],train_hr_vid_img_list[75],train_hr_vid_img_list[105]], path=train_hr_vid_list[0] + '/frames/', n_threads=32)
+    train_vid_img_list = sorted(tl.files.load_file_list(path=train_vid_list[0] + '/frames/', regx='.*.jpg', printable=False))
+    train_vid_flow_list = sorted(tl.files.load_file_list(path=train_vid_list[0] + '/flownet/', regx='.*.jpg', printable=False))
+    print('train_vid_flow_list')
+    print(len(train_vid_flow_list))
+
     train_target_vid_imgs = tl.vis.read_images([train_vid_img_list[20],train_vid_img_list[50],train_vid_img_list[80],train_vid_img_list[110]], path=train_vid_list[0] + '/frames/', n_threads=32)
+    #train_target_vid_flows = tl.vis.read_images([train_vid_img_list[20],train_vid_img_list[50],train_vid_img_list[80],train_vid_img_list[110]], path=train_vid_list[0] + '/frames/', n_threads=32)
     #train_target_vid_imgs = tl.vis.read_images([train_vid_img_list[45]], path=train_vid_list[0] + '/frames/', n_threads=32)
     #indices_1 = [14,16]
     #indices_2 = [44,46]
