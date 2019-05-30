@@ -246,10 +246,10 @@ def train():
     sess.run(tf.assign(lr_v, lr_init))
 
     print(" ** fixed learning rate: %f (for init G)" % lr_init)
-
-    train_vid_list = train_vid_list[0:500] #5000
     print('len vid list')
     print(len(train_vid_list))
+    train_vid_list = train_vid_list[0:500] #5000
+
 
     for epoch in range(0, n_epoch_init + 1): #0
 
