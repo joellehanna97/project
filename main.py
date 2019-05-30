@@ -207,8 +207,11 @@ def train():
 
 
     train_vid_imgs = tl.vis.read_images(train_vid_img_list_s1+train_vid_img_list_s2+train_vid_img_list_s3+train_vid_img_list_s4, path=train_vid_list[0] + '/frames/', n_threads=32)
-    #train_vid_imgs = tl.vis.read_images(train_vid_img_list_s2, path=train_vid_list[0] + '/frames/', n_threads=32)
-    train_flow_img = tl.vis.read_images([train_vid_flow_list[2],train_vid_flow_list[3]], path=train_vid_list[0] + '/flownet/', n_threads=32)
+
+    train_flow_img_19_21 = tl.vis.read_images([train_vid_flow_list[2],train_vid_flow_list[3]], path=train_vid_list[0] + '/flownet/', n_threads=32)
+    train_flow_img_49_51 = tl.vis.read_images([train_vid_flow_list[4],train_vid_flow_list[5]], path=train_vid_list[0] + '/flownet/', n_threads=32)
+    train_flow_img_79_81 = tl.vis.read_images([train_vid_flow_list[6],train_vid_flow_list[7]], path=train_vid_list[0] + '/flownet/', n_threads=32)
+    train_flow_img_109_111 = tl.vis.read_images([train_vid_flow_list[0],train_vid_flow_list[1]], path=train_vid_list[0] + '/flownet/', n_threads=32)
 
 
     """
@@ -222,23 +225,26 @@ def train():
     """
     ## use first `batch_size` of train set to have a quick test during training
     train_vid_imgs = tl.prepro.threading_data(train_vid_imgs, fn = crop_sub_imgs_fn,is_random=False) #fn=tl.prepro.crop, wrg=82, hrg=82, is_random=False)
-    train_flow_img = tl.prepro.threading_data(train_flow_img, fn = crop_sub_imgs_fn,is_random=False)
+
+    train_flow_img_19_21 = tl.prepro.threading_data(train_flow_img_19_21, fn = crop_sub_imgs_fn,is_random=False)
+    train_flow_img_49_51 = tl.prepro.threading_data(train_flow_img_49_51, fn = crop_sub_imgs_fn,is_random=False)
+    train_flow_img_79_81 = tl.prepro.threading_data(train_flow_img_79_81, fn = crop_sub_imgs_fn,is_random=False)
+    train_flow_img_109_111 = tl.prepro.threading_data(train_flow_img_109_111, fn = crop_sub_imgs_fn,is_random=False)
     train_target_vid_imgs = tl.prepro.threading_data(train_target_vid_imgs, fn = crop_sub_imgs_fn,is_random=False)#fn=tl.prepro.crop, wrg=82, hrg=82, is_random=False) #328 328
     #train_vid_seqs = [np.concatenate([train_vid_imgs[0], train_vid_imgs[1]],2)]
-    print('lalalal')
-    print(np.shape(train_flow_img))
 
     train_vid_seqs = np.stack([np.concatenate([train_vid_imgs[0], train_vid_imgs[1]], 2),
 			np.concatenate([train_vid_imgs[2], train_vid_imgs[3]], 2),
 			np.concatenate([train_vid_imgs[4], train_vid_imgs[5]], 2),
 			np.concatenate([train_vid_imgs[6], train_vid_imgs[7]], 2)])
 
-    """
-    train_vid_seqs = np.stack([np.concatenate([train_vid_imgs[0], train_vid_imgs[1],train_vid_imgs[2],train_vid_imgs[3]], 2),
-			np.concatenate([train_vid_imgs[4], train_vid_imgs[5], train_vid_imgs[6], train_vid_imgs[7]], 2),
-			np.concatenate([train_vid_imgs[8], train_vid_imgs[9], train_vid_imgs[10],train_vid_imgs[11]], 2),
-			np.concatenate([train_vid_imgs[12], train_vid_imgs[13], train_vid_imgs[14], train_vid_imgs[15]], 2)])
-    """
+
+    train_vid_seqs_blabla = np.stack([np.concatenate([train_vid_imgs[0], train_flow_img_19_21[0],train_flow_img_19_21[1],train_vid_imgs[1]], 2),
+			np.concatenate([train_vid_imgs[2], train_flow_img_49_51[0], train_flow_img_49_51[1], train_vid_imgs[3]], 2),
+			np.concatenate([train_vid_imgs[4], train_flow_img_79_81[0], train_flow_img_79_81[1],train_vid_imgs[5]], 2),
+			np.concatenate([train_vid_imgs[6], train_flow_img_109_111[0], train_flow_img_109_111[1], train_vid_imgs[7]], 2)])
+    print('blablabla')
+    print(np.shape(train_vid_seqs_blabla))
     tl.vis.save_images(train_target_vid_imgs, [ni, ni], save_dir_ginit + '/_train_sample_384.png')
     #tl.vis.save_images(np.asarray(train_vid_seqs), [ni, ni], save_dir_ginit + '/_train_sample_96_1.png')
     tl.vis.save_images(train_vid_seqs[:,:,:,0:3], [ni, ni], save_dir_ginit + '/_train_sample_1.png')
