@@ -230,6 +230,10 @@ def train():
 			np.concatenate([train_vid_imgs[4], train_vid_imgs[5]], 2),
 			np.concatenate([train_vid_imgs[6], train_vid_imgs[7]], 2)])
     """
+    print(np.shape(train_vid_imgs[0]))
+    print(np.shape(train_vid_imgs[1]))
+    print(np.shape(train_vid_imgs[2]))
+    print(np.shape(train_vid_imgs[3]))
     train_vid_seqs = np.stack([np.concatenate([train_vid_imgs[0], train_vid_imgs[1],train_vid_imgs[2],train_vid_imgs[3]], 2),
 			np.concatenate([train_vid_imgs[4], train_vid_imgs[5], train_vid_imgs[6], train_vid_imgs[7]], 2),
 			np.concatenate([train_vid_imgs[8], train_vid_imgs[9], train_vid_imgs[10],train_vid_imgs[11]], 2),
