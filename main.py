@@ -209,8 +209,7 @@ def train():
     train_vid_imgs = tl.vis.read_images(train_vid_img_list_s1+train_vid_img_list_s2+train_vid_img_list_s3+train_vid_img_list_s4, path=train_vid_list[0] + '/frames/', n_threads=32)
     #train_vid_imgs = tl.vis.read_images(train_vid_img_list_s2, path=train_vid_list[0] + '/frames/', n_threads=32)
     train_flow_img = tl.vis.read_images([train_vid_flow_list[2],train_vid_flow_list[3]], path=train_vid_list[0] + '/flownet/', n_threads=32)
-    print('lalalal')
-    print(np.shape(train_flow_img))
+
 
     """
     [train_hr_vid_img_list[15],
@@ -226,7 +225,8 @@ def train():
     train_flow_img = tl.prepro.threading_data(train_flow_img, fn = crop_sub_imgs_fn,is_random=False)
     train_target_vid_imgs = tl.prepro.threading_data(train_target_vid_imgs, fn = crop_sub_imgs_fn,is_random=False)#fn=tl.prepro.crop, wrg=82, hrg=82, is_random=False) #328 328
     #train_vid_seqs = [np.concatenate([train_vid_imgs[0], train_vid_imgs[1]],2)]
-
+    print('lalalal')
+    print(np.shape(train_flow_img))
 
     train_vid_seqs = np.stack([np.concatenate([train_vid_imgs[0], train_vid_imgs[1]], 2),
 			np.concatenate([train_vid_imgs[2], train_vid_imgs[3]], 2),
