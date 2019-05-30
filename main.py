@@ -61,8 +61,8 @@ def train():
     #t_image = tf.placeholder(tf.float32, [1,82,82,6], name = 't_video_input_to_SRGAN_generator')
     #t_target_image = tf.placeholder(tf.float32, [1, 82, 82, 3], name='t_target_image')
 
-    t_image = tf.placeholder(tf.float32, [4,82,82,6], name = 't_video_input_to_SRGAN_generator')
-    #t_image = tf.placeholder(tf.float32, [4,82,82,12], name = 't_video_input_to_SRGAN_generator')
+    #t_image = tf.placeholder(tf.float32, [4,82,82,6], name = 't_video_input_to_SRGAN_generator')
+    t_image = tf.placeholder(tf.float32, [4,82,82,12], name = 't_video_input_to_SRGAN_generator')
     t_target_image = tf.placeholder(tf.float32, [4, 82, 82, 3], name='t_target_image')
 
     # For the discrimator
@@ -232,25 +232,25 @@ def train():
     train_flow_img_109_111 = tl.prepro.threading_data(train_flow_img_109_111, fn = crop_sub_imgs_fn,is_random=False)
     train_target_vid_imgs = tl.prepro.threading_data(train_target_vid_imgs, fn = crop_sub_imgs_fn,is_random=False)#fn=tl.prepro.crop, wrg=82, hrg=82, is_random=False) #328 328
     #train_vid_seqs = [np.concatenate([train_vid_imgs[0], train_vid_imgs[1]],2)]
-
+    """
     train_vid_seqs = np.stack([np.concatenate([train_vid_imgs[0], train_vid_imgs[1]], 2),
 			np.concatenate([train_vid_imgs[2], train_vid_imgs[3]], 2),
 			np.concatenate([train_vid_imgs[4], train_vid_imgs[5]], 2),
 			np.concatenate([train_vid_imgs[6], train_vid_imgs[7]], 2)])
 
+    """
 
-    train_vid_seqs_blabla = np.stack([np.concatenate([train_vid_imgs[0], train_flow_img_19_21[0],train_flow_img_19_21[1],train_vid_imgs[1]], 2),
+    train_vid_seqs = np.stack([np.concatenate([train_vid_imgs[0], train_flow_img_19_21[0],train_flow_img_19_21[1],train_vid_imgs[1]], 2),
 			np.concatenate([train_vid_imgs[2], train_flow_img_49_51[0], train_flow_img_49_51[1], train_vid_imgs[3]], 2),
 			np.concatenate([train_vid_imgs[4], train_flow_img_79_81[0], train_flow_img_79_81[1],train_vid_imgs[5]], 2),
 			np.concatenate([train_vid_imgs[6], train_flow_img_109_111[0], train_flow_img_109_111[1], train_vid_imgs[7]], 2)])
-    print('blablabla')
-    print(np.shape(train_vid_seqs_blabla))
+    #print(np.shape(train_vid_seqs_blabla))
     tl.vis.save_images(train_target_vid_imgs, [ni, ni], save_dir_ginit + '/_train_sample_384.png')
     #tl.vis.save_images(np.asarray(train_vid_seqs), [ni, ni], save_dir_ginit + '/_train_sample_96_1.png')
     tl.vis.save_images(train_vid_seqs[:,:,:,0:3], [ni, ni], save_dir_ginit + '/_train_sample_1.png')
     tl.vis.save_images(train_vid_seqs[:,:,:,3:6], [ni, ni], save_dir_ginit + '/_train_sample_3.png')
-    #tl.vis.save_images(train_vid_seqs[:,:,:,6:9], [ni, ni], save_dir_ginit + '/_train_sample_2_1.png')
-    #tl.vis.save_images(train_vid_seqs[:,:,:,9:12], [ni, ni], save_dir_ginit + '/_train_sample_2_2.png')
+    tl.vis.save_images(train_vid_seqs[:,:,:,6:9], [ni, ni], save_dir_ginit + '/_train_sample_2_1.png')
+    tl.vis.save_images(train_vid_seqs[:,:,:,9:12], [ni, ni], save_dir_ginit + '/_train_sample_2_2.png')
 
     """
     tl.vis.save_images(train_lr_vid_seqs[:,:,:,3:6], [ni, ni], save_dir_ginit + '/_train_sample_96_2.png')
@@ -259,8 +259,8 @@ def train():
     #this is for GAN
     tl.vis.save_images(train_vid_seqs[:,:,:,0:3], [ni, ni], save_dir_gan + '/_train_sample_1.png')
     tl.vis.save_images(train_vid_seqs[:,:,:,3:6], [ni, ni], save_dir_gan + '/_train_sample_3.png')
-    #tl.vis.save_images(train_vid_seqs[:,:,:,6:9], [ni, ni], save_dir_gan + '/_train_sample_2_1.png')
-    #tl.vis.save_images(train_vid_seqs[:,:,:,9:12], [ni, ni], save_dir_gan + '/_train_sample_2_2.png')
+    tl.vis.save_images(train_vid_seqs[:,:,:,6:9], [ni, ni], save_dir_gan + '/_train_sample_2_1.png')
+    tl.vis.save_images(train_vid_seqs[:,:,:,9:12], [ni, ni], save_dir_gan + '/_train_sample_2_2.png')
     #tl.vis.save_images(train_vid_seqs, [ni, ni], save_dir_gan + '/_train_sample_96_1.png')
     """
     tl.vis.save_images(train_lr_vid_seqs[:,:,:,3:6], [ni, ni], save_dir_gan + '/_train_sample_96_2.png')
@@ -356,9 +356,19 @@ def train():
 
             b_imgs_384 = tl.prepro.threading_data(b_imgs_384, fn=crop_custom, w=328, h=328, is_random=False)
             """
-            b_imgs_96 = tl.prepro.threading_data(b_imgs_96, fn = crop_sub_imgs_fn,is_random=False)#fn=tl.prepro.crop, wrg=82, hrg=82, is_random=False)
 
+            train_flow_img_19_21 = tl.vis.read_images([train_vid_flow_list[2],train_vid_flow_list[3]], path=train_vid_list[idx] + '/flownet/', n_threads=32)
+            train_flow_img_49_51 = tl.vis.read_images([train_vid_flow_list[4],train_vid_flow_list[5]], path=train_vid_list[idx] + '/flownet/', n_threads=32)
+            train_flow_img_79_81 = tl.vis.read_images([train_vid_flow_list[6],train_vid_flow_list[7]], path=train_vid_list[idx] + '/flownet/', n_threads=32)
+            train_flow_img_109_111 = tl.vis.read_images([train_vid_flow_list[0],train_vid_flow_list[1]], path=train_vid_list[idx] + '/flownet/', n_threads=32)
+
+            b_imgs_96 = tl.prepro.threading_data(b_imgs_96, fn = crop_sub_imgs_fn,is_random=False)#fn=tl.prepro.crop, wrg=82, hrg=82, is_random=False)
             b_imgs_384 = tl.prepro.threading_data(b_imgs_384, fn = crop_sub_imgs_fn,is_random=False)#fn=tl.prepro.crop, wrg=82, hrg=82, is_random=False)#fn=tl.prepro.crop, wrg=82, hrg=82, is_random=False)
+
+            train_flow_img_19_21 = tl.prepro.threading_data(train_flow_img_19_21, fn = crop_sub_imgs_fn,is_random=False)
+            train_flow_img_49_51 = tl.prepro.threading_data(train_flow_img_49_51, fn = crop_sub_imgs_fn,is_random=False)
+            train_flow_img_79_81 = tl.prepro.threading_data(train_flow_img_79_81, fn = crop_sub_imgs_fn,is_random=False)
+            train_flow_img_109_111 = tl.prepro.threading_data(train_flow_img_109_111, fn = crop_sub_imgs_fn,is_random=False)
             #b_imgs_384 = tl.prepro.threading_data(b_imgs_384, fn=tl.prepro.crop, wrg=160, hrg=160, is_random=False)
             #b_seqs_96 = np.stack([np.concatenate([b_imgs_96[0], b_imgs_96[1], b_imgs_96[2]], 2),
 			#        np.concatenate([b_imgs_96[3], b_imgs_96[4], b_imgs_96[5]], 2),
@@ -366,11 +376,16 @@ def train():
 			#        np.concatenate([b_imgs_96[9], b_imgs_96[10], b_imgs_96[11]], 2)])
             #b_seqs_96 = [np.concatenate([b_imgs_96[0], b_imgs_96[1]],2)]
 
+            b_seqs_96 = np.stack([np.concatenate([b_imgs_96[0], train_flow_img_19_21[0],train_flow_img_19_21[1],b_imgs_96[1]], 2),
+        			np.concatenate([b_imgs_96[2], train_flow_img_49_51[0], train_flow_img_49_51[1], b_imgs_96[3]], 2),
+        			np.concatenate([b_imgs_96[4], train_flow_img_79_81[0], train_flow_img_79_81[1],b_imgs_96[5]], 2),
+        			np.concatenate([b_imgs_96[6], train_flow_img_109_111[0], train_flow_img_109_111[1], b_imgs_96[7]], 2)])
+            """
             b_seqs_96 = np.stack([np.concatenate([b_imgs_96[0], b_imgs_96[1]], 2),
         			np.concatenate([b_imgs_96[2], b_imgs_96[3]], 2),
         			np.concatenate([b_imgs_96[4], b_imgs_96[5]], 2),
         			np.concatenate([b_imgs_96[6], b_imgs_96[7]], 2)])
-            """
+
             b_seqs_96 = np.stack([np.concatenate([b_imgs_96[0], b_imgs_96[1],b_imgs_96[2],b_imgs_96[3]], 2),
         			np.concatenate([b_imgs_96[4], b_imgs_96[5], b_imgs_96[6], b_imgs_96[7]], 2),
         			np.concatenate([b_imgs_96[8], b_imgs_96[9], b_imgs_96[10],b_imgs_96[11]], 2),
@@ -406,7 +421,7 @@ def train():
 
         ## Evaluation on train set (first 4 images of training set)
         if (epoch % 1 == 0):
-            out = sess.run(net_g_test.outputs, {t_image: train_vid_seqs  })
+            out = sess.run(net_g_test.outputs, {t_image: train_vid_seqs})
             print("[Evauation] save training images")
             tl.vis.save_images(out, [ni, ni], save_dir_gan + '/train_%d.png' % epoch)
 
@@ -515,8 +530,6 @@ def train():
             net_g.outputs
             print(np.shape(b_fake_3))
             """
-
-
             #b_fake_3 = np.concatenate([b_imgs_384_3[0], net_g.outputs[0],b_imgs_384_3[2] ], 2)
 
             """
