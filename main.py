@@ -209,6 +209,7 @@ def train():
     train_vid_imgs = tl.vis.read_images(train_vid_img_list_s1+train_vid_img_list_s2+train_vid_img_list_s3+train_vid_img_list_s4, path=train_vid_list[0] + '/frames/', n_threads=32)
     #train_vid_imgs = tl.vis.read_images(train_vid_img_list_s2, path=train_vid_list[0] + '/frames/', n_threads=32)
     train_flow_img = tl.vis.read_images([train_vid_flow_list[2],train_vid_flow_list[3]], path=train_vid_list[0] + '/flownet/', n_threads=32)
+    print('lalalal')
     print(np.shape(train_flow_img))
 
     """
