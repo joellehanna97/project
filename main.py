@@ -182,10 +182,7 @@ def train():
 
     train_vid_img_list = sorted(tl.files.load_file_list(path=train_vid_list[0] + '/frames/', regx='.*.jpg', printable=False))
     train_vid_flow_list = sorted(tl.files.load_file_list(path=train_vid_list[0] + '/flownet/', regx='.*.jpg', printable=False))
-    print('train_vid_flow_list')
-    print(len(train_vid_flow_list))
-    print('train_vid_img_list')
-    print(len(train_vid_img_list))
+
 
     train_target_vid_imgs = tl.vis.read_images([train_vid_img_list[20],train_vid_img_list[50],train_vid_img_list[80],train_vid_img_list[110]], path=train_vid_list[0] + '/frames/', n_threads=32)
     #train_target_vid_flows = tl.vis.read_images([train_vid_img_list[20],train_vid_img_list[50],train_vid_img_list[80],train_vid_img_list[110]], path=train_vid_list[0] + '/frames/', n_threads=32)
@@ -251,6 +248,8 @@ def train():
     print(" ** fixed learning rate: %f (for init G)" % lr_init)
 
     train_vid_list = train_vid_list[0:500] #5000
+    print('len vid list')
+    print(len(train_vid_list))
 
     for epoch in range(0, n_epoch_init + 1): #0
 
