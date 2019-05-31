@@ -692,17 +692,19 @@ def validate():
     checkpoint_dir = "checkpoint"
 
     ###====================== PRE-LOAD DATA ===========================###
-    train_video_folders = '/media/saeed-lts5/Data-Saeed/SuperResolution/youtube8m-dataset/frames'
+    #train_video_folders = '/media/saeed-lts5/Data-Saeed/SuperResolution/youtube8m-dataset/frames'
+    train_video_folders = '/media/saeed-lts5/Data-Saeed/SuperResolution/sports1m-dataset/frames'
     train_vid_list = sorted(tl.files.load_folder_list(path=train_video_folders))
 
-    train_vid_img_list = sorted(tl.files.load_file_list(path=train_vid_list[30] + '/frames/', regx='.*.png', printable=False))
-
+    train_vid_img_list = sorted(tl.files.load_file_list(path=train_vid_list[30] + '/frames/', regx='.*.jpg', printable=False))
+    train_vid_flow_list = sorted(tl.files.load_file_list(path=train_vid_list[30] + '/flownet/', regx='.*.jpg', printable=False))
     #print('len train_vid_img_list')
     #print(len(train_vid_img_list)) # 150
     #print('len train_vid_list')
     #print(len(train_vid_list)) # 6757
 
-    train_vid_list = train_vid_list[5020:5040]
+    #train_vid_list = train_vid_list[5020:5040]
+    train_vid_list = train_vid_list[520:540]
     # valid_lr_img_list = sorted(tl.files.load_file_list(path=config.VALID.lr_img_path, regx='.*.png', printable=False))
     """
     all_files = [f for f in os.listdir('/home/best_student/Documents/SR_Joelle/project/frames_to_test') if f.endswith('.jpg')]
@@ -713,7 +715,9 @@ def validate():
     #valid_hr_imgs = tl.vis.read_images(valid_hr_img_list, path=config.VALID.video_test_path, n_threads=32)
     #valid_hr_imgs = tl.vis.read_images(sorted_files, path=config.VALID.video_test_path, n_threads=32)
 
-    t_image = tf.placeholder('float32', [1, 240, 300, 6], name='input_image')
+    #t_image = tf.placeholder('float32', [1, 240, 300, 6], name='input_image')
+    t_image = tf.placeholder('float32', [1, 240, 300, 12], name='input_image')
+
 
     net_g = SRGAN_g(t_image, is_train=False, reuse=False)
 
@@ -736,7 +740,8 @@ def validate():
 
     for i in range(0,len(train_vid_list)):
 
-        train_vid_img_list = sorted(tl.files.load_file_list(path=train_vid_list[i] + '/frames/', regx='.*.png', printable=False))
+        train_vid_img_list = sorted(tl.files.load_file_list(path=train_vid_list[i] + '/frames/', regx='.*.jpg', printable=False))
+        train_vid_flow_list = sorted(tl.files.load_file_list(path=train_vid_list[i] + '/flownet/', regx='.*.jpg', printable=False))
         #b_imgs_384 = tl.vis.read_images([train_vid_img_list[110]], path=train_vid_list[100] + '/frames/', n_threads=32)
         indices_1 = [19,21]
         train_vid_img_list_s1 = [train_vid_img_list[j] for j in indices_1]
@@ -744,6 +749,7 @@ def validate():
         #train_target_vid_imgs = tl.vis.read_images([train_vid_img_list[20],train_vid_img_list[50],train_vid_img_list[80],train_vid_img_list[110]], path=train_vid_list[0] + '/frames/', n_threads=32)
 
         train_vid_img_list_s1 = tl.vis.read_images(train_vid_img_list_s1,path=train_vid_list[i] + '/frames/', n_threads=32)
+        train_flow_img_19_21 = tl.vis.read_images([train_vid_flow_list[2],train_vid_flow_list[3]], path=train_vid_list[i] + '/flownet/', n_threads=32)
 
         target = tl.vis.read_images([train_vid_img_list[20]],path=train_vid_list[i] + '/frames/', n_threads=32)
         first_frame = tl.vis.read_images([train_vid_img_list[19]],path=train_vid_list[i] + '/frames/', n_threads=32)
@@ -755,6 +761,7 @@ def validate():
         target = tl.prepro.threading_data(target, fn = crop_sub_imgs_fn_2, is_random = False)
         first_frame = tl.prepro.threading_data(first_frame, fn = crop_sub_imgs_fn_2, is_random = False)
         second_frame = tl.prepro.threading_data(second_frame, fn = crop_sub_imgs_fn_2, is_random = False)
+
         print('cropped')
         #target = (255. / 2.) * target
         #target = target.astype(np.uint8)
@@ -762,12 +769,16 @@ def validate():
         tl.vis.save_image(target[0,:,:,:], save_dir + '/target_%d.png' %i)
         tl.vis.save_image(first_frame[0,:,:,:], save_dir + '/first_frame_%d.png' %i)
         tl.vis.save_image(second_frame[0,:,:,:], save_dir + '/second_frame_%d.png' %i)
+        tl.vis.save_image(train_flow_img_19_21[0][0,:,:,:], save_dir + '/first_flow_%d.png' %i)
+        tl.vis.save_image(train_flow_img_19_21[1][0,:,:,:], save_dir + '/second_flow_%d.png' %i)
+
         print('saved')
 
 
         train_vid_img_list_s1 = tl.prepro.threading_data(train_vid_img_list_s1, fn = crop_sub_imgs_fn_2, is_random=False)
+        train_flow_img_19_21 = tl.prepro.threading_data(train_flow_img_19_21, fn = crop_sub_imgs_fn_2, is_random=False)
 
-        train_vid_seqs =[np.concatenate([train_vid_img_list_s1[0], train_vid_img_list_s1[1]], 2)]
+        train_vid_seqs =[np.concatenate([train_vid_img_list_s1[0], train_flow_img_19_21[0], train_flow_img_19_21[1], train_vid_img_list_s1[1]], 2)]
 
         train_vid_seqs = np.asarray(train_vid_seqs)
         #mod_0 = i*3
