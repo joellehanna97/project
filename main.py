@@ -770,8 +770,8 @@ def validate():
         tl.vis.save_image(target[0,:,:,:], save_dir + '/target_%d.png' %i)
         tl.vis.save_image(first_frame[0,:,:,:], save_dir + '/first_frame_%d.png' %i)
         tl.vis.save_image(second_frame[0,:,:,:], save_dir + '/second_frame_%d.png' %i)
-        tl.vis.save_image(train_flow_img_19_21[0][0,:,:,:], save_dir + '/first_flow_%d.png' %i)
-        tl.vis.save_image(train_flow_img_19_21[1][0,:,:,:], save_dir + '/second_flow_%d.png' %i)
+        #tl.vis.save_image(train_flow_img_19_21[0][0,:,:,:], save_dir + '/first_flow_%d.png' %i)
+        #tl.vis.save_image(train_flow_img_19_21[1][0,:,:,:], save_dir + '/second_flow_%d.png' %i)
 
         print('saved')
 
