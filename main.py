@@ -730,7 +730,8 @@ def validate():
     ###======================= EVALUATION =============================###
 
     # Warmup on a dummy image
-    im_warmup = 0.2 * np.ones((240, 300, 6), dtype=np.uint8)
+    #im_warmup = 0.2 * np.ones((240, 300, 6), dtype=np.uint8)
+    im_warmup = 0.2 * np.ones((240, 300, 12), dtype=np.uint8)
     start_time = time.time()
     out = sess.run(net_g.outputs, {t_image: [im_warmup]})
     print("warm up took: %4.4fs" % (time.time() - start_time))
