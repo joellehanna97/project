@@ -704,7 +704,7 @@ def validate():
     #print(len(train_vid_list)) # 6757
 
     #train_vid_list = train_vid_list[5020:5040]
-    train_vid_list = train_vid_list[520:540]
+    train_vid_list = train_vid_list[510:530] #520 540
     # valid_lr_img_list = sorted(tl.files.load_file_list(path=config.VALID.lr_img_path, regx='.*.png', printable=False))
     """
     all_files = [f for f in os.listdir('/home/best_student/Documents/SR_Joelle/project/frames_to_test') if f.endswith('.jpg')]
@@ -716,7 +716,7 @@ def validate():
     #valid_hr_imgs = tl.vis.read_images(sorted_files, path=config.VALID.video_test_path, n_threads=32)
 
     #t_image = tf.placeholder('float32', [1, 240, 300, 6], name='input_image')
-    t_image = tf.placeholder('float32', [1, 140, 190, 12], name='input_image') # 240 300
+    t_image = tf.placeholder('float32', [1, 240, 300, 12], name='input_image') # 240 300
 
 
     net_g = SRGAN_g(t_image, is_train=False, reuse=False)
@@ -731,7 +731,7 @@ def validate():
 
     # Warmup on a dummy image
     #im_warmup = 0.2 * np.ones((240, 300, 6), dtype=np.uint8)
-    im_warmup = 0.2 * np.ones((140, 190, 12), dtype=np.uint8)  #240 300
+    im_warmup = 0.2 * np.ones((240, 300, 12), dtype=np.uint8)  #240 300
     start_time = time.time()
     out = sess.run(net_g.outputs, {t_image: [im_warmup]})
     print("warm up took: %4.4fs" % (time.time() - start_time))
