@@ -30,7 +30,7 @@ def crop_sub_imgs_fn(x, is_random=True):
     return x
 
 def crop_sub_imgs_fn_2(x, is_random=True):
-    x = crop(x, wrg=300, hrg=240, is_random=is_random)
+    x = crop(x, wrg=190, hrg=140, is_random=is_random) #300 240
     x = x / (255. / 2.)
     x = x - 1.
     # x = (x - 0.5)*2
