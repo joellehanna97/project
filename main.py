@@ -779,7 +779,8 @@ def validate():
         train_vid_img_list_s1 = tl.prepro.threading_data(train_vid_img_list_s1, fn = crop_sub_imgs_fn_2, is_random=False)
         train_flow_img_19_21 = tl.prepro.threading_data(train_flow_img_19_21, fn = crop_sub_imgs_fn_2, is_random=False)
 
-        train_vid_seqs =[np.concatenate([train_vid_img_list_s1[0], train_flow_img_19_21[0], train_flow_img_19_21[1], train_vid_img_list_s1[1]], 2)]
+        #train_vid_seqs =[np.concatenate([train_vid_img_list_s1[0], train_flow_img_19_21[0], train_flow_img_19_21[1], train_vid_img_list_s1[1]], 2)]
+        train_vid_seqs =[np.concatenate([train_vid_img_list_s1[0], train_vid_img_list_s1[1]], 2)]
 
         train_vid_seqs = np.asarray(train_vid_seqs)
         #mod_0 = i*3
