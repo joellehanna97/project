@@ -724,8 +724,8 @@ def validate():
     ###========================== RESTORE G =============================###
     sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=False))
     tl.layers.initialize_global_variables(sess)
-    #tl.files.load_and_assign_npz(sess=sess, name=checkpoint_dir + '/g_srgan.npz', network=net_g)
-    tl.files.load_and_assign_npz(sess=sess, name=checkpoint_dir + '/g_srgan_safe.npz', network=net_g)
+    tl.files.load_and_assign_npz(sess=sess, name=checkpoint_dir + '/g_srgan.npz', network=net_g)
+    #tl.files.load_and_assign_npz(sess=sess, name=checkpoint_dir + '/g_srgan_safe.npz', network=net_g)
 
     ###======================= EVALUATION =============================###
 
@@ -756,8 +756,8 @@ def validate():
         first_frame = tl.vis.read_images([train_vid_img_list[19]],path=train_vid_list[i] + '/frames/', n_threads=32)
         second_frame = tl.vis.read_images([train_vid_img_list[21]],path=train_vid_list[i] + '/frames/', n_threads=32)
 
-        #print('shape is')
-        #print(np.shape(target))
+        print('shape is')
+        print(np.shape(target))
 
         target = tl.prepro.threading_data(target, fn = crop_sub_imgs_fn_2, is_random = False)
         first_frame = tl.prepro.threading_data(first_frame, fn = crop_sub_imgs_fn_2, is_random = False)
@@ -779,8 +779,7 @@ def validate():
         train_vid_img_list_s1 = tl.prepro.threading_data(train_vid_img_list_s1, fn = crop_sub_imgs_fn_2, is_random=False)
         train_flow_img_19_21 = tl.prepro.threading_data(train_flow_img_19_21, fn = crop_sub_imgs_fn_2, is_random=False)
 
-        #train_vid_seqs =[np.concatenate([train_vid_img_list_s1[0], train_flow_img_19_21[0], train_flow_img_19_21[1], train_vid_img_list_s1[1]], 2)]
-        train_vid_seqs =[np.concatenate([train_vid_img_list_s1[0], train_vid_img_list_s1[1]], 2)]
+        train_vid_seqs =[np.concatenate([train_vid_img_list_s1[0], train_flow_img_19_21[0], train_flow_img_19_21[1], train_vid_img_list_s1[1]], 2)]
 
         train_vid_seqs = np.asarray(train_vid_seqs)
         #mod_0 = i*3
