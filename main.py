@@ -716,7 +716,7 @@ def validate():
     #valid_hr_imgs = tl.vis.read_images(sorted_files, path=config.VALID.video_test_path, n_threads=32)
 
     #t_image = tf.placeholder('float32', [1, 240, 300, 6], name='input_image')
-    t_image = tf.placeholder('float32', [1, 240, 300, 12], name='input_image')
+    t_image = tf.placeholder('float32', [1, 140, 192, 12], name='input_image') # 240 300
 
 
     net_g = SRGAN_g(t_image, is_train=False, reuse=False)
