@@ -758,7 +758,7 @@ def validate():
 
         print('shape is')
         print(np.shape(target))
-
+        """
         target = tl.prepro.threading_data(target, fn = crop_sub_imgs_fn_2, is_random = False)
         first_frame = tl.prepro.threading_data(first_frame, fn = crop_sub_imgs_fn_2, is_random = False)
         second_frame = tl.prepro.threading_data(second_frame, fn = crop_sub_imgs_fn_2, is_random = False)
@@ -810,7 +810,7 @@ def validate():
         print("LR size: %s /  generated HR size: %s" % (size, out.shape))  # LR size: (339, 510, 3) /  gen HR size: (1, 1356, 2040, 3)
         print("[*] save images")
         tl.vis.save_image(out[0], save_dir + '/frame_%d.png' %i)
-
+        """
 
 
 
