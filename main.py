@@ -731,7 +731,7 @@ def validate():
 
     # Warmup on a dummy image
     #im_warmup = 0.2 * np.ones((240, 300, 6), dtype=np.uint8)
-    im_warmup = 0.2 * np.ones((240, 300, 12), dtype=np.uint8)
+    im_warmup = 0.2 * np.ones((140, 192, 12), dtype=np.uint8)  #240 300
     start_time = time.time()
     out = sess.run(net_g.outputs, {t_image: [im_warmup]})
     print("warm up took: %4.4fs" % (time.time() - start_time))
@@ -810,7 +810,7 @@ def validate():
         print("LR size: %s /  generated HR size: %s" % (size, out.shape))  # LR size: (339, 510, 3) /  gen HR size: (1, 1356, 2040, 3)
         print("[*] save images")
         tl.vis.save_image(out[0], save_dir + '/frame_%d.png' %i)
-        
+
 
 
 
