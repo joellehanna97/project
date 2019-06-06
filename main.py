@@ -636,7 +636,7 @@ def evaluate():
 
     #valid_hr_imgs = tl.vis.read_images(valid_hr_img_list, path=config.VALID.video_test_path, n_threads=32)
     valid_hr_imgs = tl.vis.read_images(sorted_files, path=config.VALID.video_test_path, n_threads=32)
-    valid_flow_images = tl.vis.read_images(sorted_files, path=config.VALID.flow_test_path, n_threads=32)
+    valid_flow_images = tl.vis.read_images(sorted_flow_files, path=config.VALID.flow_test_path, n_threads=32)
 
 
     #t_image = tf.placeholder('float32', [1, 720, 1280, 6], name='input_image')
@@ -661,6 +661,7 @@ def evaluate():
     ###========================== DEFINE MODEL ============================###
 
     print(len(valid_hr_imgs))
+
     for i in range(0,len(valid_hr_imgs)):
         indices_1 = [i,i+1]
         indices_2 = [2*i, 2*i+1]
