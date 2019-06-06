@@ -617,25 +617,30 @@ def sort_alphanum(a):
 
 def evaluate():
     ## create folders to save result images
-    save_dir = "samples_12052019/{}".format(tl.global_flag['mode'])
+    save_dir = "samples_06062019/{}".format(tl.global_flag['mode'])
     tl.files.exists_or_mkdir(save_dir)
     checkpoint_dir = "checkpoint"
 
     ###====================== PRE-LOAD DATA ===========================###
     valid_hr_img_list = sorted(tl.files.load_file_list(path=config.VALID.video_test_path, regx='.*.jpg', printable=False))
+    valid_hr_flow_list = sorted(tl.files.load_file_list(path=config.VALID.flow_test_path, regx='.*.jpg', printable=False))
 
 
     #valid_lr_img_list = sorted(tl.files.load_file_list(path=config.VALID.lr_img_path, regx='.*.png', printable=False))
     all_files = [f for f in os.listdir('/home/best_student/Documents/SR_Joelle/project/frames_to_test') if f.endswith('.jpg')]
     sorted_files = sort_alphanum(all_files)
-    for file in sorted_files:
-        print(file)
+
+    all_flow_files = [f for f in os.listdir('/home/best_student/Documents/SR_Joelle/project/flow_to_test') if f.endswith('.jpg')]
+    sorted_flow_files = sort_alphanum(all_flow_files)
+
 
     #valid_hr_imgs = tl.vis.read_images(valid_hr_img_list, path=config.VALID.video_test_path, n_threads=32)
     valid_hr_imgs = tl.vis.read_images(sorted_files, path=config.VALID.video_test_path, n_threads=32)
+    valid_flow_images = tl.vis.read_images(sorted_files, path=config.VALID.flow_test_path, n_threads=32)
 
 
-    t_image = tf.placeholder('float32', [1, 720, 1280, 6], name='input_image')
+    #t_image = tf.placeholder('float32', [1, 720, 1280, 6], name='input_image')
+    t_image = tf.placeholder('float32', [1, 720, 1280, 12], name='input_image')
 
     net_g = SRGAN_g(t_image, is_train=False, reuse=False)
 
@@ -647,7 +652,8 @@ def evaluate():
     ###======================= EVALUATION =============================###
 
     # Warmup on a dummy image
-    im_warmup = 0.2 * np.ones((720, 1280, 6), dtype=np.uint8)
+    #im_warmup = 0.2 * np.ones((720, 1280, 6), dtype=np.uint8)
+    im_warmup = 0.2 * np.ones((720, 1280, 12), dtype=np.uint8)
     start_time = time.time()
     out = sess.run(net_g.outputs, {t_image: [im_warmup]})
     print("warm up took: %4.4fs" % (time.time() - start_time))
@@ -657,9 +663,12 @@ def evaluate():
     print(len(valid_hr_imgs))
     for i in range(0,len(valid_hr_imgs)):
         indices_1 = [i,i+1]
+        indices_2 = [2*i, 2*i+1]
         train_vid_img_list_s1 = [valid_hr_imgs[j] for j in indices_1]
+        train_vid_flow_list_s1 = [valid_flow_images[j] for j in indices_2]
 
-        train_vid_seqs =[np.concatenate([train_vid_img_list_s1[0], train_vid_img_list_s1[1]], 2)]
+        #train_vid_seqs =[np.concatenate([train_vid_img_list_s1[0], train_vid_img_list_s1[1]], 2)]
+        train_vid_seqs =[np.concatenate([train_vid_img_list_s1[0], train_vid_flow_list_s1[0], train_vid_flow_list_s1[1], train_vid_img_list_s1[1]], 2)]
 
         train_vid_seqs = np.asarray(train_vid_seqs)
         #mod_0 = i*3
