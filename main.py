@@ -30,7 +30,7 @@ n_epoch = config.TRAIN.n_epoch
 lr_decay = config.TRAIN.lr_decay
 decay_every = config.TRAIN.decay_every
 
-train_only_generator = True
+train_only_generator = False
 train_using_gan = True
 
 ni = int(np.sqrt(batch_size))
