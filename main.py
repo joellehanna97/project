@@ -617,20 +617,23 @@ def sort_alphanum(a):
 
 def evaluate():
     ## create folders to save result images
-    save_dir = "samples_06062019/{}".format(tl.global_flag['mode'])
+    save_dir = "samples_11062019/{}".format(tl.global_flag['mode'])
     tl.files.exists_or_mkdir(save_dir)
     checkpoint_dir = "checkpoint"
 
     ###====================== PRE-LOAD DATA ===========================###
-    valid_hr_img_list = sorted(tl.files.load_file_list(path=config.VALID.video_test_path, regx='.*.jpg', printable=False))
+    #valid_hr_img_list = sorted(tl.files.load_file_list(path=config.VALID.video_test_path, regx='.*.jpg', printable=False))
+    valid_hr_img_list = sorted(tl.files.load_file_list(path=config.VALID.video_test_path, regx='.*.png', printable=False))
     valid_hr_flow_list = sorted(tl.files.load_file_list(path=config.VALID.flow_test_path, regx='.*.jpg', printable=False))
 
 
     #valid_lr_img_list = sorted(tl.files.load_file_list(path=config.VALID.lr_img_path, regx='.*.png', printable=False))
-    all_files = [f for f in os.listdir('/home/best_student/Documents/SR_Joelle/project/frames_to_test') if f.endswith('.jpg')]
+    #all_files = [f for f in os.listdir('/home/best_student/Documents/SR_Joelle/project/frames_to_test') if f.endswith('.jpg')]
+    all_files = [f for f in os.listdir('/home/best_student/Documents/SR_Joelle/project/frames_gen') if f.endswith('.png')]
     sorted_files = sort_alphanum(all_files)
 
-    all_flow_files = [f for f in os.listdir('/home/best_student/Documents/SR_Joelle/project/flow_to_test') if f.endswith('.jpg')]
+    #all_flow_files = [f for f in os.listdir('/home/best_student/Documents/SR_Joelle/project/flow_to_test') if f.endswith('.jpg')]
+    all_flow_files = [f for f in os.listdir('/home/best_student/Documents/SR_Joelle/project/flow_gen') if f.endswith('.jpg')]
     sorted_flow_files = sort_alphanum(all_flow_files)
 
 
@@ -640,7 +643,8 @@ def evaluate():
 
 
     #t_image = tf.placeholder('float32', [1, 720, 1280, 6], name='input_image')
-    t_image = tf.placeholder('float32', [1, 720, 1280, 12], name='input_image')
+    #t_image = tf.placeholder('float32', [1, 720, 1280, 12], name='input_image')
+    t_image = tf.placeholder('float32', [1, 240, 300, 12], name='input_image')
 
     net_g = SRGAN_g(t_image, is_train=False, reuse=False)
 
@@ -653,7 +657,8 @@ def evaluate():
 
     # Warmup on a dummy image
     #im_warmup = 0.2 * np.ones((720, 1280, 6), dtype=np.uint8)
-    im_warmup = 0.2 * np.ones((720, 1280, 12), dtype=np.uint8)
+    #im_warmup = 0.2 * np.ones((720, 1280, 12), dtype=np.uint8)
+    im_warmup = 0.2 * np.ones((240, 300, 12), dtype=np.uint8)
     start_time = time.time()
     out = sess.run(net_g.outputs, {t_image: [im_warmup]})
     print("warm up took: %4.4fs" % (time.time() - start_time))
