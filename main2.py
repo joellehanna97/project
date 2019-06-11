@@ -643,9 +643,9 @@ def evaluate():
     valid_flow_images = tl.vis.read_images(sorted_flow_files, path=config.VALID.flow_test_path, n_threads=32)
 
 
-    t_image = tf.placeholder('float32', [1, 720, 1280, 6], name='input_image')
+    #t_image = tf.placeholder('float32', [1, 720, 1280, 6], name='input_image')
     #t_image = tf.placeholder('float32', [1, 720, 1280, 12], name='input_image')
-    #t_image = tf.placeholder('float32', [1, 240, 300, 12], name='input_image')
+    t_image = tf.placeholder('float32', [1, 240, 300, 6], name='input_image')
 
     net_g = SRGAN_g(t_image, is_train=False, reuse=False)
 
