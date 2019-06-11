@@ -674,8 +674,8 @@ def evaluate():
         train_vid_img_list_s1 = [valid_hr_imgs[j] for j in indices_1]
         train_vid_flow_list_s1 = [valid_flow_images[j] for j in indices_2]
 
-        #train_vid_seqs =[np.concatenate([train_vid_img_list_s1[0], train_vid_img_list_s1[1]], 2)]
-        train_vid_seqs =[np.concatenate([train_vid_img_list_s1[0], train_vid_flow_list_s1[0], train_vid_flow_list_s1[1], train_vid_img_list_s1[1]], 2)]
+        train_vid_seqs =[np.concatenate([train_vid_img_list_s1[0], train_vid_img_list_s1[1]], 2)]
+        #train_vid_seqs =[np.concatenate([train_vid_img_list_s1[0], train_vid_flow_list_s1[0], train_vid_flow_list_s1[1], train_vid_img_list_s1[1]], 2)]
 
         train_vid_seqs = np.asarray(train_vid_seqs)
         #mod_0 = i*3
