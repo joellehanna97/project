@@ -643,9 +643,9 @@ def evaluate():
     valid_flow_images = tl.vis.read_images(sorted_flow_files, path=config.VALID.flow_test_path, n_threads=32)
 
 
-    #t_image = tf.placeholder('float32', [1, 720, 1280, 6], name='input_image')
+    t_image = tf.placeholder('float32', [1, 720, 1280, 6], name='input_image')
     #t_image = tf.placeholder('float32', [1, 720, 1280, 12], name='input_image')
-    t_image = tf.placeholder('float32', [1, 240, 300, 12], name='input_image')
+    #t_image = tf.placeholder('float32', [1, 240, 300, 12], name='input_image')
 
     net_g = SRGAN_g(t_image, is_train=False, reuse=False)
 
@@ -659,7 +659,7 @@ def evaluate():
     # Warmup on a dummy image
     #im_warmup = 0.2 * np.ones((720, 1280, 6), dtype=np.uint8)
     #im_warmup = 0.2 * np.ones((720, 1280, 12), dtype=np.uint8)
-    im_warmup = 0.2 * np.ones((240, 300, 12), dtype=np.uint8)
+    im_warmup = 0.2 * np.ones((240, 300, 6), dtype=np.uint8)
     start_time = time.time()
     out = sess.run(net_g.outputs, {t_image: [im_warmup]})
     print("warm up took: %4.4fs" % (time.time() - start_time))
