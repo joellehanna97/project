@@ -617,7 +617,7 @@ def sort_alphanum(a):
 
 def evaluate():
     ## create folders to save result images
-    save_dir = "samples_11062019/{}".format(tl.global_flag['mode'])
+    save_dir = "samples_11062019_ter/{}".format(tl.global_flag['mode'])
     tl.files.exists_or_mkdir(save_dir)
     checkpoint_dir = "checkpoint"
 
